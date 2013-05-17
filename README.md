@@ -1,5 +1,7 @@
 # node-sprite-generator
 
+[![Build Status](https://travis-ci.org/selaux/node-sprite-generator.png)](https://travis-ci.org/[YOUR_GITHUB_USERNAME]/[YOUR_PROJECT_NAME])
+
 Generates image sprites and their stylesheets from sets of images. Development is at a very early stage and APIs are subject to change.
 
 ## Installation
