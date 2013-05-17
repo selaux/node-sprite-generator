@@ -1,0 +1,3 @@
+.foo { background-image: url('../images/png/sprite.png'); background-position: 0px 0px; width: 150px; height: 12px; }
+.bar { background-image: url('../images/png/sprite.png'); background-position: 0px -12px; width: 150px; height: 24px; }
+.test { background-image: url('../images/png/sprite.png'); background-position: 0px -36px; width: 150px; height: 12px; }

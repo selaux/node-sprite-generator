@@ -1,0 +1,28 @@
+{
+	"name": "node-sprite-generator",
+	"version": "0.0.1",
+	"description": "Generates sprites and stylesheets from image files.",
+	"main": "lib/nsg.js",
+	"dependencies": {
+		"async": "~0.2.7",
+		"underscore": "~1.4.4",
+		"canvas": "~1.0.2"
+	},	
+	"devDependencies": {
+		"buster": "~0.6.12",
+		"grunt": "~0.4.1",
+		"grunt-jslint": "~0.2.5"
+	},
+	"scripts": {
+		"test": "buster test"
+	},
+	"keywords": [
+		"sprite",
+		"sprites",
+		"generator",
+		"middleware",
+		"css",
+		"stylus"
+	]
+	
+}

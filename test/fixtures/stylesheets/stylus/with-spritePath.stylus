@@ -1,0 +1,8 @@
+foo = 0px 0px 150px 12px
+bar = 0px -12px 150px 24px
+test = 0px -36px 150px 12px
+sprite($sprite)
+    background-image: url('/this/is/my/spritepath.png')
+    background-position: $sprite[0] $sprite[1]
+    width: $sprite[2]
+    height: $sprite[3]
