@@ -56,7 +56,7 @@
 
                 canvas.render(layout, spritePath, {}, done(function (err) {
                     expect(err).toEqual(null);
-                    expect(fs.readFileSync(expectedPath).toJSON()).toEqual(fs.readFileSync(spritePath).toJSON());
+                    expect(fs.readFileSync(expectedPath).toString()).toEqual(fs.readFileSync(spritePath).toString());
 
                     fs.unlinkSync(spritePath);
                 }));
