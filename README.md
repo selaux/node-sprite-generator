@@ -31,7 +31,7 @@ nsg({
 
 This will generate a sprite.png file and the corresponding stylus stylesheet, with can then be included from your stylus files.
 
-### With express.jss
+### With express.js
 
 node-sprite-generator provides a middleware to use with [express.js](https://github.com/visionmedia/express).
 
