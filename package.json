@@ -5,6 +5,7 @@
 	"main": "lib/nsg.js",
 	"dependencies": {
 		"async": "~0.2.7",
+		"glob": "~3.2.1",
 		"underscore": "~1.4.4",
 		"canvas": "~1.0.2"
 	},	

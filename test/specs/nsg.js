@@ -17,22 +17,25 @@
             lockImagePath = path.normalize(path.join(__dirname, '../fixtures/images/lock.png')),
             houseImagePath = path.normalize(path.join(__dirname, '../fixtures/images/house.png')),
             imagePaths = [
+                houseImagePath,
                 lenaImagePath,
-                lockImagePath,
-                houseImagePath
+                lockImagePath
             ],
             stylesheetPath = path.normalize(path.join(__dirname, '../fixtures/stylesheet.styl')),
             expectedStylesheetPath = path.normalize(path.join(__dirname, '../fixtures/stylesheets/stylus/nsg-test.styl')),
             spritePath = path.normalize(path.join(__dirname, '../fixtures/sprite.png')),
             expectedSpritePath = path.normalize(path.join(__dirname, '../fixtures/images/expected.png'));
 
-
-        it('should correctly write sprite image and stylesheets when using directly', function (done) {
-            nsg({
+        function testSpriteGenerationWithOptions(options, done) {
+            var defaults = {
                 src: imagePaths,
                 spritePath: spritePath,
                 stylesheetPath: stylesheetPath
-            }, done(function (err) {
+            };
+
+            _.defaults(options, defaults);
+
+            nsg(options, done(function (err) {
                 expect(err).toBe(null);
 
                 expect(fs.readFileSync(expectedStylesheetPath).toString()).toEqual(fs.readFileSync(stylesheetPath).toString());
@@ -41,6 +44,20 @@
                 fs.unlinkSync(stylesheetPath);
                 fs.unlinkSync(spritePath);
             }));
+        }
+
+
+        it('should correctly write sprite image and stylesheets when using directly', function (done) {
+            testSpriteGenerationWithOptions({}, done);
+        });
+
+        it('should correctly write sprite image and stylesheets using glob pattern matching', function (done) {
+            testSpriteGenerationWithOptions({
+                src: [
+                    path.normalize(path.join(__dirname, '../fixtures/images/ho*')),
+                    path.normalize(path.join(__dirname, '../fixtures/images/l*'))
+                ]
+            }, done);
         });
 
         it('should correctly write sprite image and stylesheets using express.js middleware', function (done) {

@@ -17,16 +17,16 @@
             lockImagePath = path.normalize(path.join(__dirname, '../../fixtures/images/lock.png')),
             houseImagePath = path.normalize(path.join(__dirname, '../../fixtures/images/house.png')),
             imagePaths = [
+                houseImagePath,
                 lenaImagePath,
-                lockImagePath,
-                houseImagePath
+                lockImagePath
             ];
 
         it('should read the files correctly', function (done) {
             canvas.readImages(imagePaths, done(function (err, images) {
-                var lenaImage = images[0],
-                    lockImage = images[1],
-                    houseImage = images[2];
+                var houseImage = images[0],
+                    lenaImage = images[1],
+                    lockImage = images[2];
 
                 expect(lenaImage.width).toBe(300);
                 expect(lenaImage.height).toBe(168);
@@ -49,8 +49,8 @@
                     height: 214,
                     images: [
                         _({ x: 0, y: 0 }).extend(images[0]),
-                        _({ x: 0, y: 168 }).extend(images[1]),
-                        _({ x: 0, y: 199 }).extend(images[2])
+                        _({ x: 0, y: 15 }).extend(images[1]),
+                        _({ x: 0, y: 183 }).extend(images[2])
                     ]
                 };
 
