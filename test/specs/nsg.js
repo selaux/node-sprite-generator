@@ -1,4 +1,4 @@
-/*global describe: false, it: false, expect: false*/
+/*global describe: false, it: false, expect: false, before: false*/
 /*jslint stupid: true */
 
 (function () {
