@@ -25,22 +25,22 @@
             };
 
         it('should generate the correct css without any options', function (done) {
-            var expectedStylesheetPath = path.join(__dirname, '../../fixtures/stylesheets/css/no-options.css');
+            var expectedStylesheetPath = 'test/fixtures/stylesheets/css/no-options.css';
             testUtils.testStylesheetGeneration(css, layout, expectedStylesheetPath, {}, done);
         });
 
         it('should generate the correct css with a prefix specified', function (done) {
-            var expectedStylesheetPath = path.join(__dirname, '../../fixtures/stylesheets/css/with-prefix.css');
+            var expectedStylesheetPath = 'test/fixtures/stylesheets/css/with-prefix.css';
             testUtils.testStylesheetGeneration(css, layout, expectedStylesheetPath, { prefix: 'sprite' }, done);
         });
 
         it('should generate the correct css with a spritePath specified', function (done) {
-            var expectedStylesheetPath = path.join(__dirname, '../../fixtures/stylesheets/css/with-spritePath.css');
+            var expectedStylesheetPath = 'test/fixtures/stylesheets/css/with-spritePath.css';
             testUtils.testStylesheetGeneration(css, layout, expectedStylesheetPath, { spritePath: '/this/is/my/spritepath.png' }, done);
         });
 
         it('should generate the correct css with a custom nameMapping specified', function (done) {
-            var expectedStylesheetPath = path.join(__dirname, '../../fixtures/stylesheets/css/with-nameMapping.css'),
+            var expectedStylesheetPath = 'test/fixtures/stylesheets/css/with-nameMapping.css',
                 nameMapping = function (imagePath) {
                     return path.basename(imagePath, path.extname(imagePath)).split("").reverse().join("");
                 };

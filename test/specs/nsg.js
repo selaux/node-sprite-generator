@@ -13,18 +13,15 @@
     buster.spec.expose();
 
     describe('NSG', function () {
-        var lenaImagePath = path.normalize(path.join(__dirname, '../fixtures/images/src/lena.jpg')),
-            lockImagePath = path.normalize(path.join(__dirname, '../fixtures/images/src/lock.png')),
-            houseImagePath = path.normalize(path.join(__dirname, '../fixtures/images/src/house.png')),
-            imagePaths = [
-                houseImagePath,
-                lenaImagePath,
-                lockImagePath
+        var imagePaths = [
+                'test/fixtures/images/src/house.png',
+                'test/fixtures/images/src/lena.jpg',
+                'test/fixtures/images/src/lock.png'
             ],
-            stylesheetPath = path.normalize(path.join(__dirname, '../fixtures/stylesheet.styl')),
-            expectedStylesheetPath = path.normalize(path.join(__dirname, '../fixtures/stylesheets/stylus/nsg-test.styl')),
-            spritePath = path.normalize(path.join(__dirname, '../fixtures/sprite.png')),
-            expectedSpritePath = path.normalize(path.join(__dirname, '../fixtures/images/expected/nsg.png'));
+            stylesheetPath = 'test/fixtures/stylesheet.styl',
+            expectedStylesheetPath = 'test/fixtures/stylesheets/stylus/nsg-test.styl',
+            spritePath = 'test/fixtures/sprite.png',
+            expectedSpritePath = 'test/fixtures/images/expected/nsg.png';
 
         function testSpriteGenerationWithOptions(options, done) {
             var defaults = {
@@ -53,7 +50,7 @@
 
         it('should correctly write sprite image and stylesheets using glob pattern matching', function (done) {
             testSpriteGenerationWithOptions({
-                src: [ path.normalize(path.join(__dirname, '../fixtures/images/src/*')) ]
+                src: [ 'test/fixtures/images/src/*' ]
             }, done);
         });
 

@@ -13,13 +13,10 @@
     buster.spec.expose();
 
     describe('Compositor/Canvas', function () {
-        var lenaImagePath = path.normalize(path.join(__dirname, '../../fixtures/images/src/lena.jpg')),
-            lockImagePath = path.normalize(path.join(__dirname, '../../fixtures/images/src/lock.png')),
-            houseImagePath = path.normalize(path.join(__dirname, '../../fixtures/images/src/house.png')),
-            imagePaths = [
-                houseImagePath,
-                lenaImagePath,
-                lockImagePath
+        var imagePaths = [
+                'test/fixtures/images/src/house.png',
+                'test/fixtures/images/src/lena.jpg',
+                'test/fixtures/images/src/lock.png'
             ];
 
         it('should read the files correctly', function (done) {
@@ -40,8 +37,8 @@
         });
 
         it('should write the sprites correctly', function (done) {
-            var spritePath = path.join(__dirname, '../../fixtures/images/test_out.png'),
-                expectedPath = path.join(__dirname, '../../fixtures/images/expected/nsg.png');
+            var spritePath = 'test/fixtures/images/test_out.png',
+                expectedPath = 'test/fixtures/images/expected/nsg.png';
 
             canvas.readImages(imagePaths, function (err, images) {
                 var layout = {
