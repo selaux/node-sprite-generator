@@ -21,8 +21,7 @@ var nsg = require('node-sprite-generator');
 
 nsg({
     src: [
-        'images/sprite/1.png',
-        'images/sprite/2.png'
+        'images/sprite/*.png'
     ],
     spritePath: 'images/sprite.png',
     stylesheetPath: 'stylus/sprite.styl'
@@ -42,8 +41,7 @@ var nsg = require('node-sprite-generator'),
     
 app.use(nsg.middleware({
     src: [
-        'images/sprite/1.png',
-        'images/sprite/2.png'
+        'images/sprite/*.png'
     ],
     spritePath: 'images/sprite.png',
     stylesheetPath: 'stylus/sprite.styl'
@@ -63,7 +61,7 @@ node-sprite-generator tries to be very modular, so you can use the options we pr
 #### options.src
 Type: `String`
 Default value: `[]`  
-Specifies the images that will be combined to the sprite.
+Specifies the images that will be combined to the sprite. node-sprite-generator uses glob pattern matching, so paths with wildcards are valid as well.
 
 #### options.spritePath
 Type: `String`
@@ -84,9 +82,9 @@ Specifies the stylesheet generator (and therefore the format) that is used. The 
 Type: `Object`
 Default value: `'{}'`  
 Options that will be passed on to the stylesheet generator. The built-in stylesheet generators support the following options:  
-&nbsp;&nbsp;&nbsp;&nbsp;__prefix__ (Type: `String` Default: `''`): A prefix that will be prepended to all classes/functions that are generated  
-&nbsp;&nbsp;&nbsp;&nbsp;__nameMapping__ (Type: `Function` Default: Filename): A function that specifies how filenames are mapped to class names in the stylesheet  
-&nbsp;&nbsp;&nbsp;&nbsp;__spritePath__ (Type: `String` Default: Relative Path): Defines which URL is used as the image path for the image sprite.
+__prefix__ (Type: `String` Default: `''`): A prefix that will be prepended to all classes/functions that are generated  
+__nameMapping__ (Type: `Function` Default: Filename): A function that specifies how filenames are mapped to class names in the stylesheet  
+__spritePath__ (Type: `String` Default: Relative Path): Defines which URL is used as the image path for the image sprite.
 
 #### options.layout
 Type: `String|Function`
@@ -97,7 +95,7 @@ The layout that is used to generate the sprite. The built-in layouts are `'verti
 Type: `Object`
 Default value: `{}`  
 Options that will be passed on to the layout generation. The built-in layouters support the following options.  
-&nbsp;&nbsp;&nbsp;&nbsp;__padding__ (Type: `Integer` Default: `0`): Specifies the padding between the images in the layout. 
+__padding__ (Type: `Integer` Default: `0`): Specifies the padding between the images in the layout. 
 
 #### options.compositor
 Type: `String|Function`
@@ -116,8 +114,7 @@ var nsg = require('node-sprite-generator');
 
 nsg({
     src: [
-        'images/all-icons/home.png',
-        'images/all-icons/profile.png'
+        'images/all-icons/*/**.png'
     ],
     spritePath: 'images/all-icons.png',
     stylesheetPath: 'stylus/all-icons.css',
