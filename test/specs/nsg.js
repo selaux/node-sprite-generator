@@ -43,6 +43,9 @@
             }));
         }
 
+        before(function () {
+            this.timeout = 500;
+        });
 
         it('should correctly write sprite image and stylesheets when using directly', function (done) {
             testSpriteGenerationWithOptions({}, done);
