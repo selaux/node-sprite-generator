@@ -1,29 +1,33 @@
 {
-	"name": "node-sprite-generator",
-	"version": "0.0.1",
-	"description": "Generates image sprites and their stylesheets from sets of images.",
-	"main": "lib/nsg.js",
-	"dependencies": {
-		"async": "0.2.9",
-		"glob": "3.2.6",
-		"underscore": "1.5.1",
-		"canvas": "1.0.4"
-	},	
-	"devDependencies": {
-		"buster": "0.6.12",
-		"grunt": "0.4.1",
-		"grunt-jslint": "0.2.6"
-	},
-	"scripts": {
-		"test": "buster test"
-	},
-	"keywords": [
-		"sprite",
-		"sprites",
-		"generator",
-		"middleware",
-		"css",
-		"stylus"
-	]
-	
+    "name": "node-sprite-generator",
+    "version": "0.0.1",
+    "description": "Generates image sprites and their stylesheets from sets of images.",
+    "main": "lib/nsg.js",
+    "dependencies": {
+        "async": "0.2.9",
+        "glob": "3.2.6",
+        "underscore": "1.5.1",
+        "canvas": "1.0.4"
+    },  
+    "devDependencies": {
+        "buster": "0.6.12",
+        "grunt": "0.4.1",
+        "grunt-jslint": "0.2.6"
+    },
+    "scripts": {
+        "test": "buster test"
+    },
+    "keywords": [
+        "sprite",
+        "sprites",
+        "generator",
+        "middleware",
+        "css",
+        "stylus"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/selaux/node-sprite-generator"
+    },
+    "license": "MIT"
 }
