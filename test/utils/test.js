@@ -9,8 +9,8 @@ var path = require('path'),
 module.exports = {
     testStylesheetGeneration: function (generator, layout, expectedPath, options, done) {
 
-        var spritePath = path.join(__dirname, '../fixtures/images/png/sprite.png'),
-            stylesheetPath = path.join(__dirname, '../fixtures/test.file');
+        var spritePath = 'test/fixtures/images/png/sprite.png',
+            stylesheetPath =  'test/fixtures/test.file';
 
         generator(layout, stylesheetPath, spritePath, options, done(function () {
             expect(fs.readFileSync(expectedPath).toString()).toEqual(fs.readFileSync(stylesheetPath).toString());
