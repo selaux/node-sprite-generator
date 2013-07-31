@@ -1,6 +1,7 @@
 # node-sprite-generator
 
 [![Build Status](https://travis-ci.org/selaux/node-sprite-generator.png)](https://travis-ci.org/selaux/node-sprite-generator)
+[![Build Status](https://david-dm.org/selaux/node-sprite-generator.png)](https://david-dm.org/selaux/node-sprite-generator)
 
 Generates image sprites and their stylesheets from sets of images. Development is at a very early stage and APIs are subject to change.
 
@@ -52,7 +53,28 @@ Make sure that the node-sprite-generator middleware is used before any css prepr
 
 ### With grunt
 
-TODO
+node-sprite-generator also provides a grunt plugin. It takes the same options as the other two methods.
+
+```javascript
+module.exports = function (grunt)  {
+
+    grunt.initConfig({
+
+        spriteGenerator: {
+            sprite: {
+                src: [
+                    'images/sprite/*.png'
+                ],
+                spritePath: 'images/sprite.png',
+                stylesheetPath: 'stylus/sprite.styl'
+            }
+        }
+
+    });
+
+    grunt.loadNpmTasks('node-sprite-generator');
+};
+```
 
 ## Options
 
