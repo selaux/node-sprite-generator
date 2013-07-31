@@ -8,6 +8,7 @@
         fs = require('fs'),
         _ = require('underscore'),
         buster = require('buster'),
+        async = require('async'),
         nsg = require('../../lib/nsg');
 
     buster.spec.expose();
@@ -73,6 +74,48 @@
                 fs.unlinkSync(stylesheetPath);
                 fs.unlinkSync(spritePath);
             }));
+        });
+
+        it('should not write the sprite image twice if nothing has changed when using express.js middleware', function (done) {
+            var middleware = nsg.middleware({
+                    src: imagePaths,
+                    spritePath: spritePath,
+                    stylesheetPath: stylesheetPath
+                }),
+                middlewareWithTimeout = function (callback) {
+                    setTimeout(function () {
+                        middleware(null, null, callback);
+                    }, 500);
+                };
+
+            // increase timeout
+            this.timeout = 2000;
+
+            // it should always be rendered the first time
+            middleware(null, null, function () {
+                var firstTime = fs.statSync(spritePath).ctime;
+
+                middlewareWithTimeout(function () {
+                    var secondTime = fs.statSync(spritePath).ctime,
+                        imageFile;
+
+                    // it should not have been changed because no files have been changed
+                    expect(firstTime.getTime()).toBe(secondTime.getTime());
+
+                    // induce new sprite creation
+                    fs.unlinkSync(spritePath);
+
+                    middlewareWithTimeout(function () {
+                        var thirdTime = fs.statSync(spritePath).ctime;
+
+                        expect(thirdTime.getTime()).toBeGreaterThan(firstTime.getTime());
+
+                        fs.unlinkSync(stylesheetPath);
+                        fs.unlinkSync(spritePath);
+                        done();
+                    });
+                });
+            });
         });
 
     });
