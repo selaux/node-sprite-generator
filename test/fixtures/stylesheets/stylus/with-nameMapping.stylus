@@ -2,7 +2,7 @@ oof = 0px 0px 150px 12px
 rab = 0px -12px 150px 24px
 tset = 0px -36px 150px 12px
 sprite($sprite)
-    background-image: url('../images/png/sprite.png')
-    background-position: $sprite[0] $sprite[1]
-    width: $sprite[2]
-    height: $sprite[3]
+    background-image url('../images/png/sprite.png')
+    background-position $sprite[0] $sprite[1]
+    width $sprite[2]
+    height $sprite[3]
