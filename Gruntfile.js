@@ -8,9 +8,8 @@ module.exports = function (grunt) {
 
         jslint: {
             files: [
-                'Gruntfile.js',
-                'lib/**/*.js',
-                'test/**/*.js'
+                '**/*.js',
+                '!node_modules/**/*.js'
             ],
             directives: {
                 node: true,
