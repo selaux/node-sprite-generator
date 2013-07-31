@@ -4,15 +4,15 @@
 	"description": "Generates image sprites and their stylesheets from sets of images.",
 	"main": "lib/nsg.js",
 	"dependencies": {
-		"async": "~0.2.7",
-		"glob": "~3.2.1",
-		"underscore": "~1.4.4",
-		"canvas": "~1.0.2"
+		"async": "0.2.9",
+		"glob": "3.2.6",
+		"underscore": "1.5.1",
+		"canvas": "1.0.4"
 	},	
 	"devDependencies": {
-		"buster": "~0.6.12",
-		"grunt": "~0.4.1",
-		"grunt-jslint": "~0.2.5"
+		"buster": "0.6.12",
+		"grunt": "0.4.1",
+		"grunt-jslint": "0.2.6"
 	},
 	"scripts": {
 		"test": "buster test"
