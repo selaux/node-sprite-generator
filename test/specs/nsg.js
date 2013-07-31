@@ -95,8 +95,7 @@ describe('NSG', function () {
             var firstTime = fs.statSync(spritePath).ctime;
 
             middlewareWithTimeout(function () {
-                var secondTime = fs.statSync(spritePath).ctime,
-                    imageFile;
+                var secondTime = fs.statSync(spritePath).ctime;
 
                 // it should not have been changed because no files have been changed
                 expect(firstTime.getTime()).toBe(secondTime.getTime());

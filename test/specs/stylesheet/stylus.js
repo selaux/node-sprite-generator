@@ -12,8 +12,7 @@ var path = require('path'),
 buster.spec.expose();
 
 describe('Stylesheet/Stylus', function () {
-    var spritePath = 'test/fixtures/stylesheets/stylus/images/png/sprite.png',
-        layout = {
+    var layout = {
             width: 150,
             height: 156,
             images: [

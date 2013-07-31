@@ -24,6 +24,8 @@ describe('Compositor/Canvas', function () {
                 lenaImage = images[1],
                 lockImage = images[2];
 
+            expect(err).toBe(null);
+
             expect(lenaImage.width).toBe(300);
             expect(lenaImage.height).toBe(168);
 
@@ -49,6 +51,8 @@ describe('Compositor/Canvas', function () {
                     _({ x: 0, y: 183 }).extend(images[2])
                 ]
             };
+
+            expect(err).toBe(null);
 
             canvas.render(layout, spritePath, {}, done(function (err) {
                 expect(err).toEqual(null);

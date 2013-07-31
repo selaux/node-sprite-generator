@@ -12,8 +12,7 @@ var path = require('path'),
 buster.spec.expose();
 
 describe('Stylesheet/CSS', function () {
-    var spritePath = path.join(__dirname, '../../fixtures/stylesheets/css/images/png/sprite.png'),
-        layout = {
+    var layout = {
             width: 150,
             height: 156,
             images: [
