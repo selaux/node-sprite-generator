@@ -1,6 +1,6 @@
 {
     "name": "node-sprite-generator",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "description": "Generates image sprites and their stylesheets from sets of images.",
     "main": "lib/nsg.js",
     "dependencies": {
