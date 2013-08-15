@@ -7,7 +7,7 @@
         "async": "0.2.9",
         "glob": "3.2.6",
         "underscore": "1.5.1",
-        "canvas": "1.0.4"
+        "canvas": "1.1.0"
     },  
     "devDependencies": {
         "buster": "0.6.12",

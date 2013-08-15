@@ -27,7 +27,7 @@ nsg({
     spritePath: 'images/sprite.png',
     stylesheetPath: 'stylus/sprite.styl'
 }, function (err) {
-	console.log('Sprite generated!');
+    console.log('Sprite generated!');
 });
 ```
 
@@ -129,7 +129,8 @@ If you don't want node-canvas to read and render the images, you can specify you
 #### options.compositorOptions
 Type: `Object`
 Default value: `{}`  
-Options that will be passed on to the compositor. ATM the built-in compositor does not support any options.
+Options that will be passed on to the compositor. The built-in compositor supports the following options:
+__compressionLevel__ (Type: `Integer` Default: `6`): Specifies the compression level for the generated png file (compression levels range from 0-9).
 
 ## A more advanced example
 

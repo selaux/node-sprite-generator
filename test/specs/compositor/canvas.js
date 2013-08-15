@@ -16,7 +16,8 @@ describe('Compositor/Canvas', function () {
             'test/fixtures/images/src/house.png',
             'test/fixtures/images/src/lena.jpg',
             'test/fixtures/images/src/lock.png'
-        ];
+        ],
+        spritePath = 'test/fixtures/images/test_out.png';
 
     it('should read the files correctly', function (done) {
         canvas.readImages(imagePaths, done(function (err, images) {
@@ -38,8 +39,7 @@ describe('Compositor/Canvas', function () {
     });
 
     it('should write the sprites correctly', function (done) {
-        var spritePath = 'test/fixtures/images/test_out.png',
-            expectedPath = 'test/fixtures/images/expected/nsg.png';
+        var expectedPath = 'test/fixtures/images/expected/nsg.png';
 
         canvas.readImages(imagePaths, function (err, images) {
             var layout = {
@@ -62,4 +62,30 @@ describe('Compositor/Canvas', function () {
             }));
         });
     });
+
+    it('should write the sprites correctly when specifying a different compression level', function(done) {
+        var expectedPath = 'test/fixtures/images/expected/nsg_compression_level_9.png';
+
+        canvas.readImages(imagePaths, function (err, images) {
+            var layout = {
+                width: 300,
+                height: 214,
+                images: [
+                    _({ x: 0, y: 0 }).extend(images[0]),
+                    _({ x: 0, y: 15 }).extend(images[1]),
+                    _({ x: 0, y: 183 }).extend(images[2])
+                ]
+            };
+
+            expect(err).toBe(null);
+
+            canvas.render(layout, spritePath, { compressionLevel: 9 }, done(function (err) {
+                expect(err).toEqual(null);
+                expect(fs.readFileSync(expectedPath).toString()).toEqual(fs.readFileSync(spritePath).toString());
+
+                fs.unlinkSync(spritePath);
+            }));
+        });
+    });
+
 });
