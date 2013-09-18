@@ -3,11 +3,9 @@
 
 'use strict';
 
-var buster = require('buster'),
+var expect = require('chai').expect,
     _ = require('underscore'),
     diagonal = require('../../../lib/layout/diagonal.js');
-
-buster.spec.expose();
 
 describe('Layout/Diagonal', function () {
     var images = [
@@ -17,9 +15,9 @@ describe('Layout/Diagonal', function () {
     ];
 
     it('should generate the correct layout without any options', function (done) {
-        diagonal(images, done(function (err, layout) {
-            expect(err).toBe(undefined);
-            expect(layout).toEqual({
+        diagonal(images, function (err, layout) {
+            expect(err).not.to.be.ok;
+            expect(layout).to.deep.equal({
                 width: 294,
                 height: 156,
                 images: [
@@ -28,13 +26,14 @@ describe('Layout/Diagonal', function () {
                     _({ x: 182, y: 44 }).extend(images[2])
                 ]
             });
-        }));
+            done();
+        });
     });
 
     it('should generate the correct layout when a padding is specified', function (done) {
-        diagonal(images, { padding: 50 }, done(function (err, layout) {
-            expect(err).toBe(undefined);
-            expect(layout).toEqual({
+        diagonal(images, { padding: 50 }, function (err, layout) {
+            expect(err).not.to.be.ok;
+            expect(layout).to.deep.equal({
                 width: 394,
                 height: 256,
                 images: [
@@ -43,6 +42,7 @@ describe('Layout/Diagonal', function () {
                     _({ x: 282, y: 144 }).extend(images[2])
                 ]
             });
-        }));
+            done();
+        });
     });
 });

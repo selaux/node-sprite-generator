@@ -3,11 +3,9 @@
 
 'use strict';
 
-var buster = require('buster'),
+var expect = require('chai').expect,
     _ = require('underscore'),
     horizontal = require('../../../lib/layout/horizontal.js');
-
-buster.spec.expose();
 
 describe('Layout/Horizontal', function () {
     var images = [
@@ -17,9 +15,9 @@ describe('Layout/Horizontal', function () {
     ];
 
     it('should generate the correct layout without any options', function (done) {
-        horizontal(images, done(function (err, layout) {
-            expect(err).toBe(undefined);
-            expect(layout).toEqual({
+        horizontal(images, function (err, layout) {
+            expect(err).not.to.be.ok;
+            expect(layout).to.deep.equal({
                 width: 294,
                 height: 112,
                 images: [
@@ -28,13 +26,14 @@ describe('Layout/Horizontal', function () {
                     _({ x: 182, y: 0 }).extend(images[2])
                 ]
             });
-        }));
+            done();
+        });
     });
 
     it('should generate the correct layout when a padding is specified', function (done) {
-        horizontal(images, { padding: 50 }, done(function (err, layout) {
-            expect(err).toBe(undefined);
-            expect(layout).toEqual({
+        horizontal(images, { padding: 50 }, function (err, layout) {
+            expect(err).not.to.be.ok;
+            expect(layout).to.deep.equal({
                 width: 394,
                 height: 112,
                 images: [
@@ -43,6 +42,7 @@ describe('Layout/Horizontal', function () {
                     _({ x: 282, y: 0 }).extend(images[2])
                 ]
             });
-        }));
+            done();
+        });
     });
 });

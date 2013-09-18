@@ -3,7 +3,8 @@
 
 'use strict';
 
-var path = require('path'),
+var expect = require('chai').expect,
+    path = require('path'),
     fs = require('fs');
 
 module.exports = {
@@ -12,10 +13,11 @@ module.exports = {
         var spritePath = 'test/fixtures/images/png/sprite.png',
             stylesheetPath =  'test/fixtures/test.file';
 
-        generator(layout, stylesheetPath, spritePath, options, done(function () {
-            expect(fs.readFileSync(expectedPath).toString()).toEqual(fs.readFileSync(stylesheetPath).toString());
+        generator(layout, stylesheetPath, spritePath, options, function () {
+            expect(fs.readFileSync(expectedPath).toString()).to.equal(fs.readFileSync(stylesheetPath).toString());
             fs.unlinkSync(stylesheetPath);
-        }));
+            done();
+        });
 
     }
 };

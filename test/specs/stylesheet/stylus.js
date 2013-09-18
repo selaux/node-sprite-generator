@@ -4,13 +4,10 @@
 'use strict';
 
 var path = require('path'),
-    buster = require('buster'),
     testUtils = require('../../utils/test.js'),
     _ = require('underscore'),
     stylus = require('../../../lib/stylesheet/stylus.js');
-
-buster.spec.expose();
-
+    
 describe('Stylesheet/Stylus', function () {
     var layout = {
             width: 150,

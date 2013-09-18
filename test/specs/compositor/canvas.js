@@ -6,10 +6,8 @@
 var path = require('path'),
     fs = require('fs'),
     _ = require('underscore'),
-    buster = require('buster'),
+    expect = require('chai').expect,
     canvas = require('../../../lib/compositor/canvas');
-
-buster.spec.expose();
 
 describe('Compositor/Canvas', function () {
     var imagePaths = [
@@ -20,22 +18,24 @@ describe('Compositor/Canvas', function () {
         spritePath = 'test/fixtures/images/test_out.png';
 
     it('should read the files correctly', function (done) {
-        canvas.readImages(imagePaths, done(function (err, images) {
+        canvas.readImages(imagePaths, function (err, images) {
             var houseImage = images[0],
                 lenaImage = images[1],
                 lockImage = images[2];
 
-            expect(err).toBe(null);
+            expect(err).to.equal(null);
 
-            expect(lenaImage.width).toBe(300);
-            expect(lenaImage.height).toBe(168);
+            expect(lenaImage.width).to.equal(300);
+            expect(lenaImage.height).to.equal(168);
 
-            expect(lockImage.width).toBe(26);
-            expect(lockImage.height).toBe(31);
+            expect(lockImage.width).to.equal(26);
+            expect(lockImage.height).to.equal(31);
 
-            expect(houseImage.width).toBe(15);
-            expect(houseImage.height).toBe(15);
-        }));
+            expect(houseImage.width).to.equal(15);
+            expect(houseImage.height).to.equal(15);
+
+            done();
+        });
     });
 
     it('should write the sprites correctly', function (done) {
@@ -52,14 +52,16 @@ describe('Compositor/Canvas', function () {
                 ]
             };
 
-            expect(err).toBe(null);
+            expect(err).not.to.be.ok;
 
-            canvas.render(layout, spritePath, {}, done(function (err) {
-                expect(err).toEqual(null);
-                expect(fs.readFileSync(expectedPath).toString()).toEqual(fs.readFileSync(spritePath).toString());
+            canvas.render(layout, spritePath, {}, function (err) {
+                expect(err).not.to.be.ok;
+                expect(fs.readFileSync(expectedPath).toString()).to.equal(fs.readFileSync(spritePath).toString());
 
                 fs.unlinkSync(spritePath);
-            }));
+
+                done();
+            });
         });
     });
 
@@ -77,14 +79,16 @@ describe('Compositor/Canvas', function () {
                 ]
             };
 
-            expect(err).toBe(null);
+            expect(err).not.to.be.ok;
 
-            canvas.render(layout, spritePath, { compressionLevel: 9 }, done(function (err) {
-                expect(err).toEqual(null);
-                expect(fs.readFileSync(expectedPath).toString()).toEqual(fs.readFileSync(spritePath).toString());
+            canvas.render(layout, spritePath, { compressionLevel: 9 }, function (err) {
+                expect(err).not.to.be.ok;
+                expect(fs.readFileSync(expectedPath).toString()).to.equal(fs.readFileSync(spritePath).toString());
 
                 fs.unlinkSync(spritePath);
-            }));
+
+                done();
+            });
         });
     });
 

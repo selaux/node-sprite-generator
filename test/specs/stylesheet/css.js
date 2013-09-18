@@ -4,12 +4,9 @@
 'use strict';
 
 var path = require('path'),
-    buster = require('buster'),
     testUtils = require('../../utils/test.js'),
     _ = require('underscore'),
     css = require('../../../lib/stylesheet/css.js');
-
-buster.spec.expose();
 
 describe('Stylesheet/CSS', function () {
     var layout = {

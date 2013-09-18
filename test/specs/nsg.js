@@ -6,11 +6,9 @@
 var path = require('path'),
     fs = require('fs'),
     _ = require('underscore'),
-    buster = require('buster'),
+    expect = require('chai').expect,
     async = require('async'),
     nsg = require('../../lib/nsg');
-
-buster.spec.expose();
 
 describe('NSG', function () {
     var imagePaths = [
@@ -32,15 +30,17 @@ describe('NSG', function () {
 
         _.defaults(options, defaults);
 
-        nsg(options, done(function (err) {
-            expect(err).toBe(null);
+        nsg(options, function (err) {
+            expect(err).not.to.be.ok;
 
-            expect(fs.readFileSync(expectedStylesheetPath).toString()).toEqual(fs.readFileSync(stylesheetPath).toString());
-            expect(fs.readFileSync(expectedSpritePath).toString()).toEqual(fs.readFileSync(spritePath).toString());
+            expect(fs.readFileSync(expectedStylesheetPath).toString()).to.equal(fs.readFileSync(stylesheetPath).toString());
+            expect(fs.readFileSync(expectedSpritePath).toString()).to.equal(fs.readFileSync(spritePath).toString());
 
             fs.unlinkSync(stylesheetPath);
             fs.unlinkSync(spritePath);
-        }));
+
+            done();
+        });
     }
 
     before(function () {
@@ -64,15 +64,17 @@ describe('NSG', function () {
             stylesheetPath: stylesheetPath
         });
 
-        middleware(undefined, undefined, done(function (err) {
-            expect(err).toBe(null);
+        middleware(undefined, undefined, function (err) {
+            expect(err).not.to.be.ok;
 
-            expect(fs.readFileSync(expectedStylesheetPath).toString()).toEqual(fs.readFileSync(stylesheetPath).toString());
-            expect(fs.readFileSync(expectedSpritePath).toString()).toEqual(fs.readFileSync(spritePath).toString());
+            expect(fs.readFileSync(expectedStylesheetPath).toString()).to.equal(fs.readFileSync(stylesheetPath).toString());
+            expect(fs.readFileSync(expectedSpritePath).toString()).to.equal(fs.readFileSync(spritePath).toString());
 
             fs.unlinkSync(stylesheetPath);
             fs.unlinkSync(spritePath);
-        }));
+
+            done();
+        });
     });
 
     it('should not write the sprite image twice if nothing has changed when using connect middleware', function (done) {
@@ -88,7 +90,7 @@ describe('NSG', function () {
             };
 
         // increase timeout
-        this.timeout = 2000;
+        this.timeout = 3000;
 
         // it should always be rendered the first time
         middleware(null, null, function () {
@@ -98,7 +100,7 @@ describe('NSG', function () {
                 var secondTime = fs.statSync(spritePath).ctime;
 
                 // it should not have been changed because no files have been changed
-                expect(firstTime.getTime()).toBe(secondTime.getTime());
+                expect(firstTime.getTime()).to.equal(secondTime.getTime());
 
                 // induce new sprite creation
                 fs.unlinkSync(spritePath);
@@ -106,7 +108,7 @@ describe('NSG', function () {
                 middlewareWithTimeout(function () {
                     var thirdTime = fs.statSync(spritePath).ctime;
 
-                    expect(thirdTime.getTime()).toBeGreaterThan(firstTime.getTime());
+                    expect(thirdTime.getTime()).to.be.above(firstTime.getTime());
 
                     fs.unlinkSync(stylesheetPath);
                     fs.unlinkSync(spritePath);

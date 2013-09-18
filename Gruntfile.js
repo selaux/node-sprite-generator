@@ -2,6 +2,7 @@ module.exports = function (grunt) {
 
     'use strict';
 
+    grunt.loadNpmTasks('grunt-mocha-test');
     grunt.loadNpmTasks('grunt-jslint');
 
     grunt.initConfig({
@@ -17,6 +18,19 @@ module.exports = function (grunt) {
             },
             options: {
                 errorsOnly: false
+            }
+        },
+
+        mochaTest: {
+            unit: {
+                options: {
+                    reporter: 'spec',
+                    ui: 'bdd'
+                },
+
+                src: [
+                    'test/specs/**/*.js'
+                ]
             }
         }
     });

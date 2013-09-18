@@ -4,10 +4,8 @@
 'use strict';
 
 var fs = require('fs'),
-
+    expect = require('chai').expect,
     changeDetector = require('../../../lib/utils/changeDetector');
-
-buster.spec.expose();
 
 describe('Utils/ChangeDetector', function () {
     var options = {
@@ -18,22 +16,26 @@ describe('Utils/ChangeDetector', function () {
         spritePath: 'test/fixtures/sprite.png'
     };
 
-    beforeAll(function () {
+    beforeEach(function () {
         fs.writeFileSync(options.stylesheetPath, 'Foo');
         fs.writeFileSync(options.spritePath, 'Bar');
     });
 
-    afterAll(function () {
-        fs.unlinkSync(options.stylesheetPath);
-        fs.unlinkSync(options.spritePath);
+    afterEach(function () {
+        if (fs.existsSync(options.stylesheetPath)) {
+            fs.unlinkSync(options.stylesheetPath);
+        }
+        if (fs.existsSync(options.spritePath)) {
+            fs.unlinkSync(options.spritePath);
+        }
     });
 
     it('should always return true the first time detect is called', function (done) {
         var changes = changeDetector(options);
 
         changes.detect(function (err, changesDetected) {
-            expect(err).toBe(null);
-            expect(changesDetected).toBe(true);
+            expect(err).not.to.be.ok;
+            expect(changesDetected).to.be.true;
             done();
         });
     });
@@ -42,11 +44,11 @@ describe('Utils/ChangeDetector', function () {
         var changes = changeDetector(options);
 
         changes.register(function (err) {
-            expect(err).toBe(null);
+            expect(err).not.to.be.ok;
 
             changes.detect(function (err, changesDetected) {
-                expect(err).toBe(null);
-                expect(changesDetected).toBe(false);
+                expect(err).not.to.be.ok;
+                expect(changesDetected).to.be.false;
                 done();
             });
         });
@@ -57,13 +59,13 @@ describe('Utils/ChangeDetector', function () {
             oldDate = new Date((new Date()).getTime() - 10000);
 
         changes.register(function (err) {
-            expect(err).toBe(null);
+            expect(err).not.to.be.ok;
 
             fs.utimesSync('test/fixtures/images/src/house.png', oldDate, oldDate);
 
             changes.detect(function (err, changesDetected) {
-                expect(err).toBe(null);
-                expect(changesDetected).toBe(true);
+                expect(err).not.to.be.ok;
+                expect(changesDetected).to.be.true;
                 done();
             });
         });
@@ -73,15 +75,13 @@ describe('Utils/ChangeDetector', function () {
         var changes = changeDetector(options);
 
         changes.register(function (err) {
-            expect(err).toBe(null);
+            expect(err).not.to.be.ok;
 
             fs.unlinkSync(options.stylesheetPath);
 
             changes.detect(function (err, changesDetected) {
-                expect(err).toBe(null);
-                expect(changesDetected).toBe(true);
-
-                fs.writeFileSync(options.stylesheetPath, 'Bar');
+                expect(err).not.to.be.ok;
+                expect(changesDetected).to.be.true;
 
                 done();
             });

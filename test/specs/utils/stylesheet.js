@@ -3,12 +3,10 @@
 
 'use strict';
 
-var buster = require('buster'),
+var expect = require('chai').expect,
     _ = require('underscore'),
 
     utils = require('../../../lib/utils/stylesheet');
-
-buster.spec.expose();
 
 describe('Utils/Stylesheet', function () {
     it('prefixString should return the prefixed string', function () {
@@ -17,7 +15,7 @@ describe('Utils/Stylesheet', function () {
                 prefix: 'foo'
             };
 
-        expect(utils.prefixString(str, options)).toBe('foo-bar');
+        expect(utils.prefixString(str, options)).to.equal('foo-bar');
     });
 
     describe('nameToClass', function () {
@@ -29,7 +27,7 @@ describe('Utils/Stylesheet', function () {
 
         _.each(cases, function (c) {
             it('should return ' + c[1] + ' for ' + c[0], function () {
-                expect(utils.nameToClass(c[0])).toBe(c[1]);
+                expect(utils.nameToClass(c[0])).to.equal(c[1]);
             });
         });
     });
@@ -44,7 +42,7 @@ describe('Utils/Stylesheet', function () {
                 prefix: 'foo'
             };
 
-        expect(utils.renderTemplateForImage(image, template, options)).toEqual('foo-bar');
+        expect(utils.renderTemplateForImage(image, template, options)).to.equal('foo-bar');
     });
 
     describe('getRelativeSpriteDir', function () {
@@ -58,7 +56,7 @@ describe('Utils/Stylesheet', function () {
 
         _.each(cases, function (c) {
             it('should return ' + c[2] + ' for ' + c[0] + ' and ' + c[1], function () {
-                expect(utils.getRelativeSpriteDir(c[0], c[1])).toBe(c[2]);
+                expect(utils.getRelativeSpriteDir(c[0], c[1])).to.equal(c[2]);
             });
         });
     });

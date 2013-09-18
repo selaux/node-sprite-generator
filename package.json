@@ -10,12 +10,15 @@
         "canvas": "https://github.com/kkoopa/node-canvas/tarball/master"
     },  
     "devDependencies": {
-        "buster": "0.6.12",
+        "chai": "1.7.2",
         "grunt": "0.4.1",
-        "grunt-jslint": "0.2.6"
+        "grunt-jslint": "0.2.6",
+        "grunt-mocha-test": "0.6.3",
+        "sinon": "1.7.3",
+        "sinon-chai": "2.4.0"
     },
     "scripts": {
-        "test": "buster test"
+        "test": "grunt mochaTest"
     },
     "keywords": [
         "sprite",
