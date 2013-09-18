@@ -19,11 +19,13 @@ describe('Utils/ChangeDetector', function () {
     });
 
     afterEach(function () {
-        if (fs.existsSync(options.stylesheetPath)) {
-            fs.unlinkSync(options.stylesheetPath);
-        }
-        if (fs.existsSync(options.spritePath)) {
+        try {
             fs.unlinkSync(options.spritePath);
+            fs.unlinkSync(options.stylesheetPath);
+        } catch (err) {
+            if (err.code !== 'ENOENT') {
+                throw err;
+            }
         }
     });
 
