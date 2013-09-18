@@ -1,6 +1,3 @@
-/*global describe: false, it: false, expect: false, before: false*/
-/*jslint stupid: true */
-
 'use strict';
 
 var path = require('path'),

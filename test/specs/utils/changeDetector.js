@@ -1,6 +1,3 @@
-/*global describe: false, buster: false, it: false, expect: false, beforeAll: false, afterAll: false */
-/*jslint stupid: true */
-
 'use strict';
 
 var fs = require('fs'),

@@ -3,21 +3,39 @@ module.exports = function (grunt) {
     'use strict';
 
     grunt.loadNpmTasks('grunt-mocha-test');
-    grunt.loadNpmTasks('grunt-jslint');
+    grunt.loadNpmTasks('grunt-contrib-jshint');
 
     grunt.initConfig({
 
-        jslint: {
-            files: [
-                '**/*.js',
-                '!node_modules/**/*.js'
-            ],
-            directives: {
+        jshint: {
+            options: {
                 node: true,
                 nomen: true
             },
-            options: {
-                errorsOnly: false
+            lib: {
+                files: {
+                    src: [
+                        '**/*.js',
+                        '!node_modules/**/*.js',
+                        '!test/**/*.js'
+                    ]
+                }
+            },
+            test: {
+                files: {
+                    src: ['test/**/*.js']
+                },
+                options: {
+                    expr: true,
+                    globals: {
+                        describe: false,
+                        it: false,
+                        before: false,
+                        after: false,
+                        beforeEach: false,
+                        afterEach: false
+                    }
+                }
             }
         },
 
@@ -34,4 +52,6 @@ module.exports = function (grunt) {
             }
         }
     });
+
+    grunt.registerTask('default', [ 'jshint', 'mochaTest' ]);
 };
