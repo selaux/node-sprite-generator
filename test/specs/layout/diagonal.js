@@ -26,6 +26,7 @@ describe('Layout/Diagonal', function () {
                     _({ x: 182, y: 44 }).extend(images[2])
                 ]
             });
+            expect(layout.images[0]).not.to.equal(images[0]);
             done();
         });
     });
@@ -42,6 +43,7 @@ describe('Layout/Diagonal', function () {
                     _({ x: 282, y: 144 }).extend(images[2])
                 ]
             });
+            expect(layout.images[0]).not.to.equal(images[0]);
             done();
         });
     });
