@@ -6,7 +6,7 @@
     "dependencies": {
         "async": "0.2.9",
         "glob": "3.2.6",
-        "underscore": "1.5.1",
+        "underscore": "1.5.2",
         "canvas": "https://github.com/kkoopa/node-canvas/tarball/master"
     },  
     "devDependencies": {
