@@ -7,7 +7,7 @@
         "async": "0.2.9",
         "glob": "3.2.6",
         "underscore": "1.5.1",
-        "canvas": "https://github.com/kkoopa/node-canvas/archive/master.zip"
+        "canvas": "https://github.com/kkoopa/node-canvas/tarball/master"
     },  
     "devDependencies": {
         "buster": "0.6.12",
