@@ -6,8 +6,11 @@
     "dependencies": {
         "async": "0.2.9",
         "glob": "3.2.6",
-        "underscore": "1.5.2",
-        "canvas": "https://github.com/kkoopa/node-canvas/tarball/master"
+        "underscore": "1.5.2"
+    },
+    "optionalDependencies": {
+        "canvas": "https://github.com/kkoopa/node-canvas/tarball/master",
+        "gm": "1.13.1"
     },  
     "devDependencies": {
         "chai": "1.7.2",
@@ -19,7 +22,7 @@
         "sinon-chai": "2.4.0"
     },
     "scripts": {
-        "test": "node_modules/.bin/grunt"
+        "test": "grunt"
     },
     "keywords": [
         "sprite",

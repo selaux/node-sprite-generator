@@ -7,11 +7,15 @@ Generates image sprites and their stylesheets from sets of images. Development i
 
 ## Installation
 
-Note: __Cairo__ needs to be installed because [node-canvas](https://github.com/LearnBoost/node-canvas) depends on it. For more information how to do this on your system go to the [node-canvas page](https://github.com/LearnBoost/node-canvas/wiki/_pages).
-
 ```bash
 npm install node-sprite-generator
 ```
+
+Note: 
+node-sprite-generator has two dependencies of which one is required. node-sprite-generator will try to figure out which one is installed and use it.
+
+- __Cairo__ needs to be installed when using the `'canvas'` compositor because [node-canvas](https://github.com/LearnBoost/node-canvas) depends on it. For more information how to do this on your system go to the [node-canvas page](https://github.com/LearnBoost/node-canvas/wiki/_pages).
+- ImageMagick/GraphicsMagick needs to be installed when the `'gm'` compositor
 
 ## Usage
 
@@ -124,7 +128,7 @@ __padding__ (Type: `Integer` Default: `0`): Specifies the padding between the im
 #### options.compositor
 Type: `String|Function`
 Default value: `'canvas'`  
-If you don't want node-canvas to read and render the images, you can specify your own module that implements this functionality. Have a look at [extending node-sprite-generator](https://github.com/selaux/node-sprite-generator#extending-node-sprite-generator) to see how it's done.
+The compositor is used to read and render the images. Built-in compositors are `'canvas'` and `'gm'`. Depending on what you choose you either need libcairo (canvas) or GraphicsMagick/ImageMagick installed. You can also specify your own module that implements this functionality. Have a look at [extending node-sprite-generator](https://github.com/selaux/node-sprite-generator#extending-node-sprite-generator) to see how it's done.
 
 #### options.compositorOptions
 Type: `Object`
