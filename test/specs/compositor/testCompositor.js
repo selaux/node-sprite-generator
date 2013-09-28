@@ -54,7 +54,7 @@ module.exports = function testCompositor(name, module) {
 
                 module.render(layout, spritePath, {}, function (err) {
                     expect(err).not.to.be.ok;
-                    gm.compare(expectedPath, spritePath, 0.2, function (err, isEqual, equality, raw) {
+                    gm.compare(expectedPath, spritePath, function (err, isEqual, equality, raw) {
                         expect(err).not.to.be.ok;
                         expect(isEqual).to.be.ok;
 
@@ -84,7 +84,7 @@ module.exports = function testCompositor(name, module) {
 
                 module.render(layout, spritePath, { compressionLevel: 9 }, function (err) {
                     expect(err).not.to.be.ok;
-                    gm.compare(expectedPath, spritePath, 0.2, function (err, isEqual, equality, raw) {
+                    gm.compare(expectedPath, spritePath, function (err, isEqual, equality, raw) {
                         expect(err).not.to.be.ok;
                         expect(isEqual).to.be.ok;
 
