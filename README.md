@@ -15,7 +15,7 @@ Note:
 node-sprite-generator has two dependencies of which one is required. node-sprite-generator will try to figure out which one is installed and use it.
 
 - __Cairo__ needs to be installed when using the `'canvas'` compositor because [node-canvas](https://github.com/LearnBoost/node-canvas) depends on it. For more information how to do this on your system go to the [node-canvas page](https://github.com/LearnBoost/node-canvas/wiki/_pages).
-- ImageMagick/GraphicsMagick needs to be installed when the `'gm'` compositor
+- ImageMagick/GraphicsMagick needs to be installed when using the `'gm'` compositor
 
 ## Usage
 
