@@ -9,7 +9,7 @@
         "underscore": "1.5.2"
     },
     "optionalDependencies": {
-        "canvas": "https://github.com/kkoopa/node-canvas/tarball/master",
+        "canvas": "1.1.1",
         "gm": "1.13.1"
     },  
     "devDependencies": {
