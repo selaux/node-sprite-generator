@@ -1,0 +1,9 @@
+foo = 0px 0px 75px 6px
+bar = 0px -6px 75px 12px
+test = 0px -18px 75px 6px
+sprite($sprite)
+    background-image url('./images/png/sprite.png')
+    background-size 75px 78px
+    background-position $sprite[0] $sprite[1]
+    width $sprite[2]
+    height $sprite[3]

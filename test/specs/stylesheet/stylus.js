@@ -38,4 +38,9 @@ describe('Stylesheet/Stylus', function () {
             };
         testUtils.testStylesheetGeneration(stylus, layout, expectedStylesheetPath, { nameMapping: nameMapping }, done);
     });
+
+    it('should generate the correct stylus with a pixelRatio specified', function (done) {
+        var expectedStylesheetPath = 'test/fixtures/stylesheets/stylus/with-pixelRatio.stylus';
+        testUtils.testStylesheetGeneration(stylus, layout, expectedStylesheetPath, { pixelRatio: 2 }, done);
+    });
 });

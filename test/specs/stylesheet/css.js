@@ -38,4 +38,9 @@ describe('Stylesheet/CSS', function () {
             };
         testUtils.testStylesheetGeneration(css, layout, expectedStylesheetPath, { nameMapping: nameMapping }, done);
     });
+
+    it('should generate the correct css with a pixelRatio specified', function (done) {
+        var expectedStylesheetPath = 'test/fixtures/stylesheets/css/with-pixelRatio.css';
+        testUtils.testStylesheetGeneration(css, layout, expectedStylesheetPath, { pixelRatio: 2 }, done);
+    });
 });

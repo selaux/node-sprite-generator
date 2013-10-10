@@ -29,6 +29,39 @@ describe('Utils/Stylesheet', function () {
         });
     });
 
+    it('getScaledLayoutForPixelRatio should return a version of the layout that is scaled by pixelRatio', function () {
+        _([
+            {
+                layout: { width: 128, height: 64, images: [ { x: 0, y: 0, width: 128, height: 64 } ] },
+                pixelRatio: 2,
+                expected: { width: 64, height: 32, images: [ { x: 0, y:0, width: 64, height: 32 } ] }
+            },
+            {
+                layout: { width: 75, height: 150, images: [ { x: 0, y: 0, width: 75, height: 75 }, { x: 0, y: 75, width: 75, height: 75 } ] },
+                pixelRatio: 1.5,
+                expected: { width: 50, height: 100, images: [ { x: 0, y:0, width: 50, height: 50 }, { x: 0, y: 50, width: 50, height: 50 } ] }
+            }
+        ]).each(function (testCase) {
+            expect(utils.getScaledLayoutForPixelRatio(testCase.layout, testCase.pixelRatio)).to.deep.equal(testCase.expected);
+        });
+    });
+
+    it('renderImageTemplatesForLayout should render a template for all images in the layout', function () {
+        var layout = {
+                width: 120,
+                height: 64,
+                images: [
+                    { some: 'image' },
+                    { some: 'other image' }
+                ]
+            },
+            template = _.template('<%= image.some %> <%= layout.height %> <%= options.an %>;'),
+            options = { an: 'option', nameMapping: function () { return 'name'; } },
+            expected = 'image 64 option;other image 64 option;';
+
+        expect(utils.renderImageTemplatesForLayout(layout, template, options)).to.equal(expected);
+    });
+
     it('renderTemplateForImage should return the rendered test for a given template and image', function () {
         var image = {
                 path: '/home/user/image/bar.png'
