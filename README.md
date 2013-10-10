@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/selaux/node-sprite-generator.png)](https://travis-ci.org/selaux/node-sprite-generator)
 [![Build Status](https://david-dm.org/selaux/node-sprite-generator.png)](https://david-dm.org/selaux/node-sprite-generator)
 
-Generates image sprites and their stylesheets from sets of images. Development is at a very early stage and APIs are subject to change.
+Generates image sprites and their spritesheets (css or stylus) from sets of images. Supports retina sprites.
 
 ## Installation
 
@@ -123,7 +123,8 @@ The layout that is used to generate the sprite. The built-in layouts are `'verti
 Type: `Object`
 Default value: `{}`  
 Options that will be passed on to the layout generation. The built-in layouters support the following options.  
-__padding__ (Type: `Integer` Default: `0`): Specifies the padding between the images in the layout. 
+__padding__ (Type: `Integer` Default: `0`): Specifies the padding between the images in the layout.
+__pixelRatio__ (Type: `Integer` Default: `1`): Specifies the pixelRatio for retina sprites
 
 #### options.compositor
 Type: `String|Function`
