@@ -112,7 +112,8 @@ Default value: `'{}'`
 Options that will be passed on to the stylesheet generator. The built-in stylesheet generators support the following options:  
 __prefix__ (Type: `String` Default: `''`): A prefix that will be prepended to all classes/functions that are generated  
 __nameMapping__ (Type: `Function` Default: Filename): A function that specifies how filenames are mapped to class names in the stylesheet  
-__spritePath__ (Type: `String` Default: Relative Path): Defines which URL is used as the image path for the image sprite.
+__spritePath__ (Type: `String` Default: Relative Path): Defines which URL is used as the image path for the image sprite.  
+__pixelRatio__ (Type: `Integer` Default: `1`): Specifies the pixelRatio for retina sprites  
 
 #### options.layout
 Type: `String|Function`
@@ -123,8 +124,7 @@ The layout that is used to generate the sprite. The built-in layouts are `'verti
 Type: `Object`
 Default value: `{}`  
 Options that will be passed on to the layout generation. The built-in layouters support the following options.  
-__padding__ (Type: `Integer` Default: `0`): Specifies the padding between the images in the layout.
-__pixelRatio__ (Type: `Integer` Default: `1`): Specifies the pixelRatio for retina sprites
+__padding__ (Type: `Integer` Default: `0`): Specifies the padding between the images in the layout.  
 
 #### options.compositor
 Type: `String|Function`
