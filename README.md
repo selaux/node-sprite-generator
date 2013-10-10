@@ -144,10 +144,10 @@ var nsg = require('node-sprite-generator');
 
 nsg({
     src: [
-        'images/all-icons/*/**.png'
+        'public/images/sprite/*.png'
     ],
-    spritePath: 'images/all-icons.png',
-    stylesheetPath: 'stylus/all-icons.css',
+    spritePath: 'public/images/all-icons.png',
+    stylesheetPath: 'public/stylesheets/all-icons.css',
     layout: 'diagonal',
     layoutOptions: {
         padding: 30
@@ -155,12 +155,13 @@ nsg({
     stylesheet: 'css',
     stylesheetOptions: {
         prefix: 'all-icons',
-        spritePath: 'http://static.your-server.org/images/all-icons.png'
+        spritePath: 'http://static.your-server.org/images/all-icons.png',
+        pixelRatio: 2
     }
 });
 ```
 
-This will generate a diagonally layouted sprite that can be accessed using classes like ```all-icons-home```. The sprite will then be loaded from your static asset server.
+This will generate a diagonally layouted retina-enabled sprite that can be accessed using classes like ```all-icons-home```. The sprite will then be loaded from your static asset server.
 
 ## Extending node-sprite-generator
 
@@ -202,6 +203,16 @@ var layout = {
 ```
 
 For more information of how to write your own modules/functions have a look at the existing ones :-D.
+
+## Changelog
+
+#### 0.2.0
+- adds gm compositor to provide an alternative where node-canvas cannot be installed 
+- adds pixelRatio stylesheet option to allow to downscale sprites for retina displays
+- adds compressionLevel compositor option to allow to set the image quality for the generated sprite image
+
+#### 0.1.0
+- Initial Release
 
 ## License
 
