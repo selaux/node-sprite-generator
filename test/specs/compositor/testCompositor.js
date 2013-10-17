@@ -37,7 +37,8 @@ module.exports = function testCompositor(name, module) {
         });
 
         it('should write the sprites correctly', function (done) {
-            var expectedPath = 'test/fixtures/images/expected/nsg.png';
+            var options = {},
+                expectedPath = 'test/fixtures/images/expected/nsg.png';
 
             module.readImages(imagePaths, function (err, images) {
                 var layout = {
@@ -52,8 +53,9 @@ module.exports = function testCompositor(name, module) {
 
                 expect(err).not.to.be.ok;
 
-                module.render(layout, spritePath, {}, function (err) {
+                module.render(layout, spritePath, options, function (err) {
                     expect(err).not.to.be.ok;
+                    expect(options).to.deep.equal({});
                     gm.compare(expectedPath, spritePath, function (err, isEqual, equality, raw) {
                         expect(err).not.to.be.ok;
                         expect(isEqual).to.be.ok;
@@ -67,7 +69,8 @@ module.exports = function testCompositor(name, module) {
         });
 
         it('should write the sprites correctly when specifying a different compression level', function(done) {
-            var expectedPath = 'test/fixtures/images/expected/nsg_compression_level_9.png';
+            var options = { compressionLevel: 9 },
+                expectedPath = 'test/fixtures/images/expected/nsg_compression_level_9.png';
 
             module.readImages(imagePaths, function (err, images) {
                 var layout = {
@@ -82,8 +85,9 @@ module.exports = function testCompositor(name, module) {
 
                 expect(err).not.to.be.ok;
 
-                module.render(layout, spritePath, { compressionLevel: 9 }, function (err) {
+                module.render(layout, spritePath, options, function (err) {
                     expect(err).not.to.be.ok;
+                    expect(options).to.deep.equal({ compressionLevel: 9 });
                     gm.compare(expectedPath, spritePath, function (err, isEqual, equality, raw) {
                         expect(err).not.to.be.ok;
                         expect(isEqual).to.be.ok;

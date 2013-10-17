@@ -115,4 +115,19 @@ describe('NSG', function () {
         });
     });
 
+    it('should not leak any default options when generating a sprite', function (done) {
+        var options = {
+            compositorOptions: {},
+            layoutOptions: {},
+            stylesheetOptions: {}
+        };
+
+        testSpriteGenerationWithOptions(options, function () {
+            expect(options.compositorOptions).to.deep.equal({});
+            expect(options.layoutOptions).to.deep.equal({});
+            expect(options.stylesheetOptions).to.deep.equal({});
+            done();
+        });
+    });
+
 });

@@ -12,8 +12,11 @@ describe('Layout/Vertical', function () {
     ];
 
     it('should generate the correct layout without any options', function (done) {
-        vertical(images, function (err, layout) {
+        var options = {};
+
+        vertical(images, {}, function (err, layout) {
             expect(err).not.to.be.ok;
+            expect(options).to.deep.equal({});
             expect(layout).to.deep.equal({
                 width: 150,
                 height: 156,
@@ -29,8 +32,11 @@ describe('Layout/Vertical', function () {
     });
 
     it('should generate the correct layout when a padding is specified', function (done) {
+        var options = { padding: 50 };
+
         vertical(images, { padding: 50 }, function (err, layout) {
             expect(err).not.to.be.ok;
+            expect(options).to.deep.equal({ padding: 50 });
             expect(layout).to.deep.equal({
                 width: 150,
                 height: 256,
@@ -44,4 +50,5 @@ describe('Layout/Vertical', function () {
             done();
         });
     });
+
 });

@@ -12,8 +12,11 @@ describe('Layout/Horizontal', function () {
     ];
 
     it('should generate the correct layout without any options', function (done) {
-        horizontal(images, function (err, layout) {
+        var options = {};
+
+        horizontal(images, options, function (err, layout) {
             expect(err).not.to.be.ok;
+            expect(options).to.deep.equal({});
             expect(layout).to.deep.equal({
                 width: 294,
                 height: 112,
@@ -29,8 +32,11 @@ describe('Layout/Horizontal', function () {
     });
 
     it('should generate the correct layout when a padding is specified', function (done) {
-        horizontal(images, { padding: 50 }, function (err, layout) {
+        var options = { padding: 50 };
+
+        horizontal(images, options, function (err, layout) {
             expect(err).not.to.be.ok;
+            expect(options).to.deep.equal({ padding: 50 });
             expect(layout).to.deep.equal({
                 width: 394,
                 height: 112,
@@ -44,4 +50,5 @@ describe('Layout/Horizontal', function () {
             done();
         });
     });
+
 });

@@ -12,8 +12,11 @@ describe('Layout/Diagonal', function () {
     ];
 
     it('should generate the correct layout without any options', function (done) {
-        diagonal(images, function (err, layout) {
+        var options = {};
+
+        diagonal(images, options, function (err, layout) {
             expect(err).not.to.be.ok;
+            expect(options).to.deep.equal(options);
             expect(layout).to.deep.equal({
                 width: 294,
                 height: 156,
@@ -29,8 +32,11 @@ describe('Layout/Diagonal', function () {
     });
 
     it('should generate the correct layout when a padding is specified', function (done) {
-        diagonal(images, { padding: 50 }, function (err, layout) {
+        var options = { padding: 50 };
+
+        diagonal(images, options, function (err, layout) {
             expect(err).not.to.be.ok;
+            expect(options).to.deep.equal({ padding: 50 });
             expect(layout).to.deep.equal({
                 width: 394,
                 height: 256,
@@ -44,4 +50,5 @@ describe('Layout/Diagonal', function () {
             done();
         });
     });
+
 });
