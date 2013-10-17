@@ -19,16 +19,19 @@ describe('NSG', function () {
         expectedSpritePath = 'test/fixtures/images/expected/nsg.png';
 
     function testSpriteGenerationWithOptions(options, done) {
-        var defaults = {
-            src: imagePaths,
-            spritePath: spritePath,
-            stylesheetPath: stylesheetPath
-        };
+        var expectedOptions,
+            defaults = {
+                src: imagePaths,
+                spritePath: spritePath,
+                stylesheetPath: stylesheetPath
+            };
 
-        _.defaults(options, defaults);
+        options = _.extend({}, defaults, options);
+        expectedOptions = _.clone(options);
 
         nsg(options, function (err) {
             expect(err).not.to.be.ok;
+            expect(options).to.deep.equal(expectedOptions);
 
             expect(fs.readFileSync(expectedStylesheetPath).toString()).to.equal(fs.readFileSync(stylesheetPath).toString());
             expect(fs.readFileSync(expectedSpritePath).toString()).to.equal(fs.readFileSync(spritePath).toString());
@@ -112,21 +115,6 @@ describe('NSG', function () {
                     done();
                 });
             });
-        });
-    });
-
-    it('should not leak any default options when generating a sprite', function (done) {
-        var options = {
-            compositorOptions: {},
-            layoutOptions: {},
-            stylesheetOptions: {}
-        };
-
-        testSpriteGenerationWithOptions(options, function () {
-            expect(options.compositorOptions).to.deep.equal({});
-            expect(options.layoutOptions).to.deep.equal({});
-            expect(options.stylesheetOptions).to.deep.equal({});
-            done();
         });
     });
 
