@@ -13,11 +13,11 @@
         "gm": "1.13.1"
     },  
     "devDependencies": {
-        "chai": "1.7.2",
+        "chai": "1.8.1",
         "grunt": "0.4.1",
         "grunt-cli": "0.1.9",
         "grunt-contrib-jshint": "0.6.4",
-        "grunt-mocha-test": "0.6.3",
+        "grunt-mocha-test": "0.7.0",
         "sinon": "1.7.3",
         "sinon-chai": "2.4.0"
     },
