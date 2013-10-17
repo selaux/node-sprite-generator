@@ -206,6 +206,10 @@ For more information of how to write your own modules/functions have a look at t
 
 ## Changelog
 
+#### 0.2.1
+- fixes default options leaking into options objects
+- replaces occurences of "0px" in stylesheets with "0"
+
 #### 0.2.0
 - adds gm compositor to provide an alternative where node-canvas cannot be installed 
 - adds pixelRatio stylesheet option to allow to downscale sprites for retina displays
