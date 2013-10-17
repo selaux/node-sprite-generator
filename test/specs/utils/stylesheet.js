@@ -46,6 +46,20 @@ describe('Utils/Stylesheet', function () {
         });
     });
 
+    describe('getCSSValue', function () {
+        [
+            {  value: 0, expected: '0'},
+            {  value: 10, expected: '10px'},
+            {  value: 23, expected: '23px'},
+            {  value: -10, expected: '-10px'},
+            {  value: -122, expected: '-122px'}
+        ].forEach(function (testCase) {
+            it('should return ' + testCase.expected + ' for ' + testCase.value, function () {
+                expect(utils.getCSSValue(testCase.value)).to.equal(testCase.expected);
+            });
+        });
+    });
+
     it('renderImageTemplatesForLayout should render a template for all images in the layout', function () {
         var layout = {
                 width: 120,

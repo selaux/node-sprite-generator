@@ -1,6 +1,6 @@
-oof = 0px 0px 150px 12px
-rab = 0px -12px 150px 24px
-tset = 0px -36px 150px 12px
+oof = 0 0 150px 12px
+rab = 0 -12px 150px 24px
+tset = 0 -36px 150px 12px
 sprite($sprite)
     background-image url('./images/png/sprite.png')
     background-position $sprite[0] $sprite[1]
