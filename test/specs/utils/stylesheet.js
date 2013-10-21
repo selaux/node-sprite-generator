@@ -60,35 +60,6 @@ describe('Utils/Stylesheet', function () {
         });
     });
 
-    it('renderImageTemplatesForLayout should render a template for all images in the layout', function () {
-        var layout = {
-                width: 120,
-                height: 64,
-                images: [
-                    { some: 'image' },
-                    { some: 'other image' }
-                ]
-            },
-            template = _.template('<%= image.some %> <%= layout.height %> <%= options.an %>;'),
-            options = { an: 'option', nameMapping: function () { return 'name'; } },
-            expected = 'image 64 option;other image 64 option;';
-
-        expect(utils.renderImageTemplatesForLayout(layout, template, options)).to.equal(expected);
-    });
-
-    it('renderTemplateForImage should return the rendered test for a given template and image', function () {
-        var image = {
-                path: '/home/user/image/bar.png'
-            },
-            template = _.template('<%= className %>'),
-            options = {
-                nameMapping: utils.nameToClass,
-                prefix: 'foo'
-            };
-
-        expect(utils.renderTemplateForImage(image, template, options)).to.equal('foo-bar');
-    });
-
     describe('getRelativeSpriteDir', function () {
         var cases = [
             [ 'test/img/sprite.png', 'test/css/app.css', '../img/sprite.png' ],
