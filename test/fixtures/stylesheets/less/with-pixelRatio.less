@@ -1,0 +1,10 @@
+@foo: "0 0 75px 6px";
+@bar: "0 -6px 75px 12px";
+@test: "0 -18px 75px 6px";
+.sprite (@sprite) {
+    background-image: url('./images/png/sprite.png');
+    background-size: 75px 78px;
+    background-position: ~`@{sprite}.split(' ')[0]` ~`@{sprite}.split(' ')[1]`;
+    width: ~`@{sprite}.split(' ')[2]`;
+    height: ~`@{sprite}.split(' ')[3]`;
+}

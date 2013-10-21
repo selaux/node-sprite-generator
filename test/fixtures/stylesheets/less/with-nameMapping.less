@@ -1,0 +1,9 @@
+@oof: "0 0 150px 12px";
+@rab: "0 -12px 150px 24px";
+@tset: "0 -36px 150px 12px";
+.sprite (@sprite) {
+    background-image: url('./images/png/sprite.png');
+    background-position: ~`@{sprite}.split(' ')[0]` ~`@{sprite}.split(' ')[1]`;
+    width: ~`@{sprite}.split(' ')[2]`;
+    height: ~`@{sprite}.split(' ')[3]`;
+}
