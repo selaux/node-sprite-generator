@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/selaux/node-sprite-generator.png)](https://travis-ci.org/selaux/node-sprite-generator)
 [![Build Status](https://david-dm.org/selaux/node-sprite-generator.png)](https://david-dm.org/selaux/node-sprite-generator)
 
-Generates image sprites and their spritesheets (css, less or stylus) from sets of images. Supports retina sprites.
+Generates image sprites and their spritesheets (css, stylus, sass or less) from sets of images. Supports retina sprites.
 
 ## Installation
 
@@ -205,6 +205,10 @@ var layout = {
 For more information of how to write your own modules/functions have a look at the existing ones :-D.
 
 ## Changelog
+
+#### 0.3.0
+- adds sass support
+- adds less support
 
 #### 0.2.1
 - fixes default options leaking into options objects
