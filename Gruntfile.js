@@ -43,12 +43,27 @@ module.exports = function (grunt) {
             unit: {
                 options: {
                     reporter: 'spec',
-                    ui: 'bdd'
+                    ui: 'bdd',
+                    require: 'test/blanket'
                 },
 
                 src: [
                     'test/specs/**/*.js'
                 ]
+            },
+            htmlCoverage: {
+                options: {
+                    reporter: 'html-cov',
+                    quiet: true,
+                    captureFile: 'coverage.html'
+                },
+                src: ['test/**/*.js']
+            },
+            travisCoverage: {
+                options: {
+                    reporter: 'travis-cov'
+                },
+                src: ['test/**/*.js']
             }
         }
     });
