@@ -1,0 +1,9 @@
+$foo: 0 0 75px 6px
+$bar: 0 -6px 75px 12px
+$test: 0 -18px 75px 6px
+@mixin sprite($sprite)
+    background-image: url('./images/png/sprite.png')
+    background-size: 75px 78px
+    background-position: nth($sprite, 1) nth($sprite, 2)
+    width: nth($sprite, 3)
+    height: nth($sprite, 4)
