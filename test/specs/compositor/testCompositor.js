@@ -6,6 +6,24 @@ var path = require('path'),
     gm = require('gm'),
     expect = require('chai').expect;
 
+function compareFiles (generated, expected, callback) {
+    var generatedContent,
+        expectedContent;
+
+    try {
+        generatedContent = fs.readFileSync(generated).toString();
+        expectedContent = fs.readFileSync(expected).toString();
+    } catch (e) {
+        return callback(e);
+    }
+
+    if (generatedContent !== expectedContent) {
+        return callback(new Error('Files dont match'));
+    }
+
+    callback(null);
+}
+
 module.exports = function testCompositor(name, module) {
     describe('Compositor/' + name, function () {
         var imagePaths = [
@@ -56,9 +74,11 @@ module.exports = function testCompositor(name, module) {
                 module.render(layout, spritePath, options, function (err) {
                     expect(err).not.to.be.ok;
                     expect(options).to.deep.equal({});
-                    expect(fs.readFileSync(expectedPath).toString()).to.equal(fs.readFileSync(spritePath).toString());
-                    fs.unlinkSync(spritePath);
-                    done();
+                    compareFiles(spritePath, expectedPath, function (err) {
+                        expect(err).not.to.be.ok;
+                        fs.unlinkSync(spritePath);
+                        done();
+                    });
                 });
             });
         });
@@ -83,9 +103,11 @@ module.exports = function testCompositor(name, module) {
                 module.render(layout, spritePath, options, function (err) {
                     expect(err).not.to.be.ok;
                     expect(options).to.deep.equal({ compressionLevel: 9 });
-                    expect(fs.readFileSync(expectedPath).toString()).to.equal(fs.readFileSync(spritePath).toString());
-                    fs.unlinkSync(spritePath);
-                    done();
+                    compareFiles(spritePath, expectedPath, function (err) {
+                        expect(err).not.to.be.ok;
+                        fs.unlinkSync(spritePath);
+                        done();
+                    });
                 });
             });
         });
