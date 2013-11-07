@@ -38,7 +38,7 @@ module.exports = function testCompositor(name, module) {
 
         it('should write the sprites correctly', function (done) {
             var options = {},
-                expectedPath = 'test/fixtures/images/expected/nsg.png';
+                expectedPath = 'test/fixtures/images/expected/' + name + '/nsg.png';
 
             module.readImages(imagePaths, function (err, images) {
                 var layout = {
@@ -56,21 +56,16 @@ module.exports = function testCompositor(name, module) {
                 module.render(layout, spritePath, options, function (err) {
                     expect(err).not.to.be.ok;
                     expect(options).to.deep.equal({});
-                    gm.compare(expectedPath, spritePath, function (err, isEqual, equality, raw) {
-                        expect(err).not.to.be.ok;
-                        expect(isEqual).to.be.ok;
-
-                        fs.unlinkSync(spritePath);
-
-                        done();
-                    });
+                    expect(fs.readFileSync(expectedPath).toString()).to.equal(fs.readFileSync(spritePath).toString());
+                    fs.unlinkSync(spritePath);
+                    done();
                 });
             });
         });
 
         it('should write the sprites correctly when specifying a different compression level', function(done) {
             var options = { compressionLevel: 9 },
-                expectedPath = 'test/fixtures/images/expected/nsg_compression_level_9.png';
+                expectedPath = 'test/fixtures/images/expected/' + name + '/nsg_compression_level_9.png';
 
             module.readImages(imagePaths, function (err, images) {
                 var layout = {
@@ -88,14 +83,9 @@ module.exports = function testCompositor(name, module) {
                 module.render(layout, spritePath, options, function (err) {
                     expect(err).not.to.be.ok;
                     expect(options).to.deep.equal({ compressionLevel: 9 });
-                    gm.compare(expectedPath, spritePath, function (err, isEqual, equality, raw) {
-                        expect(err).not.to.be.ok;
-                        expect(isEqual).to.be.ok;
-
-                        fs.unlinkSync(spritePath);
-
-                        done();
-                    });
+                    expect(fs.readFileSync(expectedPath).toString()).to.equal(fs.readFileSync(spritePath).toString());
+                    fs.unlinkSync(spritePath);
+                    done();
                 });
             });
         });
