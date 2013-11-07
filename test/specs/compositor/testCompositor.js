@@ -74,8 +74,10 @@ module.exports = function testCompositor(name, module) {
                 module.render(layout, spritePath, options, function (err) {
                     expect(err).not.to.be.ok;
                     expect(options).to.deep.equal({});
-                    compareFiles(spritePath, expectedPath, function (err) {
+                    gm.compare(expectedPath, spritePath, function (err, isEqual) {
                         expect(err).not.to.be.ok;
+                        expect(isEqual).to.be.ok;
+
                         fs.unlinkSync(spritePath);
                         done();
                     });
@@ -85,7 +87,7 @@ module.exports = function testCompositor(name, module) {
 
         it('should write the sprites correctly when specifying a different compression level', function(done) {
             var options = { compressionLevel: 9 },
-                expectedPath = 'test/fixtures/images/expected/' + name + '/nsg_compression_level_9.png';
+                expectedPath = 'test/fixtures/images/expected/' + name + '/nsg.png';
 
             module.readImages(imagePaths, function (err, images) {
                 var layout = {
@@ -103,8 +105,11 @@ module.exports = function testCompositor(name, module) {
                 module.render(layout, spritePath, options, function (err) {
                     expect(err).not.to.be.ok;
                     expect(options).to.deep.equal({ compressionLevel: 9 });
-                    compareFiles(spritePath, expectedPath, function (err) {
+                    gm.compare(expectedPath, spritePath, function (err, isEqual) {
                         expect(err).not.to.be.ok;
+                        expect(isEqual).to.be.ok;
+                        expect(fs.statSync(spritePath).size).to.be.below(fs.statSync(expectedPath).size);
+
                         fs.unlinkSync(spritePath);
                         done();
                     });
