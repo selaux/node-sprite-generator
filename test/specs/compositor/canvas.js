@@ -46,7 +46,7 @@ describe('Compositor/canvas', function () {
             nodeCanvas = {
                 Image: ImageStub
             },
-            canvas = sandboxedModule.require('../../../lib/compositor/canvas', {
+            canvasCompositor = sandboxedModule.require('../../../lib/compositor/canvas', {
                 requires: {
                     fs: fs,
                     canvas: nodeCanvas
@@ -58,7 +58,7 @@ describe('Compositor/canvas', function () {
         });
 
 
-        canvas.readImages(_.keys(imageData), function (err, images) {
+        canvasCompositor.readImages(_.keys(imageData), function (err, images) {
             var houseImage = images[0],
                 lenaImage = images[1],
                 lockImage = images[2];
@@ -109,14 +109,14 @@ describe('Compositor/canvas', function () {
                 toBuffer: sinon.stub().yieldsAsync(null, fileBuffer)
             },
             Canvas = sinon.stub().returns(canvasInstance),
-            canvas = sandboxedModule.require('../../../lib/compositor/canvas', {
+            canvasCompositor = sandboxedModule.require('../../../lib/compositor/canvas', {
                 requires: {
                     fs: fs,
                     canvas: Canvas
                 }
             });
 
-        canvas.render(layout, 'some/path', options, function (err) {
+        canvasCompositor.render(layout, 'some/path', options, function (err) {
             expect(err).not.to.be.ok;
             expect(options).to.deep.equal(optionsClone);
 
