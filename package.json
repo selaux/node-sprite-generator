@@ -19,6 +19,7 @@
         "grunt-cli": "0.1.9",
         "grunt-contrib-jshint": "0.6.4",
         "grunt-mocha-test": "0.7.0",
+        "sandboxed-module": "0.3.0",
         "sinon": "1.7.3",
         "sinon-chai": "2.4.0",
         "travis-cov": "0.2.4"
