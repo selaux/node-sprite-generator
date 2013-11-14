@@ -3,6 +3,7 @@
 var path = require('path'),
     fs = require('fs'),
     _ = require('underscore'),
+    Canvas = require('canvas'),
     sandboxedModule = require('sandboxed-module'),
     sinon = require('sinon'),
     chai = require('chai'),
@@ -155,6 +156,24 @@ describe('Compositor/canvas', function () {
         }, function (stubs) {
             expect(stubs.canvasInstance.toBuffer.getCall(0).args[1]).to.equal(9);
             done();
+        });
+    });
+
+    describe('filterToParam', function () {
+        var canvasCompositor = require('../../../lib/compositor/canvas'),
+            canvasInstance = new Canvas(0,0);
+
+        [
+            { filter: 'none', expected: canvasInstance.PNG_FILTER_NONE },
+            { filter: 'sub', expected: canvasInstance.PNG_FILTER_SUB },
+            { filter: 'up', expected: canvasInstance.PNG_FILTER_UP },
+            { filter: 'average', expected: canvasInstance.PNG_FILTER_AVG },
+            { filter: 'paeth', expected: canvasInstance.PNG_FILTER_PAETH },
+            { filter: 'all', expected: canvasInstance.PNG_ALL_FILTERS }
+        ].forEach(function (testCase) {
+            it('should return ' + testCase.expected + ' for ' + testCase.filter, function () {
+                expect(canvasCompositor.filterToParam(testCase.filter, canvasInstance)).to.deep.equal(testCase.expected);
+            });
         });
     });
 
