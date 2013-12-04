@@ -135,7 +135,7 @@ The compositor is used to read and render the images. Built-in compositors are `
 Type: `Object`
 Default value: `{}`  
 Options that will be passed on to the compositor. The built-in compositor supports the following options:
-__compressionLevel__ (Type: `Integer` Default: `6`): Specifies the compression level for the generated png file (compression levels range from 0-9).
+__compressionLevel__ (Type: `Integer` Default: `60`): Specifies the compression level for the generated png file (compression levels range from 0-100).
 
 ## A more advanced example
 
@@ -157,6 +157,9 @@ nsg({
         prefix: 'all-icons',
         spritePath: 'http://static.your-server.org/images/all-icons.png',
         pixelRatio: 2
+    },
+	compositorOptions: {
+        compressionLevel : 100
     }
 });
 ```
