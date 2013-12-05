@@ -206,6 +206,11 @@ For more information of how to write your own modules/functions have a look at t
 
 ## Changelog
 
+#### 0.3.1
+- fix "Fatal error: spawn EMFILE" issue with too many open files for large sprites
+- fixes compositor options not being passed to the compositor (oops)
+- fixes compression level for gm compositor
+
 #### 0.3.0
 - adds sass support
 - adds less support
