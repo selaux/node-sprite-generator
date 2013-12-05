@@ -121,14 +121,14 @@ describe('Compositor/gm', function () {
 
     it('should write the sprites correctly', function (done) {
         testRender({}, function (stubs) {
-            expect(stubs.gmInstanceStub.quality).to.have.been.calledWith(69);
+            expect(stubs.gmInstanceStub.quality).to.have.been.calledWith(60);
             done();
         });
     });
 
     it('should write the sprites correctly when specifying a different compression level', function(done) {
-        testRender({ compressionLevel: 9 }, function (stubs) {
-            expect(stubs.gmInstanceStub.quality).to.have.been.calledWith(99);
+        testRender({ compressionLevel: 65 }, function (stubs) {
+            expect(stubs.gmInstanceStub.quality).to.have.been.calledWith(65);
             done();
         });
     });
