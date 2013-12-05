@@ -107,7 +107,9 @@ describe('Compositor/canvas', function () {
             },
             canvasInstance = {
                 getContext: sinon.stub().returns(canvas2dContext),
-                toBuffer: sinon.stub().yieldsAsync(null, fileBuffer)
+                toBuffer: sinon.stub().yieldsAsync(null, fileBuffer),
+                PNG_FILTER_NONE: 8,
+                PNG_ALL_FILTERS: 256
             },
             Canvas = sinon.stub().returns(canvasInstance),
             canvasCompositor = sandboxedModule.require('../../../lib/compositor/canvas', {
@@ -146,6 +148,7 @@ describe('Compositor/canvas', function () {
     it('should render the sprite correctly', function (done) {
         testRender({}, function (stubs) {
             expect(stubs.canvasInstance.toBuffer.getCall(0).args[1]).to.equal(6);
+            expect(stubs.canvasInstance.toBuffer.getCall(0).args[2]).to.equal(256);
             done();
         });
     });
@@ -155,6 +158,17 @@ describe('Compositor/canvas', function () {
             compressionLevel: 9
         }, function (stubs) {
             expect(stubs.canvasInstance.toBuffer.getCall(0).args[1]).to.equal(9);
+            expect(stubs.canvasInstance.toBuffer.getCall(0).args[2]).to.equal(256);
+            done();
+        });
+    });
+
+    it('should render the sprite correctly with a different filter method', function (done) {
+        testRender({
+            filter: 'none'
+        }, function (stubs) {
+            expect(stubs.canvasInstance.toBuffer.getCall(0).args[1]).to.equal(6);
+            expect(stubs.canvasInstance.toBuffer.getCall(0).args[2]).to.equal(8);
             done();
         });
     });
