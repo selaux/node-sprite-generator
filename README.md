@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/selaux/node-sprite-generator.png)](https://travis-ci.org/selaux/node-sprite-generator)
 [![Build Status](https://david-dm.org/selaux/node-sprite-generator.png)](https://david-dm.org/selaux/node-sprite-generator)
 
-Generates image sprites and their spritesheets (css, stylus, sass or less) from sets of images. Supports retina sprites.
+Generates image sprites and their spritesheets (css, stylus, sass or less) from sets of images. Supports retina sprites. Provides express middleware and grunt task.
 
 ## Installation
 
