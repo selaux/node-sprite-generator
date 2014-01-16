@@ -133,4 +133,26 @@ describe('Compositor/gm', function () {
         });
     });
 
+    it('should write the sprites correctly when specifying a different filter', function(done) {
+        testRender({ filter: 'none' }, function (stubs) {
+            expect(stubs.gmInstanceStub.quality).to.have.been.calledWith(60);
+            done();
+        });
+    });
+
+    describe('filterToQualtiy', function () {
+        [
+            { filter: 'none', expected: 0 },
+            { filter: 'sub', expected: 1 },
+            { filter: 'up', expected: 2 },
+            { filter: 'average', expected: 3 },
+            { filter: 'paeth', expected: 4 },
+            { filter: 'all', expected: 9 }
+        ].forEach(function (testCase) {
+            it('should return ' + testCase.expected + ' for ' + testCase.filter, function () {
+                expect(gmCompositor.filterToQuality(testCase.filter)).to.equal(testCase.expected);
+            });
+        });
+    });
+
 });

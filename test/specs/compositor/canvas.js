@@ -3,6 +3,7 @@
 var path = require('path'),
     fs = require('fs'),
     _ = require('underscore'),
+    Canvas = require('canvas'),
     sandboxedModule = require('sandboxed-module'),
     sinon = require('sinon'),
     chai = require('chai'),
@@ -46,7 +47,7 @@ describe('Compositor/canvas', function () {
             nodeCanvas = {
                 Image: ImageStub
             },
-            canvas = sandboxedModule.require('../../../lib/compositor/canvas', {
+            canvasCompositor = sandboxedModule.require('../../../lib/compositor/canvas', {
                 requires: {
                     fs: fs,
                     canvas: nodeCanvas
@@ -58,7 +59,7 @@ describe('Compositor/canvas', function () {
         });
 
 
-        canvas.readImages(_.keys(imageData), function (err, images) {
+        canvasCompositor.readImages(_.keys(imageData), function (err, images) {
             var houseImage = images[0],
                 lenaImage = images[1],
                 lockImage = images[2];
@@ -106,17 +107,19 @@ describe('Compositor/canvas', function () {
             },
             canvasInstance = {
                 getContext: sinon.stub().returns(canvas2dContext),
-                toBuffer: sinon.stub().yieldsAsync(null, fileBuffer)
+                toBuffer: sinon.stub().yieldsAsync(null, fileBuffer),
+                PNG_FILTER_NONE: 8,
+                PNG_ALL_FILTERS: 256
             },
             Canvas = sinon.stub().returns(canvasInstance),
-            canvas = sandboxedModule.require('../../../lib/compositor/canvas', {
+            canvasCompositor = sandboxedModule.require('../../../lib/compositor/canvas', {
                 requires: {
                     fs: fs,
                     canvas: Canvas
                 }
             });
 
-        canvas.render(layout, 'some/path', options, function (err) {
+        canvasCompositor.render(layout, 'some/path', options, function (err) {
             expect(err).not.to.be.ok;
             expect(options).to.deep.equal(optionsClone);
 
@@ -145,6 +148,7 @@ describe('Compositor/canvas', function () {
     it('should render the sprite correctly', function (done) {
         testRender({}, function (stubs) {
             expect(stubs.canvasInstance.toBuffer.getCall(0).args[1]).to.equal(6);
+            expect(stubs.canvasInstance.toBuffer.getCall(0).args[2]).to.equal(256);
             done();
         });
     });
@@ -154,7 +158,36 @@ describe('Compositor/canvas', function () {
             compressionLevel: 9
         }, function (stubs) {
             expect(stubs.canvasInstance.toBuffer.getCall(0).args[1]).to.equal(9);
+            expect(stubs.canvasInstance.toBuffer.getCall(0).args[2]).to.equal(256);
             done();
+        });
+    });
+
+    it('should render the sprite correctly with a different filter method', function (done) {
+        testRender({
+            filter: 'none'
+        }, function (stubs) {
+            expect(stubs.canvasInstance.toBuffer.getCall(0).args[1]).to.equal(6);
+            expect(stubs.canvasInstance.toBuffer.getCall(0).args[2]).to.equal(8);
+            done();
+        });
+    });
+
+    describe('filterToParam', function () {
+        var canvasCompositor = require('../../../lib/compositor/canvas'),
+            canvasInstance = new Canvas(0,0);
+
+        [
+            { filter: 'none', expected: canvasInstance.PNG_FILTER_NONE },
+            { filter: 'sub', expected: canvasInstance.PNG_FILTER_SUB },
+            { filter: 'up', expected: canvasInstance.PNG_FILTER_UP },
+            { filter: 'average', expected: canvasInstance.PNG_FILTER_AVG },
+            { filter: 'paeth', expected: canvasInstance.PNG_FILTER_PAETH },
+            { filter: 'all', expected: canvasInstance.PNG_ALL_FILTERS }
+        ].forEach(function (testCase) {
+            it('should return ' + testCase.expected + ' for ' + testCase.filter, function () {
+                expect(canvasCompositor.filterToParam(testCase.filter, canvasInstance)).to.deep.equal(testCase.expected);
+            });
         });
     });
 
