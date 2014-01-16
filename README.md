@@ -134,8 +134,9 @@ The compositor is used to read and render the images. Built-in compositors are `
 #### options.compositorOptions
 Type: `Object`
 Default value: `{}`  
-Options that will be passed on to the compositor. The built-in compositor supports the following options:
-__compressionLevel__ (Type: `Integer` Default: `6`): Specifies the compression level for the generated png file (compression levels range from 0-9).
+Options that will be passed on to the compositor. The built-in compositor supports the following options:  
+__compressionLevel__ (Type: `Integer` Default: `6`): Specifies the compression level for the generated png file (compression levels range from 0-9).  
+__filter__ (Type: `String` Default: `all`): Specifies the filter used for the generated png file. Possible values: `all`, `none`, `sub`, `up`, `average`, `paeth`.
 
 ## A more advanced example
 
