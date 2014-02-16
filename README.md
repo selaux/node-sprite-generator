@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/selaux/node-sprite-generator.png)](https://travis-ci.org/selaux/node-sprite-generator)
 [![Build Status](https://david-dm.org/selaux/node-sprite-generator.png)](https://david-dm.org/selaux/node-sprite-generator)
 
-Generates image sprites and their spritesheets (css, stylus, sass or less) from sets of images. Supports retina sprites. Provides express middleware and grunt task.
+Generates image sprites and their spritesheets (css, stylus, sass, scss or less) from sets of images. Supports retina sprites. Provides express middleware and grunt task.
 
 ## Installation
 
@@ -104,7 +104,7 @@ The path your stylesheet will be written to.
 #### options.stylesheet
 Type: `String|Function`
 Default value: `'stylus'`  
-Specifies the stylesheet generator (and therefore the format) that is used. The built-in formats are `'stylus'`, `'less'`, `'sass'` and `'css'`. Please note that the sass module outputs sass syntax, not scss syntax. You can also specify a function that writes a custom stylesheet (see more at [extending node-sprite-generator](https://github.com/selaux/node-sprite-generator#extending-node-sprite-generator)).
+Specifies the stylesheet generator (and therefore the format) that is used. The built-in formats are `'stylus'`, `'less'`, `'sass'`, `'scss'` and `'css'`. You can also specify a function that writes a custom stylesheet (see more at [extending node-sprite-generator](https://github.com/selaux/node-sprite-generator#extending-node-sprite-generator)).
 
 #### options.stylesheetOptions
 Type: `Object`
