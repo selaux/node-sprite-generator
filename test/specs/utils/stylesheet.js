@@ -9,7 +9,7 @@ describe('Utils/Stylesheet', function () {
     it('prefixString should return the prefixed string', function () {
         var str = 'bar',
             options = {
-                prefix: 'foo'
+                prefix: 'foo-'
             };
 
         expect(utils.prefixString(str, options)).to.equal('foo-bar');

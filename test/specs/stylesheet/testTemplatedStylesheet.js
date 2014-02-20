@@ -24,7 +24,7 @@ module.exports = function (name) {
 
         it('should generate the correct ' + name + ' with a prefix specified', function (done) {
             var expectedStylesheetPath = 'test/fixtures/stylesheets/' + name + '/with-prefix.' + name;
-            testUtils.testStylesheetGeneration(stylesheetGenerator, layout, expectedStylesheetPath, { prefix: 'sprite' }, done);
+            testUtils.testStylesheetGeneration(stylesheetGenerator, layout, expectedStylesheetPath, { prefix: 'sprite-' }, done);
         });
 
         it('should generate the correct ' + name + ' with a spritePath specified', function (done) {
