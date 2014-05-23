@@ -104,7 +104,8 @@ The path your stylesheet will be written to.
 #### options.stylesheet
 Type: `String|Function`
 Default value: `'stylus'`  
-Specifies the stylesheet generator (and therefore the format) that is used. The built-in formats are `'stylus'`, `'less'`, `'sass'`, `'scss'` and `'css'`. You can also specify a function that writes a custom stylesheet (see more at [extending node-sprite-generator](https://github.com/selaux/node-sprite-generator#extending-node-sprite-generator)).
+Specifies the stylesheet generator (and therefore the format) that is used. The built-in formats are `'stylus'`, `'less'`, `'sass'`, `'scss'`, `'css'` and `'prefixed-css'`. `'prefixed-css'` is the same as `'css'` but generates a lighter CSS file, it requires the use of `options.stylesheetOptions.prefix`.  
+You can also specify a function that writes a custom stylesheet (see more at [extending node-sprite-generator](https://github.com/selaux/node-sprite-generator#extending-node-sprite-generator)).
 
 #### options.stylesheetOptions
 Type: `Object`

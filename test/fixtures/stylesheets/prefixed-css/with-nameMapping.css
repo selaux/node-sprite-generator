@@ -1,0 +1,4 @@
+[class^='sprite-'], [class*=' sprite-'] { background-image:url('./images/png/sprite.png'); }
+.sprite-oof { background-position:0 0; width:150px; height:12px; }
+.sprite-rab { background-position:0 -12px; width:150px; height:24px; }
+.sprite-tset { background-position:0 -36px; width:150px; height:12px; }

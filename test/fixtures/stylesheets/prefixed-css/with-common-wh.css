@@ -1,0 +1,4 @@
+[class^='sprite-'], [class*=' sprite-'] { background-image:url('./images/png/sprite.png'); width:150px; height:12px; }
+.sprite-foo { background-position:0 0; }
+.sprite-bar { background-position:0 -12px; }
+.sprite-test { background-position:0 -24px; }
