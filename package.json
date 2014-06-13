@@ -4,25 +4,25 @@
     "description": "Generates image sprites and their spritesheets (css, stylus, sass, scss or less) from sets of images. Supports retina sprites. Provides express middleware and grunt task.",
     "main": "lib/nsg.js",
     "dependencies": {
-        "async": "0.2.9",
-        "glob": "3.2.6",
-        "underscore": "1.5.2"
+        "async": "0.9.0",
+        "glob": "4.0.2",
+        "underscore": "1.6.0"
     },
     "optionalDependencies": {
-        "canvas": "1.1.3",
-        "gm": "1.13.1"
+        "canvas": "1.1.4",
+        "gm": "1.16.0"
     },  
     "devDependencies": {
-        "blanket": "1.1.5",
-        "chai": "1.8.1",
-        "grunt": "0.4.1",
-        "grunt-cli": "0.1.9",
-        "grunt-contrib-jshint": "0.6.4",
-        "grunt-mocha-test": "0.7.0",
-        "sandboxed-module": "0.3.0",
-        "sinon": "1.7.3",
-        "sinon-chai": "2.4.0",
-        "travis-cov": "0.2.4"
+        "blanket": "1.1.6",
+        "chai": "1.9.1",
+        "grunt": "0.4.5",
+        "grunt-cli": "0.1.13",
+        "grunt-contrib-jshint": "0.10.0",
+        "grunt-mocha-test": "0.11.0",
+        "sandboxed-module": "1.0.0",
+        "sinon": "1.10.2",
+        "sinon-chai": "2.5.0",
+        "travis-cov": "0.2.5"
     },
     "scripts": {
         "test": "grunt"
