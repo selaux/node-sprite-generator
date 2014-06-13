@@ -12,7 +12,8 @@ module.exports = {
             spritePath = 'test/fixtures/images/png/sprite.png',
             stylesheetPath =  'test/fixtures/test.file';
 
-        generator(layout, stylesheetPath, spritePath, options, function () {
+        generator(layout, stylesheetPath, spritePath, options, function (err) {
+            expect(err).not.to.be.ok;
             expect(options).to.deep.equal(expectedOptions);
             expect(fs.readFileSync(expectedPath).toString()).to.equal(fs.readFileSync(stylesheetPath).toString());
             fs.unlinkSync(stylesheetPath);
