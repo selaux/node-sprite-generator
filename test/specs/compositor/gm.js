@@ -32,11 +32,12 @@ describe('Compositor/gm', function () {
             }
         ],
         gmStub,
-        fsStub = { readFile: sinon.stub() },
+        fsStub,
         gmCompositor;
 
     beforeEach(function () {
         gmStub = sinon.stub();
+        fsStub = { readFile: sinon.stub() };
         gmCompositor = sandboxedModule.require('../../../lib/compositor/gm', {
             requires: {
                 gm: gmStub,
@@ -63,6 +64,37 @@ describe('Compositor/gm', function () {
         gmCompositor.readImages(_.pluck(imageData, 'path'), function (err, images) {
             expect(err).to.equal(null);
             expect(images).to.deep.equal(imageData);
+            done();
+        });
+    });
+
+    it('should callback with errors from reading files', function (done) {
+        var error = new Error('Test Error');
+
+        fsStub.readFile.yieldsAsync(error);
+
+        gmCompositor.readImages(_.pluck(imageData, 'path'), function (err) {
+            expect(err).to.equal(error);
+            done();
+        });
+    });
+
+    it('should callback with errors from gm', function (done) {
+        var error = new Error('Test Error');
+
+        _.each(imageData, function (image) {
+            var imgStub = {
+                size: sinon.stub().yieldsAsync(error)
+            };
+
+            imgStub.size.returns(imgStub);
+
+            fsStub.readFile.withArgs(image.path).yieldsAsync(null, image.data);
+            gmStub.withArgs(image.data).returns(imgStub);
+        });
+
+        gmCompositor.readImages(_.pluck(imageData, 'path'), function (err) {
+            expect(err).to.equal(error);
             done();
         });
     });

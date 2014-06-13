@@ -87,6 +87,28 @@ describe('Compositor/canvas', function () {
         });
     });
 
+    it('should correctly callback with errors when reading', function (done) {
+        var fs = {
+                readFile: sinon.stub()
+            },
+            canvasCompositor = sandboxedModule.require('../../../lib/compositor/canvas', {
+                requires: {
+                    fs: fs,
+                    canvas: {
+                        Image: sinon.stub()
+                    }
+                }
+            }),
+            error = new Error('Test Error');
+
+        fs.readFile.yieldsAsync(error);
+
+        canvasCompositor.readImages(_.keys(imageData), function (err) {
+            expect(err).to.equal(error);
+            done();
+        });
+    });
+
     function testRender (options, callback) {
         var optionsClone = _.clone(options),
             layout = {
