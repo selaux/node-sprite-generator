@@ -208,6 +208,10 @@ For more information of how to write your own modules/functions have a look at t
 
 ## Changelog
 
+#### 0.6.0
+- adds support for prefixed-css
+- fix issues with errors being absorbed before callbacks
+
 #### 0.5.0
 - **BREAKING CHANGE**: prefixes are not prepended with a hyphen (`-`) anymore (`prefix-sprite` will become `prefixsprite`)
 - adds support for scss syntax
