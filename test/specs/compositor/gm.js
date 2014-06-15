@@ -3,6 +3,7 @@
 var path = require('path'),
     _ = require('underscore'),
     sandboxedModule = require('sandboxed-module'),
+    sandboxedModuleBlanket = require('sandboxed-module-blanket'),
     sinon = require('sinon'),
     chai = require('chai'),
     expect = chai.expect,
@@ -39,6 +40,7 @@ describe('Compositor/gm', function () {
         gmStub = sinon.stub();
         fsStub = { readFile: sinon.stub() };
         gmCompositor = sandboxedModule.require('../../../lib/compositor/gm', {
+            sourceTransformers: sandboxedModuleBlanket,
             requires: {
                 gm: gmStub,
                 fs: fsStub
