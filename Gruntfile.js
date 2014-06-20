@@ -59,14 +59,16 @@ module.exports = function (grunt) {
                 },
                 src: ['test/**/*.js']
             },
-            travisCoverage: {
+            coveralls: {
                 options: {
-                    reporter: 'travis-cov'
+                    reporter: 'mocha-lcov-reporter',
+                    quiet: true,
+                    captureFile: 'coverage.lcov'
                 },
                 src: ['test/**/*.js']
             }
         }
     });
 
-    grunt.registerTask('default', [ 'jshint', 'mochaTest' ]);
+    grunt.registerTask('default', [ 'jshint', 'mochaTest:unit', 'mochaTest:htmlCoverage' ]);
 };

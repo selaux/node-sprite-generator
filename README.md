@@ -1,7 +1,8 @@
 # node-sprite-generator
 
 [![Build Status](https://travis-ci.org/selaux/node-sprite-generator.png)](https://travis-ci.org/selaux/node-sprite-generator)
-[![Build Status](https://david-dm.org/selaux/node-sprite-generator.png)](https://david-dm.org/selaux/node-sprite-generator)
+[![Coverage Status](https://coveralls.io/repos/selaux/node-sprite-generator/badge.png?branch=master)](https://coveralls.io/r/selaux/node-sprite-generator?branch=master)
+[![Dependencies](https://david-dm.org/selaux/node-sprite-generator.png)](https://david-dm.org/selaux/node-sprite-generator)
 
 Generates image sprites and their spritesheets (css, stylus, sass, scss or less) from sets of images. Supports retina sprites. Provides express middleware and grunt task.
 
