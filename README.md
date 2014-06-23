@@ -155,11 +155,10 @@ nsg({
     layoutOptions: {
         padding: 30
     },
-    stylesheet: 'css',
+    stylesheet: 'app/assets/sprites/template.tpl',
     stylesheetOptions: {
         prefix: 'all-icons',
         spritePath: 'http://static.your-server.org/images/all-icons.png',
-        templatePath: 'app/assets/sprites/template.tpl',
         pixelRatio: 2
     }
 });
