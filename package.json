@@ -23,10 +23,12 @@
         "sandboxed-module-blanket": "0.0.1",
         "sinon": "1.10.2",
         "sinon-chai": "2.5.0",
-        "travis-cov": "0.2.5"
+        "mocha-lcov-reporter": "0.0.1",
+        "coveralls": "2.10.0"
     },
     "scripts": {
-        "test": "grunt"
+        "test": "grunt",
+        "coveralls": "grunt mochaTest:coveralls && cat coverage.lcov | coveralls"
     },
     "keywords": [
         "sprite",
