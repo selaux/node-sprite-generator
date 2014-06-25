@@ -47,6 +47,10 @@ describe('NSG', function () {
         this.timeout = 500;
     });
 
+    afterEach(function () {
+        expectedStylesheetPath = 'test/fixtures/stylesheets/stylus/nsg-test.styl';
+    });
+
     it('should correctly write sprite image and stylesheets when using directly', function (done) {
         testSpriteGenerationWithOptions({}, done);
     });
