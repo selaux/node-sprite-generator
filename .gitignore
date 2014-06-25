@@ -2,3 +2,4 @@
 node-sprite-generator.iml
 node_modules/*
 coverage.html
+**/.DS_Store
