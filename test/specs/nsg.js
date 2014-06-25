@@ -118,4 +118,11 @@ describe('NSG', function () {
         });
     });
 
+    it('should correctly write stylesheets when using custom template', function (done) {
+        expectedStylesheetPath = 'test/fixtures/stylesheets/stylus/with-custom-template.stylus';
+
+        testSpriteGenerationWithOptions({
+            stylesheet: 'test/fixtures/stylesheets/template.tpl'
+        }, done);
+    });
 });

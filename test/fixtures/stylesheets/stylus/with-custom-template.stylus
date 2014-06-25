@@ -1,0 +1,10 @@
+house = 0 0 15px 15px
+lena = 0 -15px 300px 168px
+lock = 0 -183px 26px 31px
+sprite($sprite)
+    background-image url('./sprite.png')
+    background-position $sprite[0] $sprite[1]
+    width $sprite[2]
+    height $sprite[3]
+
+// Generated using custom template!
