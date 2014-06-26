@@ -47,6 +47,10 @@ describe('NSG', function () {
         this.timeout = 500;
     });
 
+    afterEach(function () {
+        expectedStylesheetPath = 'test/fixtures/stylesheets/stylus/nsg-test.styl';
+    });
+
     it('should correctly write sprite image and stylesheets when using directly', function (done) {
         testSpriteGenerationWithOptions({}, done);
     });
@@ -118,4 +122,11 @@ describe('NSG', function () {
         });
     });
 
+    it('should correctly write stylesheets when using custom template', function (done) {
+        expectedStylesheetPath = 'test/fixtures/stylesheets/stylus/with-custom-template.stylus';
+
+        testSpriteGenerationWithOptions({
+            stylesheet: 'test/fixtures/stylesheets/template.tpl'
+        }, done);
+    });
 });
