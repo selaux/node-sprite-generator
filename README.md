@@ -115,7 +115,7 @@ Options that will be passed on to the stylesheet generator. The built-in stylesh
 __prefix__ (Type: `String` Default: `''`): A prefix that will be prepended to all classes/functions that are generated  
 __nameMapping__ (Type: `Function` Default: Filename): A function that specifies how filenames are mapped to class names in the stylesheet  
 __spritePath__ (Type: `String` Default: Relative Path): Defines which URL is used as the image path for the image sprite.  
-__pixelRatio__ (Type: `Integer` Default: `1`): Specifies the pixelRatio for retina sprites
+__pixelRatio__ (Type: `Integer` Default: `1`): Specifies the pixelRatio for retina sprites.  
 __templatePath__ (Type: `String`  Default: `''` ) Specifies the template to be used to generate stylesheet output
 
 #### options.layout
