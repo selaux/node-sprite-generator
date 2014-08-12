@@ -210,6 +210,9 @@ For more information of how to write your own modules/functions have a look at t
 
 ## Changelog
 
+#### 0.7.0
+- adds support for templatePath in stylesheetOptions
+
 #### 0.6.0
 - adds support for prefixed-css
 - fix issues with errors being absorbed before callbacks
