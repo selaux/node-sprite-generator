@@ -12,7 +12,7 @@ Generates image sprites and their spritesheets (css, stylus, sass, scss or less)
 npm install node-sprite-generator
 ```
 
-Note: 
+Note:
 node-sprite-generator has two dependencies of which one is required. node-sprite-generator will try to figure out which one is installed and use it.
 
 - __Cairo__ needs to be installed when using the `'canvas'` compositor because [node-canvas](https://github.com/LearnBoost/node-canvas) depends on it. For more information how to do this on your system go to the [node-canvas page](https://github.com/LearnBoost/node-canvas/wiki/_pages).
@@ -46,7 +46,7 @@ node-sprite-generator provides a middleware to use with [express.js](https://git
 var nsg = require('node-sprite-generator'),
     express = require('express'),
     app = express();
-    
+
 app.use(nsg.middleware({
     src: [
         'images/sprite/*.png'
@@ -128,6 +128,7 @@ Type: `Object`
 Default value: `{}`  
 Options that will be passed on to the layout generation. The built-in layouters support the following options.  
 __padding__ (Type: `Integer` Default: `0`): Specifies the padding between the images in the layout.  
+__scaling__ (Type: `Number` Default: `1`): Specifies the factor that the images are scaled with in the layout. This allows generating multiple, scaled versions of the same sprites using a single image set.  
 
 #### options.compositor
 Type: `String|Function`
@@ -239,7 +240,7 @@ For more information of how to write your own modules/functions have a look at t
 - replaces occurences of "0px" in stylesheets with "0"
 
 #### 0.2.0
-- adds gm compositor to provide an alternative where node-canvas cannot be installed 
+- adds gm compositor to provide an alternative where node-canvas cannot be installed
 - adds pixelRatio stylesheet option to allow to downscale sprites for retina displays
 - adds compressionLevel compositor option to allow to set the image quality for the generated sprite image
 
