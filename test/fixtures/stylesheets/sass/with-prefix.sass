@@ -1,8 +1,29 @@
-$prefix-foo: 0 0 150px 12px
-$prefix-bar: 0 -12px 150px 24px
-$prefix-test: 0 -36px 150px 12px
-@mixin prefix-sprite($sprite)
+$prefix-foo-x: 0
+$prefix-foo-y: 0
+$prefix-foo-width: 150px
+$prefix-foo-height: 12px
+$prefix-foo: $prefix-foo-x $prefix-foo-y $prefix-foo-width $prefix-foo-height
+$prefix-bar-x: 0
+$prefix-bar-y: -12px
+$prefix-bar-width: 150px
+$prefix-bar-height: 24px
+$prefix-bar: $prefix-bar-x $prefix-bar-y $prefix-bar-width $prefix-bar-height
+$prefix-test-x: 0
+$prefix-test-y: -36px
+$prefix-test-width: 150px
+$prefix-test-height: 12px
+$prefix-test: $prefix-test-x $prefix-test-y $prefix-test-width $prefix-test-height
+
+@mixin prefix-sprite-image
     background-image: url('./images/png/sprite.png')
+@mixin prefix-sprite-position($sprite)
     background-position: nth($sprite, 1) nth($sprite, 2)
+@mixin prefix-sprite-width($sprite)
     width: nth($sprite, 3)
+@mixin prefix-sprite-height($sprite)
     height: nth($sprite, 4)
+@mixin prefix-sprite($sprite)
+    @include prefix-sprite-image
+    @include prefix-sprite-position($sprite)
+    @include prefix-sprite-width($sprite)
+    @include prefix-sprite-height($sprite)

@@ -15,7 +15,7 @@ module.exports = {
         generator(layout, stylesheetPath, spritePath, options, function (err) {
             expect(err).not.to.be.ok;
             expect(options).to.deep.equal(expectedOptions);
-            expect(fs.readFileSync(expectedPath).toString()).to.equal(fs.readFileSync(stylesheetPath).toString());
+            expect(fs.readFileSync(stylesheetPath).toString()).to.equal(fs.readFileSync(expectedPath).toString());
             fs.unlinkSync(stylesheetPath);
             done();
         });
