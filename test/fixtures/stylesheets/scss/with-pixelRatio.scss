@@ -1,10 +1,38 @@
-$foo: 0 0 75px 6px;
-$bar: 0 -6px 75px 12px;
-$test: 0 -18px 75px 6px;
-@mixin sprite($sprite) {
+$foo-x: 0;
+$foo-y: 0;
+$foo-width: 75px;
+$foo-height: 6px;
+$foo: $foo-x $foo-y $foo-width $foo-height;
+$bar-x: 0;
+$bar-y: -6px;
+$bar-width: 75px;
+$bar-height: 12px;
+$bar: $bar-x $bar-y $bar-width $bar-height;
+$test-x: 0;
+$test-y: -18px;
+$test-width: 75px;
+$test-height: 6px;
+$test: $test-x $test-y $test-width $test-height;
+
+@mixin sprite-image {
   background-image: url("./images/png/sprite.png");
+}
+@mixin sprite-size {
   background-size: 75px 78px;
+}
+@mixin sprite-position($sprite) {
   background-position: nth($sprite, 1) nth($sprite, 2);
+}
+@mixin sprite-width($sprite) {
   width: nth($sprite, 3);
+}
+@mixin sprite-height($sprite) {
   height: nth($sprite, 4);
+}
+@mixin sprite($sprite) {
+  @include sprite-image;
+  @include sprite-size;
+  @include sprite-position($sprite);
+  @include sprite-width($sprite);
+  @include sprite-height($sprite);
 }
