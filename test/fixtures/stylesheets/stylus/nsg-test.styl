@@ -1,8 +1,29 @@
-house = 0 0 15px 15px
-lena = 0 -15px 300px 168px
-lock = 0 -183px 26px 31px
-sprite($sprite)
+house-x = 0
+house-y = 0
+house-width = 15px
+house-height = 15px
+house = house-x house-y house-width house-height
+lena-x = 0
+lena-y = -15px
+lena-width = 300px
+lena-height = 168px
+lena = lena-x lena-y lena-width lena-height
+lock-x = 0
+lock-y = -183px
+lock-width = 26px
+lock-height = 31px
+lock = lock-x lock-y lock-width lock-height
+
+sprite-image()
     background-image url('./sprite.png')
+sprite-position($sprite)
     background-position $sprite[0] $sprite[1]
+sprite-width($sprite)
     width $sprite[2]
+sprite-height($sprite)
     height $sprite[3]
+sprite($sprite)
+    sprite-image()
+    sprite-position($sprite)
+    sprite-width($sprite)
+    sprite-height($sprite)
