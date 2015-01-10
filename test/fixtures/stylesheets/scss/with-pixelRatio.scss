@@ -1,38 +1,38 @@
-$foo_x: 0;
-$foo_y: 0;
-$foo_width: 75px;
-$foo_height: 6px;
-$foo: $foo_x $foo_y $foo_width $foo_height;
-$bar_x: 0;
-$bar_y: -6px;
-$bar_width: 75px;
-$bar_height: 12px;
-$bar: $bar_x $bar_y $bar_width $bar_height;
-$test_x: 0;
-$test_y: -18px;
-$test_width: 75px;
-$test_height: 6px;
-$test: $test_x $test_y $test_width $test_height;
+$foo-x: 0;
+$foo-y: 0;
+$foo-width: 75px;
+$foo-height: 6px;
+$foo: $foo-x $foo-y $foo-width $foo-height;
+$bar-x: 0;
+$bar-y: -6px;
+$bar-width: 75px;
+$bar-height: 12px;
+$bar: $bar-x $bar-y $bar-width $bar-height;
+$test-x: 0;
+$test-y: -18px;
+$test-width: 75px;
+$test-height: 6px;
+$test: $test-x $test-y $test-width $test-height;
 
-@mixin sprite_image {
+@mixin sprite-image {
   background-image: url("./images/png/sprite.png");
 }
-@mixin sprite_size {
+@mixin sprite-size {
   background-size: 75px 78px;
 }
-@mixin sprite_position($sprite) {
+@mixin sprite-position($sprite) {
   background-position: nth($sprite, 1) nth($sprite, 2);
 }
-@mixin sprite_width($sprite) {
+@mixin sprite-width($sprite) {
   width: nth($sprite, 3);
 }
-@mixin sprite_height($sprite) {
+@mixin sprite-height($sprite) {
   height: nth($sprite, 4);
 }
 @mixin sprite($sprite) {
-  @include sprite_image;
-  @include sprite_size;
-  @include sprite_position($sprite);
-  @include sprite_width($sprite);
-  @include sprite_height($sprite);
+  @include sprite-image;
+  @include sprite-size;
+  @include sprite-position($sprite);
+  @include sprite-width($sprite);
+  @include sprite-height($sprite);
 }
