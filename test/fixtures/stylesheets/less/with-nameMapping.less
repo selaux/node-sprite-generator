@@ -1,9 +1,34 @@
-@oof: "0 0 150px 12px";
-@rab: "0 -12px 150px 24px";
-@tset: "0 -36px 150px 12px";
-.sprite (@sprite) {
+@oof-x: "0";
+@oof-y: "0";
+@oof-width: "150px";
+@oof-height: "12px";
+@oof: @oof-x, @oof-y, @oof-width, @oof-height;
+@rab-x: "0";
+@rab-y: "-12px";
+@rab-width: "150px";
+@rab-height: "24px";
+@rab: @rab-x, @rab-y, @rab-width, @rab-height;
+@tset-x: "0";
+@tset-y: "-36px";
+@tset-width: "150px";
+@tset-height: "12px";
+@tset: @tset-x, @tset-y, @tset-width, @tset-height;
+
+.sprite-image() {
     background-image: url('./images/png/sprite.png');
-    background-position: ~`@{sprite}.split(' ')[0]` ~`@{sprite}.split(' ')[1]`;
-    width: ~`@{sprite}.split(' ')[2]`;
-    height: ~`@{sprite}.split(' ')[3]`;
+}
+.sprite-position(@sprite) {
+    background-position: ~`@{sprite}[0]` ~`@{sprite}[1]`;
+}
+.sprite-width(@sprite) {
+    width: ~`@{sprite}[2]`;
+}
+.sprite-height(@sprite) {
+    height: ~`@{sprite}[3]`;
+}
+.sprite(@sprite) {
+    .sprite-image();
+    .sprite-position(@sprite);
+    .sprite-width(@sprite);
+    .sprite-height(@sprite);
 }
