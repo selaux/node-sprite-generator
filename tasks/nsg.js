@@ -6,8 +6,8 @@ var nsg = require('../lib/nsg'),
 module.exports = function(grunt) {
 
     grunt.registerMultiTask('spriteGenerator', 'Generates image sprites and their stylesheets from sets of images.', function() {
-        var done = this.async();
-        var options = this.options();
+        var done = this.async(),
+            options = this.options();
 
         this.files.forEach(function(f) {
 
