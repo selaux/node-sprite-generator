@@ -1,8 +1,9 @@
 # node-sprite-generator
 
-[![Build Status](https://img.shields.io/travis/selaux/node-sprite-generator.svg?style=flat)](https://travis-ci.org/selaux/node-sprite-generator)
-[![Coverage Status](https://img.shields.io/coveralls/selaux/node-sprite-generator.svg?style=flat)](https://coveralls.io/r/selaux/node-sprite-generator?branch=master)
-[![Dependencies](https://img.shields.io/david/selaux/node-sprite-generator.svg?style=flat)](https://david-dm.org/selaux/node-sprite-generator)
+[![NPM Version](https://img.shields.io/npm/v/node-sprite-generator.svg?style=flat-square)](https://www.npmjs.org/package/node-sprite-generator)
+[![Build Status](https://img.shields.io/travis/selaux/node-sprite-generator.svg?style=flat-square)](https://travis-ci.org/selaux/node-sprite-generator)
+[![Coverage Status](https://img.shields.io/coveralls/selaux/node-sprite-generator.svg?style=flat-square)](https://coveralls.io/r/selaux/node-sprite-generator?branch=master)
+[![Dependencies](https://img.shields.io/david/selaux/node-sprite-generator.svg?style=flat-square)](https://david-dm.org/selaux/node-sprite-generator)
 
 Generates image sprites and their spritesheets (css, stylus, sass, scss or less) from sets of images. Supports retina sprites. Provides express middleware and grunt task.
 
