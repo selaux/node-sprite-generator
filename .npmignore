@@ -1,0 +1,4 @@
+.git*
+npm-debug.log
+test/
+.travis.yml
