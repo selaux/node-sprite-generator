@@ -212,6 +212,11 @@ For more information of how to write your own modules/functions have a look at t
 
 ## Changelog
 
+#### 0.8.0
+- adds additional mixins to spritesheets (sprite-position, sprite-width, etc.)
+- adds support for global grunt task options
+- adds support to scale images before generating sprites and spritesheets
+
 #### 0.7.0
 - adds support for templatePath in stylesheetOptions
 
