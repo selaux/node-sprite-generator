@@ -51,4 +51,24 @@ describe('Layout/Vertical', function () {
         });
     });
 
+    it('should generate the correct layout when a scaling is specified', function (done) {
+        var options = { scaling: 0.7 };
+
+        vertical(images, options, function (err, layout) {
+            expect(err).not.to.be.ok;
+            expect(options).to.deep.equal({ scaling: 0.7 });
+            expect(layout).to.deep.equal({
+                width: 105,
+                height: 108,
+                images: [
+                    { x: 0, y: 0, width: 105, height: 8, path: 'foo'  },
+                    { x: 0, y: 8, width: 22, height: 22, path: 'bar' },
+                    { x: 0, y: 30, width: 78, height: 78, path: 'bla' }
+                ]
+            });
+            expect(layout.images[0]).not.to.equal(images[0]);
+            done();
+        });
+    });
+
 });
