@@ -1,8 +1,6 @@
 'use strict';
 
-var path = require('path'),
-    fs = require('fs'),
-    _ = require('underscore'),
+var _ = require('underscore'),
     Canvas = require('canvas'),
     sandboxedModule = require('sandboxed-module'),
     sinon = require('sinon'),
@@ -133,11 +131,11 @@ describe('Compositor/canvas', function () {
                 PNG_FILTER_NONE: 8,
                 PNG_ALL_FILTERS: 256
             },
-            Canvas = sinon.stub().returns(canvasInstance),
+            canvasStub = sinon.stub().returns(canvasInstance),
             canvasCompositor = sandboxedModule.require('../../../lib/compositor/canvas', {
                 requires: {
                     fs: fs,
-                    canvas: Canvas
+                    canvas: canvasStub
                 }
             });
 
@@ -145,8 +143,8 @@ describe('Compositor/canvas', function () {
             expect(err).not.to.be.ok;
             expect(options).to.deep.equal(optionsClone);
 
-            expect(Canvas).to.have.been.calledOnce;
-            expect(Canvas).to.have.been.calledWith(layout.width, layout.height);
+            expect(canvasStub).to.have.been.calledOnce;
+            expect(canvasStub).to.have.been.calledWith(layout.width, layout.height);
 
             expect(canvas2dContext.drawImage).to.have.been.calledThrice;
             expect(canvas2dContext.drawImage.getCall(0).args).to.deep.equal([ 'house data', 0, 0, 15, 15 ]);
@@ -159,7 +157,7 @@ describe('Compositor/canvas', function () {
             expect(fs.writeFile).to.have.been.calledWith('some/path', fileBuffer);
 
             callback({
-                Canvas: Canvas,
+                Canvas: canvasStub,
                 canvasInstance: canvasInstance,
                 canvas2dContext: canvas2dContext,
                 fs: fs
