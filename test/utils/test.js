@@ -9,7 +9,7 @@ module.exports = {
 
         var expectedOptions = _.clone(options),
             spritePath = 'test/fixtures/images/png/sprite.png',
-            stylesheetPath =  'test/fixtures/test.file';
+            stylesheetPath = 'test/fixtures/test.file';
 
         generator(layout, stylesheetPath, spritePath, options, function (err) {
             expect(err).not.to.be.ok;

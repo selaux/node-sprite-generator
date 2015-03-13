@@ -38,7 +38,7 @@ module.exports = function (name, suffix, additionalTests) {
         it('should generate the correct ' + name + ' with a custom nameMapping specified', function (done) {
             var expectedStylesheetPath = 'test/fixtures/stylesheets/' + name + '/with-nameMapping.' + suffix,
                 nameMapping = function (imagePath) {
-                    return path.basename(imagePath, path.extname(imagePath)).split("").reverse().join("");
+                    return path.basename(imagePath, path.extname(imagePath)).split('').reverse().join('');
                 };
             testUtils.testStylesheetGeneration(stylesheetGenerator, layout, expectedStylesheetPath, { nameMapping: nameMapping }, done);
         });

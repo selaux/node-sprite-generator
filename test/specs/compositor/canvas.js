@@ -36,7 +36,7 @@ describe('Compositor/canvas', function () {
             ImageStub = function () {
                 /*jshint -W105 */
                 var self = this;
-                self.__defineSetter__("src", function (src) {
+                self['__defineSetter__']('src', function (src) {
                     var image = _.find(imageData, function (img) { return img.data === src; });
                     self.width = image.width;
                     self.height = image.height;
@@ -195,7 +195,7 @@ describe('Compositor/canvas', function () {
 
     describe('filterToParam', function () {
         var canvasCompositor = require('../../../lib/compositor/canvas'),
-            canvasInstance = new Canvas(0,0);
+            canvasInstance = new Canvas(0, 0);
 
         [
             { filter: 'none', expected: canvasInstance.PNG_FILTER_NONE },

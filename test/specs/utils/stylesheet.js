@@ -34,12 +34,12 @@ describe('Utils/Stylesheet', function () {
             {
                 layout: { width: 128, height: 64, images: [ { x: 0, y: 0, width: 128, height: 64 } ] },
                 pixelRatio: 2,
-                expected: { width: 64, height: 32, images: [ { x: 0, y:0, width: 64, height: 32 } ] }
+                expected: { width: 64, height: 32, images: [ { x: 0, y: 0, width: 64, height: 32 } ] }
             },
             {
                 layout: { width: 75, height: 150, images: [ { x: 0, y: 0, width: 75, height: 75 }, { x: 0, y: 75, width: 75, height: 75 } ] },
                 pixelRatio: 1.5,
-                expected: { width: 50, height: 100, images: [ { x: 0, y:0, width: 50, height: 50 }, { x: 0, y: 50, width: 50, height: 50 } ] }
+                expected: { width: 50, height: 100, images: [ { x: 0, y: 0, width: 50, height: 50 }, { x: 0, y: 50, width: 50, height: 50 } ] }
             }
         ]).each(function (testCase) {
             expect(utils.getScaledLayoutForPixelRatio(testCase.layout, testCase.pixelRatio)).to.deep.equal(testCase.expected);
@@ -48,11 +48,11 @@ describe('Utils/Stylesheet', function () {
 
     describe('getCSSValue', function () {
         [
-            {  value: 0, expected: '0'},
-            {  value: 10, expected: '10px'},
-            {  value: 23, expected: '23px'},
-            {  value: -10, expected: '-10px'},
-            {  value: -122, expected: '-122px'}
+            { value: 0, expected: '0'},
+            { value: 10, expected: '10px'},
+            { value: 23, expected: '23px'},
+            { value: -10, expected: '-10px'},
+            { value: -122, expected: '-122px'}
         ].forEach(function (testCase) {
             it('should return ' + testCase.expected + ' for ' + testCase.value, function () {
                 expect(utils.getCSSValue(testCase.value)).to.equal(testCase.expected);
