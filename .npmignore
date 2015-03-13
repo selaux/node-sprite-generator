@@ -1,4 +1,8 @@
+build/
+node_modules/
 .git*
 npm-debug.log
 test/
-.travis.yml
+.*rc
+.*.yml
+.*ignore
