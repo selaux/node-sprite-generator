@@ -5,7 +5,6 @@ var path = require('path'),
     _ = require('underscore'),
     Canvas = require('canvas'),
     sandboxedModule = require('sandboxed-module'),
-    sandboxedModuleBlanket = require('sandboxed-module-blanket'),
     sinon = require('sinon'),
     chai = require('chai'),
     expect = chai.expect,
@@ -49,7 +48,6 @@ describe('Compositor/canvas', function () {
                 Image: ImageStub
             },
             canvasCompositor = sandboxedModule.require('../../../lib/compositor/canvas', {
-                sourceTransformers: sandboxedModuleBlanket,
                 requires: {
                     fs: fs,
                     canvas: nodeCanvas
