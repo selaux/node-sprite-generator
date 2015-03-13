@@ -12,7 +12,7 @@ module.exports = {
             stylesheetPath = 'test/fixtures/test.file';
 
         generator(layout, stylesheetPath, spritePath, options, function (err) {
-            expect(err).not.to.be.ok;
+            expect(err).to.equal(null);
             expect(options).to.deep.equal(expectedOptions);
             expect(fs.readFileSync(stylesheetPath).toString()).to.equal(fs.readFileSync(expectedPath).toString());
             fs.unlinkSync(stylesheetPath);
