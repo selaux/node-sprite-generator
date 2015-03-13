@@ -2,7 +2,6 @@
 
 var expect = require('chai').expect,
     _ = require('underscore'),
-    path = require('path'),
     fs = require('fs');
 
 module.exports = {
