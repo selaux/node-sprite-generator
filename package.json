@@ -24,7 +24,7 @@
     },
     "scripts": {
         "lint": "eslint .",
-        "unit-test": "istanbul test --dir build/coverage _mocha test -- --recursive --reporter spec",
+        "unit-test": "istanbul test _mocha test -- --recursive --reporter spec",
         "coverage": "npm run unit-test --coverage && npm run report-coverage-html",
         "report-coverage-html": "istanbul report --dir  build/coverage html",
         "test": "npm run lint && npm run coverage",
