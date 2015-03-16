@@ -2,7 +2,7 @@
 
 var _ = require('underscore'),
     Canvas = require('canvas'),
-    sandboxedModule = require('sandboxed-module'),
+    proxyquire = require('proxyquire').noCallThru(),
     sinon = require('sinon'),
     chai = require('chai'),
     expect = chai.expect,
@@ -45,11 +45,9 @@ describe('Compositor/canvas', function () {
             nodeCanvas = {
                 Image: ImageStub
             },
-            canvasCompositor = sandboxedModule.require('../../../lib/compositor/canvas', {
-                requires: {
-                    fs: fs,
-                    canvas: nodeCanvas
-                }
+            canvasCompositor = proxyquire('../../../lib/compositor/canvas', {
+                fs: fs,
+                canvas: nodeCanvas
             });
 
         _.each(imageData, function (data, path) {
@@ -89,12 +87,10 @@ describe('Compositor/canvas', function () {
         var fs = {
                 readFile: sinon.stub()
             },
-            canvasCompositor = sandboxedModule.require('../../../lib/compositor/canvas', {
-                requires: {
-                    fs: fs,
-                    canvas: {
-                        Image: sinon.stub()
-                    }
+            canvasCompositor = proxyquire('../../../lib/compositor/canvas', {
+                fs: fs,
+                canvas: {
+                    Image: sinon.stub()
                 }
             }),
             error = new Error('Test Error');
@@ -132,11 +128,9 @@ describe('Compositor/canvas', function () {
                 PNG_ALL_FILTERS: 256
             },
             canvasStub = sinon.stub().returns(canvasInstance),
-            canvasCompositor = sandboxedModule.require('../../../lib/compositor/canvas', {
-                requires: {
-                    fs: fs,
-                    canvas: canvasStub
-                }
+            canvasCompositor = proxyquire('../../../lib/compositor/canvas', {
+                fs: fs,
+                canvas: canvasStub
             });
 
         canvasCompositor.render(layout, 'some/path', options, function (err) {
