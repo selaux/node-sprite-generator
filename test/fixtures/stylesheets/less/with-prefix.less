@@ -1,30 +1,30 @@
-@prefix-foo-x: "0";
-@prefix-foo-y: "0";
-@prefix-foo-width: "150px";
-@prefix-foo-height: "12px";
+@prefix-foo-x: 0;
+@prefix-foo-y: 0;
+@prefix-foo-width: 150px;
+@prefix-foo-height: 12px;
 @prefix-foo: @prefix-foo-x, @prefix-foo-y, @prefix-foo-width, @prefix-foo-height;
-@prefix-bar-x: "0";
-@prefix-bar-y: "-12px";
-@prefix-bar-width: "150px";
-@prefix-bar-height: "24px";
+@prefix-bar-x: 0;
+@prefix-bar-y: -12px;
+@prefix-bar-width: 150px;
+@prefix-bar-height: 24px;
 @prefix-bar: @prefix-bar-x, @prefix-bar-y, @prefix-bar-width, @prefix-bar-height;
-@prefix-test-x: "0";
-@prefix-test-y: "-36px";
-@prefix-test-width: "150px";
-@prefix-test-height: "12px";
+@prefix-test-x: 0;
+@prefix-test-y: -36px;
+@prefix-test-width: 150px;
+@prefix-test-height: 12px;
 @prefix-test: @prefix-test-x, @prefix-test-y, @prefix-test-width, @prefix-test-height;
 
 .prefix-sprite-image() {
     background-image: url('./images/png/sprite.png');
 }
 .prefix-sprite-position(@sprite) {
-    background-position: ~`@{sprite}[0]` ~`@{sprite}[1]`;
+    background-position: extract(@sprite, 1) extract(@sprite, 2);
 }
 .prefix-sprite-width(@sprite) {
-    width: ~`@{sprite}[2]`;
+    width: extract(@sprite, 3);
 }
 .prefix-sprite-height(@sprite) {
-    height: ~`@{sprite}[3]`;
+    height: extract(@sprite, 4);
 }
 .prefix-sprite(@sprite) {
     .prefix-sprite-image();
