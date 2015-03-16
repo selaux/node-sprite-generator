@@ -36,7 +36,12 @@
         "generator",
         "middleware",
         "css",
-        "stylus"
+        "stylus",
+        "less",
+        "sass",
+        "scss",
+        "grunt",
+        "retina"
     ],
     "repository": {
         "type": "git",
