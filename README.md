@@ -122,7 +122,7 @@ __pixelRatio__ (Type: `Integer` Default: `1`): Specifies the pixelRatio for reti
 #### options.layout
 Type: `String|Function`
 Default value: `'vertical'`  
-The layout that is used to generate the sprite. The built-in layouts are `'vertical'`, `'horizontal'` and `'diagonal'`. You can also specify a function that generates a custom layout  (see more at [extending node-sprite-generator](https://github.com/selaux/node-sprite-generator#extending-node-sprite-generator)).
+The layout that is used to generate the sprite. The built-in layouts are `'packed'` (for bin-packing), `'vertical'`, `'horizontal'` and `'diagonal'`. You can also specify a function that generates a custom layout  (see more at [extending node-sprite-generator](https://github.com/selaux/node-sprite-generator#extending-node-sprite-generator)).
 
 #### options.layoutOptions
 Type: `Object`
