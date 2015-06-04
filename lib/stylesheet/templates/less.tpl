@@ -1,7 +1,7 @@
-<% layout.images.forEach(function (image) { %>@<%= image.className %>-x: "<%= getCSSValue(-image.x) %>";
-@<%= image.className %>-y: "<%= getCSSValue(-image.y) %>";
-@<%= image.className %>-width: "<%= getCSSValue(image.width) %>";
-@<%= image.className %>-height: "<%= getCSSValue(image.height) %>";
+<% layout.images.forEach(function (image) { %>@<%= image.className %>-x: <%= getCSSValue(-image.x) %>;
+@<%= image.className %>-y: <%= getCSSValue(-image.y) %>;
+@<%= image.className %>-width: <%= getCSSValue(image.width) %>;
+@<%= image.className %>-height: <%= getCSSValue(image.height) %>;
 @<%= image.className %>: @<%= image.className %>-x, @<%= image.className %>-y, @<%= image.className %>-width, @<%= image.className %>-height;
 <% }); %>
 .<%= spriteName %>-image() {
@@ -11,13 +11,13 @@
     background-size: <%= getCSSValue(layout.width) %> <%= getCSSValue(layout.height) %>;
 }<% } %>
 .<%= spriteName %>-position(@sprite) {
-    background-position: ~`@{sprite}[0]` ~`@{sprite}[1]`;
+    background-position: extract(@sprite, 1) extract(@sprite, 2);
 }
 .<%= spriteName %>-width(@sprite) {
-    width: ~`@{sprite}[2]`;
+    width: extract(@sprite, 3);
 }
 .<%= spriteName %>-height(@sprite) {
-    height: ~`@{sprite}[3]`;
+    height: extract(@sprite, 4);
 }
 .<%= spriteName %>(@sprite) {
     .<%= spriteName %>-image();<% if (options.pixelRatio !== 1) { %>

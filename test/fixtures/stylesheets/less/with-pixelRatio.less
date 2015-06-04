@@ -1,17 +1,17 @@
-@foo-x: "0";
-@foo-y: "0";
-@foo-width: "75px";
-@foo-height: "6px";
+@foo-x: 0;
+@foo-y: 0;
+@foo-width: 75px;
+@foo-height: 6px;
 @foo: @foo-x, @foo-y, @foo-width, @foo-height;
-@bar-x: "0";
-@bar-y: "-6px";
-@bar-width: "75px";
-@bar-height: "12px";
+@bar-x: 0;
+@bar-y: -6px;
+@bar-width: 75px;
+@bar-height: 12px;
 @bar: @bar-x, @bar-y, @bar-width, @bar-height;
-@test-x: "0";
-@test-y: "-18px";
-@test-width: "75px";
-@test-height: "6px";
+@test-x: 0;
+@test-y: -18px;
+@test-width: 75px;
+@test-height: 6px;
 @test: @test-x, @test-y, @test-width, @test-height;
 
 .sprite-image() {
@@ -21,13 +21,13 @@
     background-size: 75px 78px;
 }
 .sprite-position(@sprite) {
-    background-position: ~`@{sprite}[0]` ~`@{sprite}[1]`;
+    background-position: extract(@sprite, 1) extract(@sprite, 2);
 }
 .sprite-width(@sprite) {
-    width: ~`@{sprite}[2]`;
+    width: extract(@sprite, 3);
 }
 .sprite-height(@sprite) {
-    height: ~`@{sprite}[3]`;
+    height: extract(@sprite, 4);
 }
 .sprite(@sprite) {
     .sprite-image();
