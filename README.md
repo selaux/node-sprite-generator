@@ -108,6 +108,7 @@ Type: `String|Function`
 Default value: `'stylus'`  
 Specifies the stylesheet generator (and therefore the format) that is used. The built-in formats are `'stylus'`, `'less'`, `'sass'`, `'scss'`, `'css'` and `'prefixed-css'`. `'prefixed-css'` is the same as `'css'` but generates a lighter CSS file, it requires the use of `options.stylesheetOptions.prefix`.  
 You can also specify a function that writes a custom stylesheet (see more at [extending node-sprite-generator](https://github.com/selaux/node-sprite-generator#extending-node-sprite-generator)).
+You can also specify a path name to custom template to be used to generate stylesheet output.
 
 #### options.stylesheetOptions
 Type: `Object`
@@ -117,7 +118,6 @@ __prefix__ (Type: `String` Default: `''`): A prefix that will be prepended to al
 __nameMapping__ (Type: `Function` Default: Filename): A function that specifies how filenames are mapped to class names in the stylesheet  
 __spritePath__ (Type: `String` Default: Relative Path): Defines which URL is used as the image path for the image sprite.  
 __pixelRatio__ (Type: `Integer` Default: `1`): Specifies the pixelRatio for retina sprites.  
-__templatePath__ (Type: `String`  Default: `''` ) Specifies the template to be used to generate stylesheet output
 
 #### options.layout
 Type: `String|Function`
