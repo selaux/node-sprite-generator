@@ -1,0 +1,24 @@
+{
+    "env": {
+        "node": true
+    },
+    "rules": {
+        "quotes": [2, "single"],
+        "no-warning-comments": [2, { "terms": ["todo", "fixme", "wtf"], "location": "anywhere" }],
+        "strict": 2,
+        "no-process-exit": 2,
+        "eqeqeq": 2,
+        "no-delete-var": 2,
+        "one-var": 2,
+        "max-params": [2, 4],
+        "no-plusplus": 2,
+        "semi": [2, "always"],
+        "no-mixed-requires": 0,
+        "valid-jsdoc": 0,
+        "wrap-iife": [2, "outside"],
+        "no-new-require": 2,
+        "no-catch-shadow": 2,
+        "dot-notation": 0,
+        "max-params": [2, 5]
+    }
+}

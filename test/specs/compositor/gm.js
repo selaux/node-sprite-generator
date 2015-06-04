@@ -2,8 +2,7 @@
 
 var path = require('path'),
     _ = require('underscore'),
-    sandboxedModule = require('sandboxed-module'),
-    sandboxedModuleBlanket = require('sandboxed-module-blanket'),
+    proxyquire = require('proxyquire').noCallThru(),
     sinon = require('sinon'),
     chai = require('chai'),
     expect = chai.expect,
@@ -39,12 +38,9 @@ describe('Compositor/gm', function () {
     beforeEach(function () {
         gmStub = sinon.stub();
         fsStub = { readFile: sinon.stub() };
-        gmCompositor = sandboxedModule.require('../../../lib/compositor/gm', {
-            sourceTransformers: sandboxedModuleBlanket,
-            requires: {
-                gm: gmStub,
-                fs: fsStub
-            }
+        gmCompositor = proxyquire('../../../lib/compositor/gm', {
+            gm: gmStub,
+            fs: fsStub
         });
     });
 

@@ -32,8 +32,8 @@ describe('Utils/ChangeDetector', function () {
     it('should always return true the first time detect is called', function (done) {
         var changes = changeDetector(options);
 
-        changes.detect(function (err, changesDetected) {
-            expect(err).not.to.be.ok;
+        changes.detect(function (changesError, changesDetected) {
+            expect(changesError).not.to.be.ok;
             expect(changesDetected).to.be.true;
             done();
         });
@@ -42,11 +42,11 @@ describe('Utils/ChangeDetector', function () {
     it('should return false if detect is called after register', function (done) {
         var changes = changeDetector(options);
 
-        changes.register(function (err) {
-            expect(err).not.to.be.ok;
+        changes.register(function (registerError) {
+            expect(registerError).not.to.be.ok;
 
-            changes.detect(function (err, changesDetected) {
-                expect(err).not.to.be.ok;
+            changes.detect(function (changesError, changesDetected) {
+                expect(changesError).not.to.be.ok;
                 expect(changesDetected).to.be.false;
                 done();
             });
@@ -57,13 +57,13 @@ describe('Utils/ChangeDetector', function () {
         var changes = changeDetector(options),
             oldDate = new Date((new Date()).getTime() - 10000);
 
-        changes.register(function (err) {
-            expect(err).not.to.be.ok;
+        changes.register(function (registerError) {
+            expect(registerError).not.to.be.ok;
 
             fs.utimesSync('test/fixtures/images/src/house.png', oldDate, oldDate);
 
-            changes.detect(function (err, changesDetected) {
-                expect(err).not.to.be.ok;
+            changes.detect(function (changesError, changesDetected) {
+                expect(changesError).not.to.be.ok;
                 expect(changesDetected).to.be.true;
                 done();
             });
@@ -73,13 +73,13 @@ describe('Utils/ChangeDetector', function () {
     it('should return true if any of the files are deleted', function (done) {
         var changes = changeDetector(options);
 
-        changes.register(function (err) {
-            expect(err).not.to.be.ok;
+        changes.register(function (registerError) {
+            expect(registerError).not.to.be.ok;
 
             fs.unlinkSync(options.stylesheetPath);
 
-            changes.detect(function (err, changesDetected) {
-                expect(err).not.to.be.ok;
+            changes.detect(function (changesError, changesDetected) {
+                expect(changesError).not.to.be.ok;
                 expect(changesDetected).to.be.true;
 
                 done();

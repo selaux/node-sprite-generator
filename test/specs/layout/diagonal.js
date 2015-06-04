@@ -61,7 +61,7 @@ describe('Layout/Diagonal', function () {
                 width: 205,
                 height: 108,
                 images: [
-                    { x: 0, y: 0, width: 105, height: 8, path: 'foo'  },
+                    { x: 0, y: 0, width: 105, height: 8, path: 'foo' },
                     { x: 105, y: 8, width: 22, height: 22, path: 'bar' },
                     { x: 127, y: 30, width: 78, height: 78, path: 'bla' }
                 ]

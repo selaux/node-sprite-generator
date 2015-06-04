@@ -1,11 +1,8 @@
 'use strict';
 
-var path = require('path'),
-    fs = require('fs'),
-    _ = require('underscore'),
+var _ = require('underscore'),
     Canvas = require('canvas'),
-    sandboxedModule = require('sandboxed-module'),
-    sandboxedModuleBlanket = require('sandboxed-module-blanket'),
+    proxyquire = require('proxyquire').noCallThru(),
     sinon = require('sinon'),
     chai = require('chai'),
     expect = chai.expect,
@@ -39,7 +36,7 @@ describe('Compositor/canvas', function () {
             ImageStub = function () {
                 /*jshint -W105 */
                 var self = this;
-                self.__defineSetter__("src", function (src) {
+                self['__defineSetter__']('src', function (src) {
                     var image = _.find(imageData, function (img) { return img.data === src; });
                     self.width = image.width;
                     self.height = image.height;
@@ -48,12 +45,9 @@ describe('Compositor/canvas', function () {
             nodeCanvas = {
                 Image: ImageStub
             },
-            canvasCompositor = sandboxedModule.require('../../../lib/compositor/canvas', {
-                sourceTransformers: sandboxedModuleBlanket,
-                requires: {
-                    fs: fs,
-                    canvas: nodeCanvas
-                }
+            canvasCompositor = proxyquire('../../../lib/compositor/canvas', {
+                fs: fs,
+                canvas: nodeCanvas
             });
 
         _.each(imageData, function (data, path) {
@@ -93,12 +87,10 @@ describe('Compositor/canvas', function () {
         var fs = {
                 readFile: sinon.stub()
             },
-            canvasCompositor = sandboxedModule.require('../../../lib/compositor/canvas', {
-                requires: {
-                    fs: fs,
-                    canvas: {
-                        Image: sinon.stub()
-                    }
+            canvasCompositor = proxyquire('../../../lib/compositor/canvas', {
+                fs: fs,
+                canvas: {
+                    Image: sinon.stub()
                 }
             }),
             error = new Error('Test Error');
@@ -135,20 +127,18 @@ describe('Compositor/canvas', function () {
                 PNG_FILTER_NONE: 8,
                 PNG_ALL_FILTERS: 256
             },
-            Canvas = sinon.stub().returns(canvasInstance),
-            canvasCompositor = sandboxedModule.require('../../../lib/compositor/canvas', {
-                requires: {
-                    fs: fs,
-                    canvas: Canvas
-                }
+            canvasStub = sinon.stub().returns(canvasInstance),
+            canvasCompositor = proxyquire('../../../lib/compositor/canvas', {
+                fs: fs,
+                canvas: canvasStub
             });
 
         canvasCompositor.render(layout, 'some/path', options, function (err) {
             expect(err).not.to.be.ok;
             expect(options).to.deep.equal(optionsClone);
 
-            expect(Canvas).to.have.been.calledOnce;
-            expect(Canvas).to.have.been.calledWith(layout.width, layout.height);
+            expect(canvasStub).to.have.been.calledOnce;
+            expect(canvasStub).to.have.been.calledWith(layout.width, layout.height);
 
             expect(canvas2dContext.drawImage).to.have.been.calledThrice;
             expect(canvas2dContext.drawImage.getCall(0).args).to.deep.equal([ 'house data', 0, 0, 15, 15 ]);
@@ -161,7 +151,7 @@ describe('Compositor/canvas', function () {
             expect(fs.writeFile).to.have.been.calledWith('some/path', fileBuffer);
 
             callback({
-                Canvas: Canvas,
+                Canvas: canvasStub,
                 canvasInstance: canvasInstance,
                 canvas2dContext: canvas2dContext,
                 fs: fs
@@ -199,7 +189,7 @@ describe('Compositor/canvas', function () {
 
     describe('filterToParam', function () {
         var canvasCompositor = require('../../../lib/compositor/canvas'),
-            canvasInstance = new Canvas(0,0);
+            canvasInstance = new Canvas(0, 0);
 
         [
             { filter: 'none', expected: canvasInstance.PNG_FILTER_NONE },

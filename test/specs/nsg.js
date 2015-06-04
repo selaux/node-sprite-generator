@@ -1,10 +1,8 @@
 'use strict';
 
-var path = require('path'),
-    fs = require('fs'),
+var fs = require('fs'),
     _ = require('underscore'),
     expect = require('chai').expect,
-    async = require('async'),
     nsg = require('../../lib/nsg');
 
 describe('NSG', function () {
