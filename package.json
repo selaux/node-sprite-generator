@@ -5,6 +5,7 @@
     "main": "lib/nsg.js",
     "dependencies": {
         "async": "1.2.0",
+        "bin-pack": "1.0.1",
         "glob": "5.0.10",
         "underscore": "1.8.2"
     },
