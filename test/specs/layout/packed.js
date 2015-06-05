@@ -41,9 +41,9 @@ describe('Layout/Packed', function () {
                 width: 50,
                 height: 50,
                 images: [
-                    _({ x: 0, y: 0 }).extend(images[0]),
-                    _({ x: 30, y: 0 }).extend(images[1]),
-                    _({ x: 0, y: 30 }).extend(images[2])
+                    _({ x: 5, y: 5 }).extend(images[0]),
+                    _({ x: 35, y: 5 }).extend(images[1]),
+                    _({ x: 5, y: 35 }).extend(images[2])
                 ]
             });
             expect(layout.images[0]).not.to.equal(images[0]);
