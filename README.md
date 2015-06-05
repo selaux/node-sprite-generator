@@ -17,7 +17,7 @@ Note:
 node-sprite-generator has two dependencies of which one is required. node-sprite-generator will try to figure out which one is installed and use it.
 
 - __Cairo__ needs to be installed when using the `'canvas'` compositor because [node-canvas](https://github.com/LearnBoost/node-canvas) depends on it. For more information how to do this on your system go to the [node-canvas page](https://github.com/LearnBoost/node-canvas/wiki/_pages).
-- ImageMagick/GraphicsMagick needs to be installed when using the `'gm'` compositor
+- __ImageMagick/GraphicsMagick__ needs to be installed when using the `'gm'` compositor
 
 ## Usage
 
@@ -211,6 +211,12 @@ var layout = {
 For more information of how to write your own modules/functions have a look at the existing ones :-D.
 
 ## Changelog
+
+#### 0.9.0
+- adds support for box-packing layout (`packed`)
+- adds support for node 0.12 and iojs
+- removes support for node 0.8 (though it might still work)
+- fix error in documentation regarding using a custom stylesheet template
 
 #### 0.8.1
 - fix less variables being strings instead of numbers
