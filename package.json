@@ -16,15 +16,15 @@
         "gm": "1.22.0"
     },
     "devDependencies": {
-        "chai": "2.1.1",
+        "chai": "3.4.1",
         "chai-as-promised": "5.1.0",
         "eslint": "1.10.3",
-        "istanbul": "0.3.7",
-        "mocha": "2.2.1",
+        "istanbul": "0.4.0",
+        "mocha": "2.3.3",
         "proxyquire": "1.4.0",
-        "sinon": "1.13.0",
-        "sinon-chai": "2.7.0",
-        "coveralls": "2.11.2"
+        "sinon": "1.17.2",
+        "sinon-chai": "2.8.0",
+        "coveralls": "2.11.4"
     },
     "scripts": {
         "lint": "eslint .",
