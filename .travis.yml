@@ -1,3 +1,4 @@
+sudo: false
 language: node_js
 node_js:
   - "iojs"
@@ -7,9 +8,21 @@ node_js:
   - "4.0"
   - "0.12"
   - "0.10"
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - imagemagick
+    - graphicsmagick
+    - libcairo2-dev
+    - libjpeg8-dev
+    - libpango1.0-dev
+    - libgif-dev
+    - build-essential
+    - gcc-4.8
+    - g++-4.8
 before_install:
-  - sudo apt-get update
-  - sudo apt-get install imagemagick graphicsmagick
-  - sudo apt-get install libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev build-essential g++
+  - "export CXX=\"g++-4.8\" CC=\"gcc-4.8\""
 after_success:
   - npm run coveralls
