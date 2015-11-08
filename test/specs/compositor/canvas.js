@@ -5,10 +5,10 @@ var _ = require('underscore'),
     proxyquire = require('proxyquire').noCallThru(),
     sinon = require('sinon'),
     chai = require('chai'),
-    expect = chai.expect,
-    sinonChai = require('sinon-chai');
+    expect = chai.expect;
 
-chai.use(sinonChai);
+chai.use(require('chai-as-promised'));
+chai.use(require('sinon-chai'));
 
 describe('Compositor/canvas', function () {
     var imageData = {
@@ -29,7 +29,7 @@ describe('Compositor/canvas', function () {
             }
         };
 
-    it('should read the files correctly', function (done) {
+    it('should read the files correctly', function () {
         var fs = {
                 readFile: sinon.stub(),
                 writeFile: sinon.stub()
@@ -56,12 +56,10 @@ describe('Compositor/canvas', function () {
         });
 
 
-        canvasCompositor.readImages(_.keys(imageData), function (err, images) {
+        return canvasCompositor.readImages(_.keys(imageData)).then(function (images) {
             var houseImage = images[0],
                 lenaImage = images[1],
                 lockImage = images[2];
-
-            expect(err).to.equal(null);
 
             expect(fs.readFile).to.have.been.calledThrice;
 
@@ -79,12 +77,10 @@ describe('Compositor/canvas', function () {
             expect(houseImage.width).to.equal(15);
             expect(houseImage.height).to.equal(15);
             expect(houseImage.data).to.be.an.instanceof(ImageStub);
-
-            done();
         });
     });
 
-    it('should correctly callback with errors when reading', function (done) {
+    it('should correctly callback with errors when reading', function () {
         var fs = {
                 readFile: sinon.stub(),
                 writeFile: sinon.stub()
@@ -99,13 +95,11 @@ describe('Compositor/canvas', function () {
 
         fs.readFile.yieldsAsync(error);
 
-        canvasCompositor.readImages(_.keys(imageData), function (err) {
-            expect(err.cause).to.equal(error);
-            done();
-        });
+        return expect(canvasCompositor.readImages(_.keys(imageData)))
+            .to.be.rejectedWith('Test Error');
     });
 
-    function testRender (options, callback) {
+    function testRender (options) {
         var optionsClone = _.clone(options),
             layout = {
                 width: 300,
@@ -136,8 +130,7 @@ describe('Compositor/canvas', function () {
                 canvas: canvasStub
             });
 
-        canvasCompositor.render(layout, 'some/path', options, function (err) {
-            expect(err).not.to.be.ok;
+        return canvasCompositor.render(layout, 'some/path', options).then(function () {
             expect(options).to.deep.equal(optionsClone);
 
             expect(canvasStub).to.have.been.calledOnce;
@@ -153,40 +146,37 @@ describe('Compositor/canvas', function () {
             expect(fs.writeFile).to.have.been.calledOnce;
             expect(fs.writeFile).to.have.been.calledWith('some/path', fileBuffer);
 
-            callback({
+            return {
                 Canvas: canvasStub,
                 canvasInstance: canvasInstance,
                 canvas2dContext: canvas2dContext,
                 fs: fs
-            });
+            };
         });
     }
 
-    it('should render the sprite correctly', function (done) {
-        testRender({}, function (stubs) {
+    it('should render the sprite correctly', function () {
+        return testRender({}).then(function (stubs) {
             expect(stubs.canvasInstance.toBuffer.getCall(0).args[1]).to.equal(6);
             expect(stubs.canvasInstance.toBuffer.getCall(0).args[2]).to.equal(256);
-            done();
         });
     });
 
-    it('should render the sprite correctly with a different compression level', function (done) {
-        testRender({
+    it('should render the sprite correctly with a different compression level', function () {
+        return testRender({
             compressionLevel: 9
-        }, function (stubs) {
+        }).then(function (stubs) {
             expect(stubs.canvasInstance.toBuffer.getCall(0).args[1]).to.equal(9);
             expect(stubs.canvasInstance.toBuffer.getCall(0).args[2]).to.equal(256);
-            done();
         });
     });
 
-    it('should render the sprite correctly with a different filter method', function (done) {
-        testRender({
+    it('should render the sprite correctly with a different filter method', function () {
+        return testRender({
             filter: 'none'
-        }, function (stubs) {
+        }).then(function (stubs) {
             expect(stubs.canvasInstance.toBuffer.getCall(0).args[1]).to.equal(6);
             expect(stubs.canvasInstance.toBuffer.getCall(0).args[2]).to.equal(8);
-            done();
         });
     });
 

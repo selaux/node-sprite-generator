@@ -44,7 +44,7 @@ describe('Compositor/gm', function () {
         });
     });
 
-    it('should read the files correctly', function (done) {
+    it('should read the files correctly', function () {
         _.each(imageData, function (image) {
             var imgStub = {
                 size: sinon.stub().yieldsAsync(null, {
@@ -59,25 +59,20 @@ describe('Compositor/gm', function () {
             gmStub.withArgs(image.data).returns(imgStub);
         });
 
-        gmCompositor.readImages(_.pluck(imageData, 'path'), function (err, images) {
-            expect(err).to.equal(null);
-            expect(images).to.deep.equal(imageData);
-            done();
-        });
+        return expect(gmCompositor.readImages(_.pluck(imageData, 'path')))
+            .to.eventually.deep.equal(imageData);
     });
 
-    it('should callback with errors from reading files', function (done) {
+    it('should callback with errors from reading files', function () {
         var error = new Error('Test Error');
 
         fsStub.readFile.yieldsAsync(error);
 
-        gmCompositor.readImages(_.pluck(imageData, 'path'), function (err) {
-            expect(err.cause).to.equal(error);
-            done();
-        });
+        return expect(gmCompositor.readImages(_.pluck(imageData, 'path')))
+            .to.be.rejectedWith('Test Error');
     });
 
-    it('should callback with errors from gm', function (done) {
+    it('should callback with errors from gm', function () {
         var error = new Error('Test Error');
 
         _.each(imageData, function (image) {
@@ -91,13 +86,11 @@ describe('Compositor/gm', function () {
             gmStub.withArgs(image.data).returns(imgStub);
         });
 
-        gmCompositor.readImages(_.pluck(imageData, 'path'), function (err) {
-            expect(err.cause).to.equal(error);
-            done();
-        });
+        return expect(gmCompositor.readImages(_.pluck(imageData, 'path')))
+            .to.be.rejectedWith('Test Error');
     });
 
-    function testRender(options, callback) {
+    function testRender(options) {
         var optionsClone = _.clone(options),
             spritePath = 'test/fixtures/images/expected/nsg.png',
             gmInstanceStub = {},
@@ -117,8 +110,7 @@ describe('Compositor/gm', function () {
         gmInstanceStub.quality = sinon.stub().returns(gmInstanceStub);
         gmInstanceStub.write = sinon.stub().yieldsAsync(null);
 
-        gmCompositor.render(layout, spritePath, options, function (err) {
-            expect(err).not.to.be.ok;
+        return gmCompositor.render(layout, spritePath, options).then(function () {
             expect(options).to.deep.equal(optionsClone);
 
             expect(gmStub).to.have.been.calledOnce;
@@ -142,31 +134,28 @@ describe('Compositor/gm', function () {
             expect(gmInstanceStub.write).to.have.been.calledOnce;
             expect(gmInstanceStub.write).to.have.been.calledWith(path.resolve(spritePath));
 
-            callback({
+            return {
                 gmStub: gmStub,
                 gmInstanceStub: gmInstanceStub
-            });
+            };
         });
     }
 
-    it('should write the sprites correctly', function (done) {
-        testRender({}, function (stubs) {
+    it('should write the sprites correctly', function () {
+        return testRender({}).then(function (stubs) {
             expect(stubs.gmInstanceStub.quality).to.have.been.calledWith(69);
-            done();
         });
     });
 
-    it('should write the sprites correctly when specifying a different compression level', function(done) {
-        testRender({ compressionLevel: 9 }, function (stubs) {
+    it('should write the sprites correctly when specifying a different compression level', function() {
+        return testRender({ compressionLevel: 9 }).then(function (stubs) {
             expect(stubs.gmInstanceStub.quality).to.have.been.calledWith(99);
-            done();
         });
     });
 
-    it('should write the sprites correctly when specifying a different filter', function(done) {
-        testRender({ filter: 'none' }, function (stubs) {
+    it('should write the sprites correctly when specifying a different filter', function() {
+        return testRender({ filter: 'none' }).then(function (stubs) {
             expect(stubs.gmInstanceStub.quality).to.have.been.calledWith(60);
-            done();
         });
     });
 

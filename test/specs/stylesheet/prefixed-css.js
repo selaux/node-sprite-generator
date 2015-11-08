@@ -16,8 +16,8 @@ testTemplatedStylesheet(name, 'css', function () {
         ]
     };
 
-    it('should generate the correct ' + name + ' with common width/height', function (done) {
+    it('should generate the correct ' + name + ' with common width/height', function () {
         var expectedStylesheetPath = 'test/fixtures/stylesheets/' + name + '/with-common-wh.css';
-        testUtils.testStylesheetGeneration(stylesheetGenerator, layoutCommon, expectedStylesheetPath, { prefix: 'sprite-' }, done);
+        return testUtils.testStylesheetGeneration(stylesheetGenerator, layoutCommon, expectedStylesheetPath, { prefix: 'sprite-' });
     });
 });

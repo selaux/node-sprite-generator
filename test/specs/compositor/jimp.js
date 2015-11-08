@@ -45,7 +45,7 @@ describe('Compositor/jimp', function () {
         });
     });
 
-    it('should read the files correctly', function (done) {
+    it('should read the files correctly', function () {
         var stubs = _.map(imageData, function (image) {
             var imgStub = {
                 data: image.data,
@@ -60,9 +60,7 @@ describe('Compositor/jimp', function () {
             return imgStub;
         });
 
-        jimpCompositor.readImages(_.pluck(imageData, 'path'), function (err, images) {
-            expect(err).to.equal(null);
-
+        return jimpCompositor.readImages(_.pluck(imageData, 'path')).then(function (images) {
             expect(images).to.deep.equal(_.map(imageData, function (image, index) {
                 return {
                     path: image.path,
@@ -71,23 +69,18 @@ describe('Compositor/jimp', function () {
                     data: stubs[index]
                 };
             }));
-
-            done();
         });
     });
 
-    it('should callback with errors from reading files', function (done) {
+    it('should callback with errors from reading files', function () {
         var error = new Error('Test Error');
 
         jimpStub.yieldsAsync(error);
 
-        jimpCompositor.readImages(_.pluck(imageData, 'path'), function (err) {
-            expect(err.cause).to.equal(error);
-            done();
-        });
+        return expect(jimpCompositor.readImages(_.pluck(imageData, 'path'))).to.be.rejectedWith('Test Error');
     });
 
-    function testRender(options, callback) {
+    function testRender(options) {
         var optionsClone = _.clone(options),
             spritePath = 'test/fixtures/images/expected/nsg.png',
             jimpInstanceStub = {},
@@ -113,9 +106,7 @@ describe('Compositor/jimp', function () {
         jimpInstanceStub.filterType = sinon.stub().returns(jimpInstanceStub);
         jimpInstanceStub.write = sinon.stub().yieldsAsync(null);
 
-        jimpCompositor.render(layout, spritePath, options, function (err) {
-            expect(err).not.to.be.ok;
-
+        return jimpCompositor.render(layout, spritePath, options).then(function () {
             expect(options).to.deep.equal(optionsClone);
 
             expect(jimpStub).to.have.been.calledOnce;
@@ -139,43 +130,37 @@ describe('Compositor/jimp', function () {
             expect(jimpInstanceStub.write).to.have.been.calledOnce;
             expect(jimpInstanceStub.write).to.have.been.calledWith(spritePath);
 
-            callback({
+            return {
                 jimpStub: jimpStub,
                 jimpInstanceStub: jimpInstanceStub
-            });
+            };
         });
     }
 
-    it('should callback with errors from jimp', function (done) {
+    it('should callback with errors from jimp', function () {
         var testError = new Error('Test Error');
 
         jimpStub.yieldsAsync(testError);
 
-        jimpCompositor.render({}, 'path', {}, function (err) {
-            expect(err.cause).to.equal(testError);
-            done();
-        });
+        return expect(jimpCompositor.render({}, 'path', {})).to.be.rejectedWith('Test Error');
     });
 
-    it('should write the sprites correctly', function (done) {
-        testRender({}, function (stubs) {
+    it('should write the sprites correctly', function () {
+        return testRender({}).then(function (stubs) {
             expect(stubs.jimpInstanceStub.deflateLevel).to.have.been.calledWith(6);
             expect(stubs.jimpInstanceStub.filterType).to.have.been.calledWith(Jimp.PNG_FILTER_AUTO);
-            done();
         });
     });
 
-    it('should write the sprites correctly when specifying a different compression level', function(done) {
-        testRender({ compressionLevel: 9 }, function (stubs) {
+    it('should write the sprites correctly when specifying a different compression level', function() {
+        return testRender({ compressionLevel: 9 }).then(function (stubs) {
             expect(stubs.jimpInstanceStub.deflateLevel).to.have.been.calledWith(9);
-            done();
         });
     });
 
-    it('should write the sprites correctly when specifying a different filter', function(done) {
-        testRender({ filter: 'none' }, function (stubs) {
+    it('should write the sprites correctly when specifying a different filter', function() {
+        return testRender({ filter: 'none' }).then(function (stubs) {
             expect(stubs.jimpInstanceStub.filterType).to.have.been.calledWith(Jimp.PNG_FILTER_NONE);
-            done();
         });
     });
 
