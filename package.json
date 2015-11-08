@@ -4,7 +4,6 @@
     "description": "Generates image sprites and their spritesheets (css, stylus, sass, scss or less) from sets of images. Supports retina sprites. Provides express middleware and grunt task.",
     "main": "lib/nsg.js",
     "dependencies": {
-        "async": "1.2.0",
         "bin-pack": "1.0.1",
         "bluebird": "3.0.5",
         "glob": "5.0.10",
