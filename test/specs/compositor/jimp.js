@@ -82,7 +82,7 @@ describe('Compositor/jimp', function () {
         jimpStub.yieldsAsync(error);
 
         jimpCompositor.readImages(_.pluck(imageData, 'path'), function (err) {
-            expect(err).to.equal(error);
+            expect(err.cause).to.equal(error);
             done();
         });
     });
@@ -152,7 +152,7 @@ describe('Compositor/jimp', function () {
         jimpStub.yieldsAsync(testError);
 
         jimpCompositor.render({}, 'path', {}, function (err) {
-            expect(err).to.equal(testError);
+            expect(err.cause).to.equal(testError);
             done();
         });
     });
