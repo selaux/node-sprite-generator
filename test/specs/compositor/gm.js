@@ -72,7 +72,7 @@ describe('Compositor/gm', function () {
         fsStub.readFile.yieldsAsync(error);
 
         gmCompositor.readImages(_.pluck(imageData, 'path'), function (err) {
-            expect(err).to.equal(error);
+            expect(err.cause).to.equal(error);
             done();
         });
     });
@@ -92,7 +92,7 @@ describe('Compositor/gm', function () {
         });
 
         gmCompositor.readImages(_.pluck(imageData, 'path'), function (err) {
-            expect(err).to.equal(error);
+            expect(err.cause).to.equal(error);
             done();
         });
     });

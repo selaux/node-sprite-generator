@@ -31,7 +31,8 @@ describe('Compositor/canvas', function () {
 
     it('should read the files correctly', function (done) {
         var fs = {
-                readFile: sinon.stub()
+                readFile: sinon.stub(),
+                writeFile: sinon.stub()
             },
             ImageStub = function () {
                 /*jshint -W105 */
@@ -85,7 +86,8 @@ describe('Compositor/canvas', function () {
 
     it('should correctly callback with errors when reading', function (done) {
         var fs = {
-                readFile: sinon.stub()
+                readFile: sinon.stub(),
+                writeFile: sinon.stub()
             },
             canvasCompositor = proxyquire('../../../lib/compositor/canvas', {
                 fs: fs,
@@ -98,7 +100,7 @@ describe('Compositor/canvas', function () {
         fs.readFile.yieldsAsync(error);
 
         canvasCompositor.readImages(_.keys(imageData), function (err) {
-            expect(err).to.equal(error);
+            expect(err.cause).to.equal(error);
             done();
         });
     });
@@ -115,6 +117,7 @@ describe('Compositor/canvas', function () {
                 ]
             },
             fs = {
+                readFile: sinon.stub(),
                 writeFile: sinon.stub().yieldsAsync(null)
             },
             fileBuffer = 'some buffer',

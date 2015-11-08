@@ -6,6 +6,7 @@
     "dependencies": {
         "async": "1.2.0",
         "bin-pack": "1.0.1",
+        "bluebird": "3.0.5",
         "glob": "5.0.10",
         "jimp": "0.2.21",
         "mkdirp": "0.5.1",
