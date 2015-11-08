@@ -11,11 +11,10 @@ describe('Layout/Diagonal', function () {
         { path: 'bla', width: 112, height: 112 }
     ];
 
-    it('should generate the correct layout without any options', function (done) {
+    it('should generate the correct layout without any options', function () {
         var options = {};
 
-        diagonal(images, options, function (err, layout) {
-            expect(err).not.to.be.ok;
+        return diagonal(images, options).then(function (layout) {
             expect(options).to.deep.equal(options);
             expect(layout).to.deep.equal({
                 width: 294,
@@ -27,15 +26,13 @@ describe('Layout/Diagonal', function () {
                 ]
             });
             expect(layout.images[0]).not.to.equal(images[0]);
-            done();
         });
     });
 
-    it('should generate the correct layout when a padding is specified', function (done) {
+    it('should generate the correct layout when a padding is specified', function () {
         var options = { padding: 50 };
 
-        diagonal(images, options, function (err, layout) {
-            expect(err).not.to.be.ok;
+        return diagonal(images, options).then(function (layout) {
             expect(options).to.deep.equal({ padding: 50 });
             expect(layout).to.deep.equal({
                 width: 394,
@@ -47,15 +44,13 @@ describe('Layout/Diagonal', function () {
                 ]
             });
             expect(layout.images[0]).not.to.equal(images[0]);
-            done();
         });
     });
 
-    it('should generate the correct layout when a scaling is specified', function (done) {
+    it('should generate the correct layout when a scaling is specified', function () {
         var options = { scaling: 0.7 };
 
-        diagonal(images, options, function (err, layout) {
-            expect(err).not.to.be.ok;
+        return diagonal(images, options).then(function (layout) {
             expect(options).to.deep.equal({ scaling: 0.7 });
             expect(layout).to.deep.equal({
                 width: 205,
@@ -67,7 +62,6 @@ describe('Layout/Diagonal', function () {
                 ]
             });
             expect(layout.images[0]).not.to.equal(images[0]);
-            done();
         });
     });
 

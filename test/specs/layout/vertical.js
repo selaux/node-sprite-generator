@@ -11,11 +11,10 @@ describe('Layout/Vertical', function () {
         { path: 'bla', width: 112, height: 112 }
     ];
 
-    it('should generate the correct layout without any options', function (done) {
+    it('should generate the correct layout without any options', function () {
         var options = {};
 
-        vertical(images, {}, function (err, layout) {
-            expect(err).not.to.be.ok;
+        return vertical(images, {}).then(function (layout) {
             expect(options).to.deep.equal({});
             expect(layout).to.deep.equal({
                 width: 150,
@@ -27,15 +26,13 @@ describe('Layout/Vertical', function () {
                 ]
             });
             expect(layout.images[0]).not.to.equal(images[0]);
-            done();
         });
     });
 
-    it('should generate the correct layout when a padding is specified', function (done) {
+    it('should generate the correct layout when a padding is specified', function () {
         var options = { padding: 50 };
 
-        vertical(images, { padding: 50 }, function (err, layout) {
-            expect(err).not.to.be.ok;
+        return vertical(images, { padding: 50 }).then(function (layout) {
             expect(options).to.deep.equal({ padding: 50 });
             expect(layout).to.deep.equal({
                 width: 150,
@@ -47,15 +44,13 @@ describe('Layout/Vertical', function () {
                 ]
             });
             expect(layout.images[0]).not.to.equal(images[0]);
-            done();
         });
     });
 
-    it('should generate the correct layout when a scaling is specified', function (done) {
+    it('should generate the correct layout when a scaling is specified', function () {
         var options = { scaling: 0.7 };
 
-        vertical(images, options, function (err, layout) {
-            expect(err).not.to.be.ok;
+        return vertical(images, options).then(function (layout) {
             expect(options).to.deep.equal({ scaling: 0.7 });
             expect(layout).to.deep.equal({
                 width: 105,
@@ -67,7 +62,6 @@ describe('Layout/Vertical', function () {
                 ]
             });
             expect(layout.images[0]).not.to.equal(images[0]);
-            done();
         });
     });
 

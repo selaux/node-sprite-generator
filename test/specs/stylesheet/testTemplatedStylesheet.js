@@ -20,32 +20,32 @@ module.exports = function (name, suffix, additionalTests) {
                 ]
             };
 
-        it('should generate the correct ' + name + ' without any options', function (done) {
+        it('should generate the correct ' + name + ' without any options', function () {
             var expectedStylesheetPath = 'test/fixtures/stylesheets/' + name + '/no-options.' + suffix;
-            testUtils.testStylesheetGeneration(stylesheetGenerator, layout, expectedStylesheetPath, {}, done);
+            return testUtils.testStylesheetGeneration(stylesheetGenerator, layout, expectedStylesheetPath, {});
         });
 
-        it('should generate the correct ' + name + ' with a prefix specified', function (done) {
+        it('should generate the correct ' + name + ' with a prefix specified', function () {
             var expectedStylesheetPath = 'test/fixtures/stylesheets/' + name + '/with-prefix.' + suffix;
-            testUtils.testStylesheetGeneration(stylesheetGenerator, layout, expectedStylesheetPath, { prefix: 'prefix-' }, done);
+            return testUtils.testStylesheetGeneration(stylesheetGenerator, layout, expectedStylesheetPath, { prefix: 'prefix-' });
         });
 
-        it('should generate the correct ' + name + ' with a spritePath specified', function (done) {
+        it('should generate the correct ' + name + ' with a spritePath specified', function () {
             var expectedStylesheetPath = 'test/fixtures/stylesheets/' + name + '/with-spritePath.' + suffix;
-            testUtils.testStylesheetGeneration(stylesheetGenerator, layout, expectedStylesheetPath, { spritePath: '/this/is/my/spritepath.png' }, done);
+            return testUtils.testStylesheetGeneration(stylesheetGenerator, layout, expectedStylesheetPath, { spritePath: '/this/is/my/spritepath.png' });
         });
 
-        it('should generate the correct ' + name + ' with a custom nameMapping specified', function (done) {
+        it('should generate the correct ' + name + ' with a custom nameMapping specified', function () {
             var expectedStylesheetPath = 'test/fixtures/stylesheets/' + name + '/with-nameMapping.' + suffix,
                 nameMapping = function (imagePath) {
                     return path.basename(imagePath, path.extname(imagePath)).split('').reverse().join('');
                 };
-            testUtils.testStylesheetGeneration(stylesheetGenerator, layout, expectedStylesheetPath, { nameMapping: nameMapping }, done);
+            return testUtils.testStylesheetGeneration(stylesheetGenerator, layout, expectedStylesheetPath, { nameMapping: nameMapping });
         });
 
-        it('should generate the correct ' + name + ' with a pixelRatio specified', function (done) {
+        it('should generate the correct ' + name + ' with a pixelRatio specified', function () {
             var expectedStylesheetPath = 'test/fixtures/stylesheets/' + name + '/with-pixelRatio.' + suffix;
-            testUtils.testStylesheetGeneration(stylesheetGenerator, layout, expectedStylesheetPath, { pixelRatio: 2 }, done);
+            return testUtils.testStylesheetGeneration(stylesheetGenerator, layout, expectedStylesheetPath, { pixelRatio: 2 });
         });
 
         if (additionalTests) {

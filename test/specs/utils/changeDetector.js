@@ -29,61 +29,42 @@ describe('Utils/ChangeDetector', function () {
         }
     });
 
-    it('should always return true the first time detect is called', function (done) {
+    it('should always return true the first time detect is called', function () {
         var changes = changeDetector(options);
 
-        changes.detect(function (changesError, changesDetected) {
-            expect(changesError).not.to.be.ok;
-            expect(changesDetected).to.be.true;
-            done();
+        return expect(changes.detect())
+            .to.eventually.be.true;
+    });
+
+    it('should return false if detect is called after register', function () {
+        var changes = changeDetector(options);
+
+        return changes.register().then(function () {
+            return expect(changes.detect())
+                .to.eventually.be.false;
         });
     });
 
-    it('should return false if detect is called after register', function (done) {
-        var changes = changeDetector(options);
-
-        changes.register(function (registerError) {
-            expect(registerError).not.to.be.ok;
-
-            changes.detect(function (changesError, changesDetected) {
-                expect(changesError).not.to.be.ok;
-                expect(changesDetected).to.be.false;
-                done();
-            });
-        });
-    });
-
-    it('should return true if any of the files have changed', function (done) {
+    it('should return true if any of the files have changed', function () {
         var changes = changeDetector(options),
             oldDate = new Date((new Date()).getTime() - 10000);
 
-        changes.register(function (registerError) {
-            expect(registerError).not.to.be.ok;
-
+        return changes.register().then(function () {
             fs.utimesSync('test/fixtures/images/src/house.png', oldDate, oldDate);
 
-            changes.detect(function (changesError, changesDetected) {
-                expect(changesError).not.to.be.ok;
-                expect(changesDetected).to.be.true;
-                done();
-            });
+            return expect(changes.detect())
+                .to.eventually.be.true;
         });
     });
 
-    it('should return true if any of the files are deleted', function (done) {
+    it('should return true if any of the files are deleted', function () {
         var changes = changeDetector(options);
 
-        changes.register(function (registerError) {
-            expect(registerError).not.to.be.ok;
-
+        return changes.register().then(function () {
             fs.unlinkSync(options.stylesheetPath);
 
-            changes.detect(function (changesError, changesDetected) {
-                expect(changesError).not.to.be.ok;
-                expect(changesDetected).to.be.true;
-
-                done();
-            });
+            return expect(changes.detect())
+                .to.eventually.be.true;
         });
     });
 });
