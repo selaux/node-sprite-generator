@@ -6,7 +6,6 @@
     "rules": {
         "quotes": [2, "single"],
         "no-warning-comments": [2, { "terms": ["todo", "fixme", "wtf"], "location": "anywhere" }],
-        "strict": [2, "global"],
         "no-process-exit": 2,
         "eqeqeq": 2,
         "no-delete-var": 2,
@@ -19,7 +18,7 @@
         "no-new-require": 2,
         "no-catch-shadow": 2,
         "dot-notation": 0,
-        "max-params": [2, 5],
-        "no-new": 1
+        "no-new": 1,
+        "strict": [2, "global"]
     }
 }
