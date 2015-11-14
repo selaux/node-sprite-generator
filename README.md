@@ -106,9 +106,14 @@ The path your stylesheet will be written to.
 #### options.stylesheet
 Type: `String|Function`
 Default value: `'stylus'`  
-Specifies the stylesheet generator (and therefore the format) that is used. The built-in formats are `'stylus'`, `'less'`, `'sass'`, `'scss'`, `'css'` and `'prefixed-css'`. `'prefixed-css'` is the same as `'css'` but generates a lighter CSS file, it requires the use of `options.stylesheetOptions.prefix`.  
-You can also specify a function that writes a custom stylesheet (see more at [extending node-sprite-generator](https://github.com/selaux/node-sprite-generator#extending-node-sprite-generator)).
-You can also specify a path name to custom template to be used to generate stylesheet output.
+Specifies the sylesheet generator (and therefore the stylesheet format) that is used either by using one of the built-in formats or specifying a path to a custom template. It is also possible to specify a function that writes a custom stylesheet (see more at [extending node-sprite-generator](https://github.com/selaux/node-sprite-generator#extending-node-sprite-generator)).
+
+Built-in formats: 
+- `'stylus'`: https://learnboost.github.io/stylus/
+- `'less'`: http://lesscss.org/
+- `'sass'`, `'scss'`: http://sass-lang.com/
+- `'css'`: http://www.w3.org/Style/CSS/
+- `'prefixed-css'`: A version of `'css'` that generates a smaller stylesheet but requires the use of the `'prefix'` stylesheet option
 
 #### options.stylesheetOptions
 Type: `Object`
@@ -122,7 +127,13 @@ __pixelRatio__ (Type: `Integer` Default: `1`): Specifies the pixelRatio for reti
 #### options.layout
 Type: `String|Function`
 Default value: `'vertical'`  
-The layout that is used to generate the sprite. The built-in layouts are `'packed'` (for bin-packing), `'vertical'`, `'horizontal'` and `'diagonal'`. You can also specify a function that generates a custom layout  (see more at [extending node-sprite-generator](https://github.com/selaux/node-sprite-generator#extending-node-sprite-generator)).
+Specifies the layout that is used to generate the sprite by using one of the built-in layouts or using a function that generates a custom layout (see more at [extending node-sprite-generator](https://github.com/selaux/node-sprite-generator#extending-node-sprite-generator)).
+
+Built-in layouts:
+- `'packed'`: Bin-packing Layout
+- `'vertical'`: Vertically aligned layout
+- `'horizontal'`: Horizontally aligned layout
+- `'diagonal'`: Diagonally aligned layout
 
 #### options.layoutOptions
 Type: `Object`
@@ -134,7 +145,12 @@ __scaling__ (Type: `Number` Default: `1`): Specifies the factor that the images 
 #### options.compositor
 Type: `String|Function`
 Default value: `'canvas'`  
-The compositor is used to read and render the images. Built-in compositors are `'canvas'` and `'gm'`. Depending on what you choose you either need libcairo (canvas) or GraphicsMagick/ImageMagick installed. You can also specify your own module that implements this functionality. Have a look at [extending node-sprite-generator](https://github.com/selaux/node-sprite-generator#extending-node-sprite-generator) to see how it's done.
+The compositor is used to read and render the images. Your can use one of the built-in options or specify your own module that implements this functionality. Have a look at [extending node-sprite-generator](https://github.com/selaux/node-sprite-generator#extending-node-sprite-generator) to see how it's done.
+
+Built-in compositors:
+- `'canvas'`: Uses [libcairo](http://cairographics.org/)
+- `'gm'`: Uses [GraphicsMagick](http://www.graphicsmagick.org/)/[ImageMagick](http://www.imagemagick.org/) 
+- `'jimp'`: [A pure javascript compositor](https://github.com/oliver-moran/jimp)
 
 #### options.compositorOptions
 Type: `Object`
