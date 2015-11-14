@@ -42,7 +42,7 @@ describe('NSG', function () {
     }
 
     before(function () {
-        this.timeout = 500;
+        this.timeout(5000);
     });
 
     afterEach(function () {
@@ -90,9 +90,6 @@ describe('NSG', function () {
                     middleware(null, null, callback);
                 }, 500);
             };
-
-        // increase timeout
-        this.timeout = 3000;
 
         // it should always be rendered the first time
         middleware(null, null, function () {
