@@ -16,7 +16,7 @@ npm install node-sprite-generator
 Note:
 node-sprite-generator has two dependencies of which one is required. node-sprite-generator will try to figure out which one is installed and use it.
 
-- __Cairo__ needs to be installed when using the `'canvas'` compositor because [node-canvas](https://github.com/LearnBoost/node-canvas) depends on it. For more information how to do this on your system go to the [node-canvas page](https://github.com/LearnBoost/node-canvas/wiki/_pages).
+- __Cairo__ needs to be installed when using the `'canvas'` compositor because [node-canvas](https://github.com/LearnBoost/node-canvas) depends on it. For more information how to do this on your system go to the [node-canvas page](https://github.com/LearnBoost/node-canvas/wiki/_pages). If you have issues installing node-canvas on OSX, please read [Issue 23](https://github.com/selaux/node-sprite-generator/issues/23).
 - __ImageMagick/GraphicsMagick__ needs to be installed when using the `'gm'` compositor
 
 ## Usage
@@ -148,7 +148,7 @@ Default value: `'canvas'`
 The compositor is used to read and render the images. Your can use one of the built-in options or specify your own module that implements this functionality. Have a look at [extending node-sprite-generator](https://github.com/selaux/node-sprite-generator#extending-node-sprite-generator) to see how it's done.
 
 Built-in compositors:
-- `'canvas'`: Uses [libcairo](http://cairographics.org/)
+- `'canvas'`: Uses [libcairo](http://cairographics.org/). If you have issues installing node-canvas on OSX, please read [Issue 23](https://github.com/selaux/node-sprite-generator/issues/23).
 - `'gm'`: Uses [GraphicsMagick](http://www.graphicsmagick.org/)/[ImageMagick](http://www.imagemagick.org/) 
 - `'jimp'`: [A pure javascript compositor](https://github.com/oliver-moran/jimp)
 
