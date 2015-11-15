@@ -228,6 +228,10 @@ For more information of how to write your own modules/functions have a look at t
 
 ## Changelog
 
+#### 0.10.0
+- adds pure-javascript compositor jimp that has no native dependencies
+- adds support for node 4.x and 5.x
+
 #### 0.9.0
 - adds support for box-packing layout (`packed`)
 - adds support for node 0.12 and iojs
