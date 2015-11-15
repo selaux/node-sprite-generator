@@ -41,7 +41,7 @@ describe('NSG', function () {
         });
     }
 
-    before(function () {
+    beforeEach(function () {
         this.timeout(5000);
     });
 
