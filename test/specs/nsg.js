@@ -41,6 +41,8 @@ describe('NSG', function () {
         });
     }
 
+    this.timeout(5000);
+
     beforeEach(function (done) {
         function executeAndIgnoreEnoent(fn) {
             try {
@@ -51,8 +53,6 @@ describe('NSG', function () {
                 }
             }
         }
-
-        this.timeout(5000);
 
         executeAndIgnoreEnoent(fs.unlinkSync.bind(null, stylesheetPath));
         executeAndIgnoreEnoent(fs.unlinkSync.bind(null, spritePath));
