@@ -1,8 +1,10 @@
 'use strict';
 
 var fs = require('fs'),
+    path = require('path'),
     _ = require('underscore'),
     expect = require('chai').expect,
+    mkdirp = require('mkdirp'),
     nsg = require('../../lib/nsg');
 
 describe('NSG', function () {
@@ -11,9 +13,10 @@ describe('NSG', function () {
             'test/fixtures/images/src/lena.jpg',
             'test/fixtures/images/src/lock.png'
         ],
-        stylesheetPath = 'test/fixtures/stylesheet.styl',
+        basePath = 'build/test/output/',
+        stylesheetPath = path.join(basePath, 'stylesheet.styl'),
         expectedStylesheetPath = 'test/fixtures/stylesheets/stylus/nsg-test.styl',
-        spritePath = 'test/fixtures/sprite.png',
+        spritePath = path.join(basePath, 'sprite.png'),
         expectedSpritePath = 'test/fixtures/images/expected/nsg.png';
 
     function testSpriteGenerationWithOptions(options, done) {
@@ -34,15 +37,28 @@ describe('NSG', function () {
             expect(fs.readFileSync(expectedStylesheetPath).toString()).to.equal(fs.readFileSync(stylesheetPath).toString());
             expect(fs.readFileSync(expectedSpritePath).toString()).to.equal(fs.readFileSync(spritePath).toString());
 
-            fs.unlinkSync(stylesheetPath);
-            fs.unlinkSync(spritePath);
-
             done();
         });
     }
 
-    beforeEach(function () {
+    beforeEach(function (done) {
+        function executeAndIgnoreEnoent(fn) {
+            try {
+                fn();
+            } catch (e) {
+                if (e.code !== 'ENOENT') {
+                    throw e;
+                }
+            }
+        }
+
         this.timeout(5000);
+
+        executeAndIgnoreEnoent(fs.unlinkSync.bind(null, stylesheetPath));
+        executeAndIgnoreEnoent(fs.unlinkSync.bind(null, spritePath));
+        executeAndIgnoreEnoent(fs.rmdirSync.bind(null, basePath));
+
+        mkdirp(basePath, done);
     });
 
     afterEach(function () {
@@ -57,6 +73,12 @@ describe('NSG', function () {
         testSpriteGenerationWithOptions({
             src: [ 'test/fixtures/images/src/*' ]
         }, done);
+    });
+
+    it('should correctly write sprite image and stylesheets when target directory does not exist', function (done) {
+        fs.rmdirSync(basePath);
+
+        testSpriteGenerationWithOptions({}, done);
     });
 
     it('should correctly write sprite image and stylesheets using express.js middleware', function (done) {
