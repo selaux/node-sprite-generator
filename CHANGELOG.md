@@ -1,5 +1,8 @@
 # Changelog
 
+#### 0.10.1
+- fixes target directories not being created if they don't exist
+
 #### 0.10.0
 - adds pure-javascript compositor jimp that has no native dependencies
 - adds support for node 4.x and 5.x
