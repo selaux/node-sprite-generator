@@ -14,7 +14,7 @@ npm install node-sprite-generator
 ```
 
 Note:
-node-sprite-generator has two dependencies of which one is required. node-sprite-generator will try to figure out which one is installed and use it.
+node-sprite-generator cen either use native libraries or pure javascript to build sprites which requires no native dependencies. To use the pure javascript compositor use `'jimp'` as the compositor module.
 
 - __Cairo__ needs to be installed when using the `'canvas'` compositor because [node-canvas](https://github.com/LearnBoost/node-canvas) depends on it. For more information how to do this on your system go to the [node-canvas page](https://github.com/LearnBoost/node-canvas/wiki/_pages). If you have issues installing node-canvas on OSX, please read [Issue 23](https://github.com/selaux/node-sprite-generator/issues/23).
 - __ImageMagick/GraphicsMagick__ needs to be installed when using the `'gm'` compositor
