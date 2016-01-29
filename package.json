@@ -17,7 +17,7 @@
     },
     "devDependencies": {
         "chai": "2.1.1",
-        "eslint": "0.16.2",
+        "eslint": "1.10.3",
         "istanbul": "0.3.7",
         "mocha": "2.2.1",
         "proxyquire": "1.4.0",
