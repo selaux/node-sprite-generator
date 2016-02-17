@@ -2,8 +2,11 @@
 
 var expect = require('chai').expect,
     _ = require('underscore'),
+    proxyquire = require('proxyquire'),
 
-    utils = require('../../../lib/utils/stylesheet');
+    utils = require('../../../lib/utils/stylesheet'),
+    pathWin32 = require('../../utils/winPathMock'),
+    utilsOnWin = proxyquire('../../../lib/utils/stylesheet', { path: pathWin32 } );
 
 describe('Utils/Stylesheet', function () {
     it('prefixString should return the prefixed string', function () {
@@ -72,6 +75,22 @@ describe('Utils/Stylesheet', function () {
         _.each(cases, function (c) {
             it('should return ' + c[2] + ' for ' + c[0] + ' and ' + c[1], function () {
                 expect(utils.getRelativeSpriteDir(c[0], c[1])).to.equal(c[2]);
+            });
+        });
+    });
+
+    describe('getRelativeSpriteDir on Windows', function () {
+        var cases = [
+            [ 'test/img/sprite.png', 'test/css/app.css', '../img/sprite.png' ],
+            [ 'test/img/sprite.png', 'test/stylesheets/stylus/app.css', '../../img/sprite.png' ],
+            [ 'test/sprite.png', 'test/app.css', './sprite.png' ],
+            [ '/home/user/test/sprite.png', '/home/user/test/app.css', './sprite.png' ],
+            [ '/home/user/test/sprite.png', '/home/user/test/css/app.css', '../sprite.png' ]
+        ];
+
+        _.each(cases, function (c) {
+            it('should return ' + c[2] + ' for ' + c[0] + ' and ' + c[1], function () {
+                expect(utilsOnWin.getRelativeSpriteDir(c[0], c[1])).to.equal(c[2]);
             });
         });
     });
