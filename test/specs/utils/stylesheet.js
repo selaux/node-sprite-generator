@@ -85,7 +85,12 @@ describe('Utils/Stylesheet', function () {
             [ 'test/img/sprite.png', 'test/stylesheets/stylus/app.css', '../../img/sprite.png' ],
             [ 'test/sprite.png', 'test/app.css', './sprite.png' ],
             [ '/home/user/test/sprite.png', '/home/user/test/app.css', './sprite.png' ],
-            [ '/home/user/test/sprite.png', '/home/user/test/css/app.css', '../sprite.png' ]
+            [ '/home/user/test/sprite.png', '/home/user/test/css/app.css', '../sprite.png' ],
+            [ 'test\\img\\sprite.png', 'test\\css\\app.css', '../img/sprite.png' ],
+            [ 'test\\img\\sprite.png', 'test\\stylesheets\\stylus\\app.css', '../../img/sprite.png' ],
+            [ 'test\\sprite.png', 'test\\app.css', './sprite.png' ],
+            [ 'C:\\home\\user\\test\\sprite.png', 'C:\\home\\user\\test\\app.css', './sprite.png' ],
+            [ 'C:\\home\\user\\test\\sprite.png', 'C:\\home\\user\\test\\css\\app.css', '../sprite.png' ]
         ];
 
         _.each(cases, function (c) {
