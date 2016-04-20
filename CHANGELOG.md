@@ -1,5 +1,8 @@
 # Changelog
 
+#### 0.10.2
+- fixes sprite path when using Windows
+
 #### 0.10.1
 - fixes target directories not being created if they don't exist
 
