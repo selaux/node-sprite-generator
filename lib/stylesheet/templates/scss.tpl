@@ -25,10 +25,6 @@ $<%= image.className %>: $<%= image.className %>-x $<%= image.className %>-y $<%
   height: nth($sprite, 4);
 }
 
-@mixin <%= spriteName %>-size($sprite) {
-  background-size: nth($sprite, 3) nth($sprite, 4);
-}
-
 @mixin <%= spriteName %>($sprite) {
   @include <%= spriteName %>-image;<% if (options.pixelRatio !== 1) { %>
   @include <%= spriteName %>-size;<% } %>
@@ -36,3 +32,12 @@ $<%= image.className %>: $<%= image.className %>-x $<%= image.className %>-y $<%
   @include <%= spriteName %>-width($sprite);
   @include <%= spriteName %>-height($sprite);
 }
+
+<% layout.images.forEach(function (image) {
+.<%= image.className %> {
+  @include <%= spriteName %>($<%= image.className %>);
+  <% if (options.rem) { %>
+  @include <%= spriteName %>-size;
+  <% } %>
+}
+<% }); %>
