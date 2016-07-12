@@ -33,8 +33,8 @@ $<%= image.className %>: $<%= image.className %>-x $<%= image.className %>-y $<%
   @include <%= spriteName %>-height($sprite);
 }
 
-<% layout.images.forEach(function (image) {
-\.<%= image.className %> {
+<% layout.images.forEach(function (image) { %>
+.<%= image.className %> {
   @include <%= spriteName %>($<%= image.className %>);
   <% if (options.rem) { %>
   @include <%= spriteName %>-size;
