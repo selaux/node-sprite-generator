@@ -123,6 +123,7 @@ __prefix__ (Type: `String` Default: `''`): A prefix that will be prepended to al
 __nameMapping__ (Type: `Function` Default: Filename): A function that specifies how filenames are mapped to class names in the stylesheet  
 __spritePath__ (Type: `String` Default: Relative Path): Defines which URL is used as the image path for the image sprite.  
 __pixelRatio__ (Type: `Integer` Default: `1`): Specifies the pixelRatio for retina sprites.  
+__rem__ (Type: `Integer` Default: `null`): Use rem for sprites.
 
 #### options.layout
 Type: `String|Function`
