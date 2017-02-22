@@ -21,6 +21,7 @@
         "eslint": "1.10.3",
         "istanbul": "0.4.0",
         "mocha": "2.3.3",
+        "node-resemble-v2": "1.0.0",
         "proxyquire": "1.4.0",
         "sinon": "1.17.2",
         "sinon-chai": "2.8.0",

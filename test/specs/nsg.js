@@ -3,6 +3,7 @@
 var fs = require('fs'),
     path = require('path'),
     _ = require('underscore'),
+    resemble = require('node-resemble-v2'),
     expect = require('chai').expect,
     mkdirp = require('mkdirp'),
     nsg = require('../../lib/nsg');
@@ -35,9 +36,11 @@ describe('NSG', function () {
             expect(options).to.deep.equal(expectedOptions);
 
             expect(fs.readFileSync(expectedStylesheetPath).toString()).to.equal(fs.readFileSync(stylesheetPath).toString());
-            expect(fs.readFileSync(expectedSpritePath).toString()).to.equal(fs.readFileSync(spritePath).toString());
-
-            done();
+            resemble(expectedSpritePath).compareTo(spritePath).ignoreColors().onComplete(function(result) {
+                expect(result).to.have.property('isSameDimensions', true);
+                expect(result).to.have.property('rawMisMatchPercentage').that.is.lessThan(0.5);
+                done();
+            });
         });
     }
 
@@ -67,6 +70,14 @@ describe('NSG', function () {
 
     it('should correctly write sprite image and stylesheets when using directly', function (done) {
         testSpriteGenerationWithOptions({}, done);
+    });
+
+    it('should correctly write sprite image and stylesheets when using directly with gm', function (done) {
+        testSpriteGenerationWithOptions({ compositor: 'gm' }, done);
+    });
+
+    it('should correctly write sprite image and stylesheets when using directly with jimp', function (done) {
+        testSpriteGenerationWithOptions({ compositor: 'jimp' }, done);
     });
 
     it('should correctly write sprite image and stylesheets using glob pattern matching', function (done) {
