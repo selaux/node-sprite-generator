@@ -4,28 +4,28 @@
     "description": "Generates image sprites and their spritesheets (css, stylus, sass, scss or less) from sets of images. Supports retina sprites. Provides express middleware and grunt task.",
     "main": "lib/nsg.js",
     "dependencies": {
-        "bin-pack": "1.0.1",
-        "bluebird": "3.0.5",
-        "glob": "5.0.10",
-        "jimp": "0.2.21",
+        "bin-pack": "1.0.2",
+        "bluebird": "3.4.7",
+        "glob": "7.1.1",
+        "jimp": "0.2.27",
         "mkdirp": "0.5.1",
         "underscore": "1.8.3"
     },
     "optionalDependencies": {
-        "canvas": "1.3.12",
-        "gm": "1.22.0"
+        "canvas": "1.6.3",
+        "gm": "1.23.0"
     },
     "devDependencies": {
-        "chai": "3.4.1",
-        "chai-as-promised": "5.1.0",
-        "eslint": "1.10.3",
-        "istanbul": "0.4.0",
-        "mocha": "2.3.3",
+        "chai": "3.5.0",
+        "chai-as-promised": "6.0.0",
+        "eslint": "2.13.1",
+        "istanbul": "0.4.5",
+        "mocha": "3.2.0",
         "node-resemble-v2": "1.0.0",
-        "proxyquire": "1.4.0",
-        "sinon": "1.17.2",
+        "proxyquire": "1.7.11",
+        "sinon": "1.17.7",
         "sinon-chai": "2.8.0",
-        "coveralls": "2.11.4"
+        "coveralls": "2.11.16"
     },
     "scripts": {
         "lint": "eslint .",
