@@ -2,4 +2,4 @@
 
 var testTemplatedStylesheet = require('./testTemplatedStylesheet');
 
-testTemplatedStylesheet('javascript');
+testTemplatedStylesheet('javascript', 'js');
