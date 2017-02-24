@@ -3,7 +3,7 @@
 module.exports = function (name, suffix, additionalTests) {
     var path = require('path'),
         testUtils = require('../../utils/test.js'),
-        stylesheetGenerator = require('../../../lib/stylesheet/' + name + '.js');
+        stylesheetGenerator = require('../../../lib/stylesheet')[name];
 
     describe('Stylesheet/' + name, function () {
         if (!suffix) {
