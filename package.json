@@ -9,6 +9,7 @@
         "glob": "7.1.1",
         "jimp": "0.2.27",
         "mkdirp": "0.5.1",
+        "ramda": "0.22.0",
         "underscore": "1.8.3"
     },
     "optionalDependencies": {
