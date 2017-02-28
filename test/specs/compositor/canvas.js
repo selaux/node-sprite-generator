@@ -130,7 +130,7 @@ describe('Compositor/canvas', function () {
                 canvas: canvasStub
             });
 
-        return canvasCompositor.render(layout, 'some/path', options).then(function () {
+        return canvasCompositor.render(layout, 'some/path', options).then(function (result) {
             expect(options).to.deep.equal(optionsClone);
 
             expect(canvasStub).to.have.been.calledOnce;
@@ -143,8 +143,7 @@ describe('Compositor/canvas', function () {
 
             expect(canvasInstance.toBuffer).to.have.been.calledOnce;
 
-            expect(fs.writeFile).to.have.been.calledOnce;
-            expect(fs.writeFile).to.have.been.calledWith('some/path', fileBuffer);
+            expect(result).to.deep.equal(fileBuffer);
 
             return {
                 Canvas: canvasStub,

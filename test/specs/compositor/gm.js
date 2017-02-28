@@ -108,9 +108,9 @@ describe('Compositor/gm', function () {
         gmInstanceStub.in = sinon.stub().returns(gmInstanceStub);
         gmInstanceStub.mosaic = sinon.stub().returns(gmInstanceStub);
         gmInstanceStub.quality = sinon.stub().returns(gmInstanceStub);
-        gmInstanceStub.write = sinon.stub().yieldsAsync(null);
+        gmInstanceStub.toBuffer = sinon.stub().yieldsAsync(null, 'png file');
 
-        return gmCompositor.render(layout, spritePath, options).then(function () {
+        return gmCompositor.render(layout, spritePath, options).then(function (result) {
             expect(options).to.deep.equal(optionsClone);
 
             expect(gmStub).to.have.been.calledOnce;
@@ -131,8 +131,10 @@ describe('Compositor/gm', function () {
 
             expect(gmInstanceStub.quality).to.have.been.calledOnce;
 
-            expect(gmInstanceStub.write).to.have.been.calledOnce;
-            expect(gmInstanceStub.write).to.have.been.calledWith(path.resolve(spritePath));
+            expect(gmInstanceStub.toBuffer).to.have.been.calledOnce;
+            expect(gmInstanceStub.toBuffer).to.have.been.calledWith('PNG');
+
+            expect(result).to.equal('png file');
 
             return {
                 gmStub: gmStub,
