@@ -6,13 +6,11 @@ var expect = require('chai').expect,
 
 module.exports = {
     testStylesheetGeneration: function (generator, layout, expectedPath, options) {
-        var expectedOptions = _.clone(options),
-            stylesheetPath = 'test/fixtures/test.file';
+        var expectedOptions = _.clone(options);
 
-        return generator(layout, stylesheetPath, options).then(function () {
+        return generator(layout, options).then(function (stylesheet) {
             expect(options).to.deep.equal(expectedOptions);
-            expect(fs.readFileSync(stylesheetPath).toString()).to.equal(fs.readFileSync(expectedPath).toString());
-            fs.unlinkSync(stylesheetPath);
+            expect(stylesheet).to.equal(fs.readFileSync(expectedPath).toString());
         });
 
     }

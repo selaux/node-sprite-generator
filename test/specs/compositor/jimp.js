@@ -104,9 +104,9 @@ describe('Compositor/jimp', function () {
         jimpInstanceStub.composite = sinon.stub().returns(jimpInstanceStub);
         jimpInstanceStub.deflateLevel = sinon.stub().returns(jimpInstanceStub);
         jimpInstanceStub.filterType = sinon.stub().returns(jimpInstanceStub);
-        jimpInstanceStub.write = sinon.stub().yieldsAsync(null);
+        jimpInstanceStub.getBuffer = sinon.stub().withArgs(Jimp.AUTO).yieldsAsync(null, 'png data');
 
-        return jimpCompositor.render(layout, spritePath, options).then(function () {
+        return jimpCompositor.render(layout, spritePath, options).then(function (result) {
             expect(options).to.deep.equal(optionsClone);
 
             expect(jimpStub).to.have.been.calledOnce;
@@ -127,8 +127,9 @@ describe('Compositor/jimp', function () {
             expect(jimpInstanceStub.deflateLevel).to.have.been.calledOnce;
             expect(jimpInstanceStub.filterType).to.have.been.calledOnce;
 
-            expect(jimpInstanceStub.write).to.have.been.calledOnce;
-            expect(jimpInstanceStub.write).to.have.been.calledWith(spritePath);
+            expect(jimpInstanceStub.getBuffer).to.have.been.calledOnce;
+
+            expect(result).to.equal('png data');
 
             return {
                 jimpStub: jimpStub,

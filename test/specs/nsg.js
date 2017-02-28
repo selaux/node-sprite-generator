@@ -3,6 +3,8 @@
 var fs = require('fs'),
     path = require('path'),
     sinon = require('sinon'),
+    proxyquire = require('proxyquire'),
+    R = require('ramda'),
     _ = require('underscore'),
     resemble = require('node-resemble-v2'),
     expect = require('chai').expect,
@@ -16,58 +18,53 @@ var fs = require('fs'),
 require('sinon-as-promised');
 
 describe('NSG', function () {
+    function mergeStubModules(options) {
+        return R.merge({
+            compositor: { readImages: sinon.stub().resolves().resolves([]), render: sinon.stub().resolves() },
+            layout: sinon.stub().resolves([]),
+            stylesheet: sinon.stub().resolves()
+        }, options);
+    }
+
     it('should pass on default options to compositor, layout and stylesheet', function () {
-        var compositor = { readImages: sinon.stub().resolves().resolves([]), render: sinon.stub().resolves() },
-            generateLayout = sinon.stub().resolves([]),
-            generateStylesheet = sinon.stub().resolves();
+        var options = mergeStubModules({});
 
-        return nsg({
-            compositor: compositor,
-            layout: generateLayout,
-            stylesheet: generateStylesheet
-        }).then(function () {
-            expect(compositor.readImages).to.have.been.calledOnce;
-            expect(compositor.readImages).to.have.been.calledWith([]);
-            expect(compositor.render).to.have.been.calledOnce;
-            expect(compositor.render).to.have.been.calledWith([], '', { filter: 'all', compressionLevel: 6 });
+        return nsg(options).then(function () {
+            expect(options.compositor.readImages).to.have.been.calledOnce;
+            expect(options.compositor.readImages).to.have.been.calledWith([]);
+            expect(options.compositor.render).to.have.been.calledOnce;
+            expect(options.compositor.render).to.have.been.calledWith([], null, { filter: 'all', compressionLevel: 6 });
 
-            expect(generateLayout).to.have.been.calledOnce;
-            expect(generateLayout).to.have.been.calledWith([], { padding: 0, scaling: 1 });
+            expect(options.layout).to.have.been.calledOnce;
+            expect(options.layout).to.have.been.calledWith([], { padding: 0, scaling: 1 });
 
-            expect(generateStylesheet).to.have.been.calledOnce;
-            expect(generateStylesheet).to.have.been.calledWith(
+            expect(options.stylesheet).to.have.been.calledOnce;
+            expect(options.stylesheet).to.have.been.calledWith(
                 [],
-                '',
                 { spritePath: null, nameMapping: stylesheetUtils.nameToClass, prefix: '', pixelRatio: 1 }
             );
         });
     });
 
     it('should pass on custom options to compositor, layout and stylesheet', function () {
-        var compositor = { readImages: sinon.stub().resolves().resolves([]), render: sinon.stub().resolves() },
-            generateLayout = sinon.stub().resolves([]),
-            generateStylesheet = sinon.stub().resolves();
-
-        return nsg({
-            compositor: compositor,
-            layout: generateLayout,
-            stylesheet: generateStylesheet,
+        var options = mergeStubModules({
             compositorOptions: { filter: 'none' },
             layoutOptions: { padding: 50 },
             stylesheetOptions: { spritePath: 'abc', prefix: 'test' }
-        }).then(function () {
-            expect(compositor.readImages).to.have.been.calledOnce;
-            expect(compositor.readImages).to.have.been.calledWith([]);
-            expect(compositor.render).to.have.been.calledOnce;
-            expect(compositor.render).to.have.been.calledWith([], '', { filter: 'none', compressionLevel: 6 });
+        });
 
-            expect(generateLayout).to.have.been.calledOnce;
-            expect(generateLayout).to.have.been.calledWith([], { padding: 50, scaling: 1 });
+        return nsg(options).then(function () {
+            expect(options.compositor.readImages).to.have.been.calledOnce;
+            expect(options.compositor.readImages).to.have.been.calledWith([]);
+            expect(options.compositor.render).to.have.been.calledOnce;
+            expect(options.compositor.render).to.have.been.calledWith([], null, { filter: 'none', compressionLevel: 6 });
 
-            expect(generateStylesheet).to.have.been.calledOnce;
-            expect(generateStylesheet).to.have.been.calledWith(
+            expect(options.layout).to.have.been.calledOnce;
+            expect(options.layout).to.have.been.calledWith([], { padding: 50, scaling: 1 });
+
+            expect(options.stylesheet).to.have.been.calledOnce;
+            expect(options.stylesheet).to.have.been.calledWith(
                 [],
-                '',
                 { spritePath: 'abc', nameMapping: stylesheetUtils.nameToClass, prefix: 'test', pixelRatio: 1 }
             );
         });
@@ -87,23 +84,66 @@ describe('NSG', function () {
         }).nodeify(done);
     }));
 
-    it('should pass the relative sprite to the stylesheet if it is not set manually', sinon.test(function () {
-        var compositor = { readImages: sinon.stub().resolves().resolves([]), render: sinon.stub().resolves() },
-            generateLayout = sinon.stub().resolves([]),
-            generateStylesheet = sinon.stub().resolves();
-
-        return nsg({
+    it('should pass the relative sprite to the stylesheet if it is not set manually', function () {
+        var options = mergeStubModules({
             spritePath: 'test/sprite/path/sprite.png',
-            stylesheetPath: 'test/styl/sprite.styl',
-            compositor: compositor,
-            layout: generateLayout,
-            stylesheet: generateStylesheet
-        }).then(function () {
-            expect(generateStylesheet).to.have.been.calledWithMatch([], 'test/styl/sprite.styl', {
+            stylesheetPath: 'test/styl/sprite.styl'
+        });
+
+        return nsg(options).then(function () {
+            expect(options.stylesheet).to.have.been.calledWithMatch([], {
                 spritePath: '../sprite/path/sprite.png'
             });
         });
-    }));
+    });
+
+    it('should create stylesheet path and write stylesheet if specified', function () {
+        var stubs = {
+                writeFile: sinon.stub().yieldsAsync(),
+                mkdirp: sinon.stub().yieldsAsync()
+            },
+            nsgProxy = proxyquire('../../lib/nsg', {
+                mkdirp: stubs.mkdirp,
+                fs: { writeFile: stubs.writeFile }
+            }),
+            options = mergeStubModules({
+                stylesheetPath: 'test/styl/sprite.styl'
+            });
+
+        options.stylesheet.resolves('my data');
+
+        return nsgProxy(options).then(function () {
+            expect(stubs.mkdirp).to.have.been.calledOnce;
+            expect(stubs.mkdirp).to.have.been.calledWith('test/styl');
+
+            expect(stubs.writeFile).to.have.been.calledOnce;
+            expect(stubs.writeFile).to.have.been.calledWith('test/styl/sprite.styl', 'my data');
+        });
+    });
+
+    it('should create sprite path and write sprite if specified', function () {
+        var stubs = {
+                writeFile: sinon.stub().yieldsAsync(),
+                mkdirp: sinon.stub().yieldsAsync()
+            },
+            nsgProxy = proxyquire('../../lib/nsg', {
+                mkdirp: stubs.mkdirp,
+                fs: { writeFile: stubs.writeFile }
+            }),
+            options = mergeStubModules({
+                spritePath: 'test/sprite/path/sprite.png'
+            });
+
+        options.compositor.render.resolves('my sprite data');
+
+        return nsgProxy(options).then(function () {
+            expect(stubs.mkdirp).to.have.been.calledOnce;
+            expect(stubs.mkdirp).to.have.been.calledWith('test/sprite/path');
+
+            expect(stubs.writeFile).to.have.been.calledOnce;
+            expect(stubs.writeFile).to.have.been.calledWith('test/sprite/path/sprite.png', 'my sprite data');
+        });
+    });
 });
 
 describe('NSG functional tests', function () {
