@@ -141,20 +141,14 @@ describe('Compositor/gm', function () {
         });
     }
 
-    it('should write the sprites correctly', function () {
-        return testRender({}).then(function (stubs) {
-            expect(stubs.gmInstanceStub.quality).to.have.been.calledWith(69);
-        });
-    });
-
-    it('should write the sprites correctly when specifying a different compression level', function() {
-        return testRender({ compressionLevel: 9 }).then(function (stubs) {
+    it('should write the sprites correctly', function() {
+        return testRender({ filter: 'all', compressionLevel: 9 }).then(function (stubs) {
             expect(stubs.gmInstanceStub.quality).to.have.been.calledWith(99);
         });
     });
 
-    it('should write the sprites correctly when specifying a different filter', function() {
-        return testRender({ filter: 'none' }).then(function (stubs) {
+    it('should write the sprites correctly when specifying different parameters', function() {
+        return testRender({ filter: 'none', compressionLevel: 6 }).then(function (stubs) {
             expect(stubs.gmInstanceStub.quality).to.have.been.calledWith(60);
         });
     });
