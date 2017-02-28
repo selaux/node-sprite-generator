@@ -156,14 +156,8 @@ describe('Compositor/canvas', function () {
     }
 
     it('should render the sprite correctly', function () {
-        return testRender({}).then(function (stubs) {
-            expect(stubs.canvasInstance.toBuffer.getCall(0).args[1]).to.equal(6);
-            expect(stubs.canvasInstance.toBuffer.getCall(0).args[2]).to.equal(256);
-        });
-    });
-
-    it('should render the sprite correctly with a different compression level', function () {
         return testRender({
+            filter: 'all',
             compressionLevel: 9
         }).then(function (stubs) {
             expect(stubs.canvasInstance.toBuffer.getCall(0).args[1]).to.equal(9);
@@ -171,9 +165,10 @@ describe('Compositor/canvas', function () {
         });
     });
 
-    it('should render the sprite correctly with a different filter method', function () {
+    it('should render the sprite correctly when specifying different parameters', function () {
         return testRender({
-            filter: 'none'
+            filter: 'none',
+            compressionLevel: 6
         }).then(function (stubs) {
             expect(stubs.canvasInstance.toBuffer.getCall(0).args[1]).to.equal(6);
             expect(stubs.canvasInstance.toBuffer.getCall(0).args[2]).to.equal(8);

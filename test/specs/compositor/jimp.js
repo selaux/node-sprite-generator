@@ -145,21 +145,14 @@ describe('Compositor/jimp', function () {
         return expect(jimpCompositor.render({}, 'path', {})).to.be.rejectedWith('Test Error');
     });
 
-    it('should write the sprites correctly', function () {
-        return testRender({}).then(function (stubs) {
-            expect(stubs.jimpInstanceStub.deflateLevel).to.have.been.calledWith(6);
-            expect(stubs.jimpInstanceStub.filterType).to.have.been.calledWith(Jimp.PNG_FILTER_AUTO);
-        });
-    });
-
-    it('should write the sprites correctly when specifying a different compression level', function() {
-        return testRender({ compressionLevel: 9 }).then(function (stubs) {
+    it('should write the sprites correctly', function() {
+        return testRender({ filter: 'all', compressionLevel: 9 }).then(function (stubs) {
             expect(stubs.jimpInstanceStub.deflateLevel).to.have.been.calledWith(9);
         });
     });
 
-    it('should write the sprites correctly when specifying a different filter', function() {
-        return testRender({ filter: 'none' }).then(function (stubs) {
+    it('should write the sprites correctly when specifying different params', function() {
+        return testRender({ filter: 'none', compressionLevel: 6 }).then(function (stubs) {
             expect(stubs.jimpInstanceStub.filterType).to.have.been.calledWith(Jimp.PNG_FILTER_NONE);
         });
     });
