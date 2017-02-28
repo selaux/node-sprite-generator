@@ -3,6 +3,7 @@
 var name = 'prefixed-css',
     testTemplatedStylesheet = require('./testTemplatedStylesheet'),
     testUtils = require('../../utils/test.js'),
+    nameToClass = require('../../../lib/utils/stylesheet').nameToClass,
     stylesheetGenerator = require('../../../lib/stylesheet/' + name + '.js');
 
 testTemplatedStylesheet(name, 'css', function () {
@@ -18,6 +19,11 @@ testTemplatedStylesheet(name, 'css', function () {
 
     it('should generate the correct ' + name + ' with common width/height', function () {
         var expectedStylesheetPath = 'test/fixtures/stylesheets/' + name + '/with-common-wh.css';
-        return testUtils.testStylesheetGeneration(stylesheetGenerator, layoutCommon, expectedStylesheetPath, { prefix: 'sprite-' });
+        return testUtils.testStylesheetGeneration(stylesheetGenerator, layoutCommon, expectedStylesheetPath, {
+            prefix: 'sprite-',
+            nameMapping: nameToClass,
+            spritePath: './images/png/sprite.png',
+            pixelRatio: 1
+        });
     });
 });

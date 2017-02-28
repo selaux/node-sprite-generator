@@ -38,13 +38,12 @@ describe('NSG', function () {
             expect(generateStylesheet).to.have.been.calledWith(
                 [],
                 '',
-                '',
-                { nameMapping: stylesheetUtils.nameToClass, prefix: '', pixelRatio: 1 }
+                { spritePath: null, nameMapping: stylesheetUtils.nameToClass, prefix: '', pixelRatio: 1 }
             );
         });
     });
 
-    it('should pass on default options to compositor, layout and stylesheet', function () {
+    it('should pass on custom options to compositor, layout and stylesheet', function () {
         var compositor = { readImages: sinon.stub().resolves().resolves([]), render: sinon.stub().resolves() },
             generateLayout = sinon.stub().resolves([]),
             generateStylesheet = sinon.stub().resolves();
@@ -55,7 +54,7 @@ describe('NSG', function () {
             stylesheet: generateStylesheet,
             compositorOptions: { filter: 'none' },
             layoutOptions: { padding: 50 },
-            stylesheetOptions: { prefix: 'test' }
+            stylesheetOptions: { spritePath: 'abc', prefix: 'test' }
         }).then(function () {
             expect(compositor.readImages).to.have.been.calledOnce;
             expect(compositor.readImages).to.have.been.calledWith([]);
@@ -69,8 +68,7 @@ describe('NSG', function () {
             expect(generateStylesheet).to.have.been.calledWith(
                 [],
                 '',
-                '',
-                { nameMapping: stylesheetUtils.nameToClass, prefix: 'test', pixelRatio: 1 }
+                { spritePath: 'abc', nameMapping: stylesheetUtils.nameToClass, prefix: 'test', pixelRatio: 1 }
             );
         });
     });
@@ -87,6 +85,24 @@ describe('NSG', function () {
             expect(providedLayouts.vertical).to.have.been.calledOnce;
             expect(providedStylesheets.stylus).to.have.been.calledOnce;
         }).nodeify(done);
+    }));
+
+    it('should pass the relative sprite to the stylesheet if it is not set manually', sinon.test(function () {
+        var compositor = { readImages: sinon.stub().resolves().resolves([]), render: sinon.stub().resolves() },
+            generateLayout = sinon.stub().resolves([]),
+            generateStylesheet = sinon.stub().resolves();
+
+        return nsg({
+            spritePath: 'test/sprite/path/sprite.png',
+            stylesheetPath: 'test/styl/sprite.styl',
+            compositor: compositor,
+            layout: generateLayout,
+            stylesheet: generateStylesheet
+        }).then(function () {
+            expect(generateStylesheet).to.have.been.calledWithMatch([], 'test/styl/sprite.styl', {
+                spritePath: '../sprite/path/sprite.png'
+            });
+        });
     }));
 });
 
