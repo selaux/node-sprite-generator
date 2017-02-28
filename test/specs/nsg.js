@@ -2,13 +2,95 @@
 
 var fs = require('fs'),
     path = require('path'),
+    sinon = require('sinon'),
     _ = require('underscore'),
     resemble = require('node-resemble-v2'),
     expect = require('chai').expect,
     mkdirp = require('mkdirp'),
-    nsg = require('../../lib/nsg');
+    nsg = require('../../lib/nsg'),
+    providedCompositors = require('../../lib/compositor'),
+    providedLayouts = require('../../lib/layout'),
+    providedStylesheets = require('../../lib/stylesheet'),
+    stylesheetUtils = require('../../lib/utils/stylesheet');
+
+require('sinon-as-promised');
 
 describe('NSG', function () {
+    it('should pass on default options to compositor, layout and stylesheet', function () {
+        var compositor = { readImages: sinon.stub().resolves().resolves([]), render: sinon.stub().resolves() },
+            generateLayout = sinon.stub().resolves([]),
+            generateStylesheet = sinon.stub().resolves();
+
+        return nsg({
+            compositor: compositor,
+            layout: generateLayout,
+            stylesheet: generateStylesheet
+        }).then(function () {
+            expect(compositor.readImages).to.have.been.calledOnce;
+            expect(compositor.readImages).to.have.been.calledWith([]);
+            expect(compositor.render).to.have.been.calledOnce;
+            expect(compositor.render).to.have.been.calledWith([], '', { filter: 'all', compressionLevel: 6 });
+
+            expect(generateLayout).to.have.been.calledOnce;
+            expect(generateLayout).to.have.been.calledWith([], { padding: 0, scaling: 1 });
+
+            expect(generateStylesheet).to.have.been.calledOnce;
+            expect(generateStylesheet).to.have.been.calledWith(
+                [],
+                '',
+                '',
+                { nameMapping: stylesheetUtils.nameToClass, prefix: '', pixelRatio: 1 }
+            );
+        });
+    });
+
+    it('should pass on default options to compositor, layout and stylesheet', function () {
+        var compositor = { readImages: sinon.stub().resolves().resolves([]), render: sinon.stub().resolves() },
+            generateLayout = sinon.stub().resolves([]),
+            generateStylesheet = sinon.stub().resolves();
+
+        return nsg({
+            compositor: compositor,
+            layout: generateLayout,
+            stylesheet: generateStylesheet,
+            compositorOptions: { filter: 'none' },
+            layoutOptions: { padding: 50 },
+            stylesheetOptions: { prefix: 'test' }
+        }).then(function () {
+            expect(compositor.readImages).to.have.been.calledOnce;
+            expect(compositor.readImages).to.have.been.calledWith([]);
+            expect(compositor.render).to.have.been.calledOnce;
+            expect(compositor.render).to.have.been.calledWith([], '', { filter: 'none', compressionLevel: 6 });
+
+            expect(generateLayout).to.have.been.calledOnce;
+            expect(generateLayout).to.have.been.calledWith([], { padding: 50, scaling: 1 });
+
+            expect(generateStylesheet).to.have.been.calledOnce;
+            expect(generateStylesheet).to.have.been.calledWith(
+                [],
+                '',
+                '',
+                { nameMapping: stylesheetUtils.nameToClass, prefix: 'test', pixelRatio: 1 }
+            );
+        });
+    });
+
+    it('should use default compositors, layout and stylesheet functions', sinon.test(function (done) {
+        this.stub(providedCompositors.canvas, 'readImages').resolves([]);
+        this.stub(providedCompositors.canvas, 'render').resolves();
+        this.stub(providedLayouts, 'vertical').resolves({ width: 0, height: 0, images: [] });
+        this.stub(providedStylesheets, 'stylus').resolves();
+
+        nsg({}).then(function () {
+            expect(providedCompositors.canvas.readImages).to.have.been.calledOnce;
+            expect(providedCompositors.canvas.render).to.have.been.calledOnce;
+            expect(providedLayouts.vertical).to.have.been.calledOnce;
+            expect(providedStylesheets.stylus).to.have.been.calledOnce;
+        }).nodeify(done);
+    }));
+});
+
+describe('NSG functional tests', function () {
     var imagePaths = [
             'test/fixtures/images/src/house.png',
             'test/fixtures/images/src/lena.jpg',
