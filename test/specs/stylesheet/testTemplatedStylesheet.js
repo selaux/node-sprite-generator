@@ -1,9 +1,17 @@
 'use strict';
 
 module.exports = function (name, suffix, additionalTests) {
-    var path = require('path'),
-        testUtils = require('../../utils/test.js'),
-        stylesheetGenerator = require('../../../lib/stylesheet')[name];
+    var R = require('ramda'),
+        path = require('path'),
+        testUtils = require('../../utils/test'),
+        nameToClass = require('../../../lib/utils/stylesheet').nameToClass,
+        stylesheetGenerator = require('../../../lib/stylesheet')[name],
+        defaultOptions = R.merge({
+            prefix: '',
+            nameMapping: nameToClass,
+            spritePath: './images/png/sprite.png',
+            pixelRatio: 1
+        });
 
     describe('Stylesheet/' + name, function () {
         if (!suffix) {
@@ -20,19 +28,14 @@ module.exports = function (name, suffix, additionalTests) {
                 ]
             };
 
-        it('should generate the correct ' + name + ' without any options', function () {
-            var expectedStylesheetPath = 'test/fixtures/stylesheets/' + name + '/no-options.' + suffix;
-            return testUtils.testStylesheetGeneration(stylesheetGenerator, layout, expectedStylesheetPath, {});
-        });
-
         it('should generate the correct ' + name + ' with a prefix specified', function () {
             var expectedStylesheetPath = 'test/fixtures/stylesheets/' + name + '/with-prefix.' + suffix;
-            return testUtils.testStylesheetGeneration(stylesheetGenerator, layout, expectedStylesheetPath, { prefix: 'prefix-' });
+            return testUtils.testStylesheetGeneration(stylesheetGenerator, layout, expectedStylesheetPath, defaultOptions({ prefix: 'prefix-' }));
         });
 
         it('should generate the correct ' + name + ' with a spritePath specified', function () {
             var expectedStylesheetPath = 'test/fixtures/stylesheets/' + name + '/with-spritePath.' + suffix;
-            return testUtils.testStylesheetGeneration(stylesheetGenerator, layout, expectedStylesheetPath, { spritePath: '/this/is/my/spritepath.png' });
+            return testUtils.testStylesheetGeneration(stylesheetGenerator, layout, expectedStylesheetPath, defaultOptions({ spritePath: '/this/is/my/spritepath.png' }));
         });
 
         it('should generate the correct ' + name + ' with a custom nameMapping specified', function () {
@@ -40,12 +43,12 @@ module.exports = function (name, suffix, additionalTests) {
                 nameMapping = function (imagePath) {
                     return path.basename(imagePath, path.extname(imagePath)).split('').reverse().join('');
                 };
-            return testUtils.testStylesheetGeneration(stylesheetGenerator, layout, expectedStylesheetPath, { nameMapping: nameMapping });
+            return testUtils.testStylesheetGeneration(stylesheetGenerator, layout, expectedStylesheetPath, defaultOptions({ nameMapping: nameMapping }));
         });
 
         it('should generate the correct ' + name + ' with a pixelRatio specified', function () {
             var expectedStylesheetPath = 'test/fixtures/stylesheets/' + name + '/with-pixelRatio.' + suffix;
-            return testUtils.testStylesheetGeneration(stylesheetGenerator, layout, expectedStylesheetPath, { pixelRatio: 2 });
+            return testUtils.testStylesheetGeneration(stylesheetGenerator, layout, expectedStylesheetPath, defaultOptions({ pixelRatio: 2 }));
         });
 
         if (additionalTests) {

@@ -74,7 +74,8 @@ describe('Utils/Stylesheet', function () {
 
         _.each(cases, function (c) {
             it('should return ' + c[2] + ' for ' + c[0] + ' and ' + c[1], function () {
-                expect(utils.getRelativeSpriteDir(c[0], c[1])).to.equal(c[2]);
+                expect(utils.getRelativeSpriteDir({ spritePath: c[0], stylesheetPath: c[1], stylesheetOptions: {} }))
+                    .to.have.deep.property('stylesheetOptions.spritePath', c[2]);
             });
         });
     });
@@ -95,7 +96,8 @@ describe('Utils/Stylesheet', function () {
 
         _.each(cases, function (c) {
             it('should return ' + c[2] + ' for ' + c[0] + ' and ' + c[1], function () {
-                expect(utilsOnWin.getRelativeSpriteDir(c[0], c[1])).to.equal(c[2]);
+                expect(utilsOnWin.getRelativeSpriteDir({ spritePath: c[0], stylesheetPath: c[1], stylesheetOptions: {} }))
+                    .to.have.deep.property('stylesheetOptions.spritePath', c[2]);
             });
         });
     });
