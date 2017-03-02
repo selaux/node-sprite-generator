@@ -84,18 +84,26 @@ describe('NSG', function () {
         }).nodeify(done);
     }));
 
-    it('should pass the relative sprite to the stylesheet if it is not set manually', function () {
-        var options = mergeStubModules({
-            spritePath: 'test/sprite/path/sprite.png',
-            stylesheetPath: 'test/styl/sprite.styl'
-        });
+    it('should pass the relative sprite to the stylesheet if it is not set manually', sinon.test(function () {
+        var stubs = {
+                writeFile: sinon.stub().yieldsAsync(),
+                mkdirp: sinon.stub().yieldsAsync()
+            },
+            nsgProxy = proxyquire('../../lib/nsg', {
+                mkdirp: stubs.mkdirp,
+                fs: { writeFile: stubs.writeFile }
+            }),
+            options = mergeStubModules({
+                spritePath: 'test/sprite/path/sprite.png',
+                stylesheetPath: 'test/styl/sprite.styl'
+            });
 
-        return nsg(options).then(function () {
+        return nsgProxy(options).then(function () {
             expect(options.stylesheet).to.have.been.calledWithMatch([], {
                 spritePath: '../sprite/path/sprite.png'
             });
         });
-    });
+    }));
 
     it('should create stylesheet path and write stylesheet if specified', function () {
         var stubs = {
@@ -144,6 +152,34 @@ describe('NSG', function () {
             expect(stubs.writeFile).to.have.been.calledWith('test/sprite/path/sprite.png', 'my sprite data');
         });
     });
+
+    it('should use a builtin compositor, stylesheet and layout when specified', sinon.test(function (done) {
+        this.stub(providedCompositors.gm, 'readImages').resolves([]);
+        this.stub(providedCompositors.gm, 'render').resolves();
+        this.stub(providedLayouts, 'horizontal').resolves({ width: 0, height: 0, images: [] });
+        this.stub(providedStylesheets, 'css').resolves();
+
+        nsg({
+            compositor: 'gm',
+            layout: 'horizontal',
+            stylesheet: 'css'
+        }).then(function () {
+            expect(providedCompositors.gm.readImages).to.have.been.calledOnce;
+            expect(providedCompositors.gm.render).to.have.been.calledOnce;
+            expect(providedLayouts.horizontal).to.have.been.calledOnce;
+            expect(providedStylesheets.css).to.have.been.calledOnce;
+        }).nodeify(done);
+    }));
+
+    it('should use a provided string for stylesheet as a template', sinon.test(function (done) {
+        var options = mergeStubModules({ stylesheet: 'test template' });
+
+        options.layout.resolves({ images: [] });
+
+        nsg(options).spread(function (stylesheet) {
+            expect(stylesheet).to.equal('test template');
+        }).nodeify(done);
+    }));
 });
 
 describe('NSG functional tests', function () {
@@ -292,7 +328,7 @@ describe('NSG functional tests', function () {
         expectedStylesheetPath = 'test/fixtures/stylesheets/stylus/with-custom-template.stylus';
 
         testSpriteGenerationWithOptions({
-            stylesheet: 'test/fixtures/stylesheets/template.tpl'
+            stylesheet: fs.readFileSync('test/fixtures/stylesheets/template.tpl').toString()
         }, done);
     });
 });
