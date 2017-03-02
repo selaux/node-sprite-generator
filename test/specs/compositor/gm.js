@@ -32,31 +32,26 @@ describe('Compositor/gm', function () {
             }
         ],
         gmStub,
-        fsStub,
         gmCompositor;
 
     beforeEach(function () {
         gmStub = sinon.stub();
-        fsStub = { readFile: sinon.stub() };
         gmCompositor = proxyquire('../../../lib/compositor/gm', {
-            gm: gmStub,
-            fs: fsStub
+            gm: gmStub
         });
     });
 
     it('should read a file correctly', function () {
         var imgStub = {
-            size: sinon.stub().yieldsAsync(null, {
-                width: 10,
-                height: 50
-            })
-        };
-        imgStub.size.returns(imgStub);
+                size: sinon.stub().yieldsAsync(null, {
+                    width: 10,
+                    height: 50
+                })
+            };
 
-        fsStub.readFile.withArgs('test path').yieldsAsync(null, 'test data');
         gmStub.withArgs('test data').returns(imgStub);
 
-        return expect(gmCompositor.readImage('test path'))
+        return expect(gmCompositor.readImage({ path: 'test path', data: 'test data' }))
             .to.eventually.deep.equal({
                 path: 'test path',
                 width: 10,
@@ -65,25 +60,15 @@ describe('Compositor/gm', function () {
             });
     });
 
-    it('should callback with errors from reading files', function () {
-        var error = new Error('Test Error');
-
-        fsStub.readFile.yieldsAsync(error);
-
-        return expect(gmCompositor.readImage('path'))
-            .to.be.rejectedWith('Test Error');
-    });
-
     it('should callback with errors from gm', function () {
         var error = new Error('Test Error'),
             imgStub = {
                 size: sinon.stub().yieldsAsync(error)
             };
 
-        fsStub.readFile.withArgs('path').yieldsAsync(null, 'data');
-        gmStub.withArgs('data').returns(imgStub);
+        gmStub.withArgs('my data').returns(imgStub);
 
-        return expect(gmCompositor.readImage('path'))
+        return expect(gmCompositor.readImage({ path: 'path', data: 'my data' }))
             .to.be.rejectedWith('Test Error');
     });
 
