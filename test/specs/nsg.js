@@ -18,14 +18,14 @@ var fs = require('fs'),
 require('sinon-as-promised');
 
 describe('NSG', function () {
-    var defaultFilename = __filename,
+    var defaultFilename = 'test',
         defaultFileContent = {
             path: defaultFilename,
-            data: fs.readFileSync(defaultFilename)
+            data: 'test'
         };
     function mergeDefaultOptions(options) {
         return R.merge({
-            src: [ defaultFilename ],
+            src: [ defaultFileContent ],
             compositor: { readImage: sinon.stub().resolves({}), render: sinon.stub().resolves() },
             layout: sinon.stub().resolves([]),
             stylesheet: sinon.stub().resolves()
@@ -82,7 +82,7 @@ describe('NSG', function () {
         this.stub(providedLayouts, 'vertical').resolves({ width: 0, height: 0, images: [] });
         this.stub(providedStylesheets, 'stylus').resolves();
 
-        nsg({ src: [ defaultFilename ] }).then(function () {
+        nsg({ src: [ defaultFileContent ] }).then(function () {
             expect(providedCompositors.canvas.readImage).to.have.been.calledOnce;
             expect(providedCompositors.canvas.render).to.have.been.calledOnce;
             expect(providedLayouts.vertical).to.have.been.calledOnce;
@@ -166,7 +166,7 @@ describe('NSG', function () {
         this.stub(providedStylesheets, 'css').resolves();
 
         nsg({
-            src: [ defaultFilename ],
+            src: [ defaultFileContent ],
             compositor: 'gm',
             layout: 'horizontal',
             stylesheet: 'css'
@@ -187,6 +187,105 @@ describe('NSG', function () {
             expect(stylesheet).to.equal('test template');
         }).nodeify(done);
     }));
+
+    it('should pass all directly passed in data to compositor', function () {
+        var options = mergeDefaultOptions({
+            src: [{path: 'somefile.png', data: 'somdata'}, {path: 'otherfile.png', data: 'otherdata'}]
+        });
+
+        return nsg(options).then(function () {
+            expect(options.compositor.readImage).to.have.been.calledTwice;
+            expect(options.compositor.readImage).to.have.been.calledWith(options.src[0]);
+            expect(options.compositor.readImage).to.have.been.calledWith(options.src[1]);
+        });
+    });
+
+    it('should pass all directly passed in source data to compositor', function () {
+        var options = mergeDefaultOptions({
+            src: [ { path: 'somefile.png', data: 'somdata' }, { path: 'otherfile.png', data: 'otherdata' } ]
+        });
+
+        return nsg(options).then(function () {
+            expect(options.compositor.readImage).to.have.been.calledTwice;
+            expect(options.compositor.readImage).to.have.been.calledWith(options.src[0]);
+            expect(options.compositor.readImage).to.have.been.calledWith(options.src[1]);
+        });
+    });
+
+    it('should glob for passed in source strings', function () {
+        var options = mergeDefaultOptions({
+                src: [ 'glob1', 'glob2' ]
+            }),
+            stubs = { glob: sinon.stub(), fs: { readFile: sinon.stub() } },
+            nsgProxy = proxyquire('../../lib/nsg', stubs);
+
+        stubs.glob.withArgs('glob1').yieldsAsync(null, [ 'path11', 'path12' ]);
+        stubs.glob.withArgs('glob2').yieldsAsync(null, [ 'path2' ]);
+        stubs.fs.readFile.withArgs('path11').yieldsAsync(null, 'data11');
+        stubs.fs.readFile.withArgs('path12').yieldsAsync(null, 'data12');
+        stubs.fs.readFile.withArgs('path2').yieldsAsync(null, 'data2');
+
+        return nsgProxy(options).then(function () {
+            expect(options.compositor.readImage).to.have.been.calledThrice;
+            expect(options.compositor.readImage).to.have.been.calledWith({ path: 'path11', data: 'data11' });
+            expect(options.compositor.readImage).to.have.been.calledWith({ path: 'path12', data: 'data12' });
+            expect(options.compositor.readImage).to.have.been.calledWith({ path: 'path2', data: 'data2' });
+        });
+    });
+
+    it('should support mixed string and buffer sources', function () {
+        var options = mergeDefaultOptions({
+                src: [ 'glob1', { path: 'foobar.jpg', data: 'fob' } ]
+            }),
+            stubs = { glob: sinon.stub(), fs: { readFile: sinon.stub() } },
+            nsgProxy = proxyquire('../../lib/nsg', stubs);
+
+        stubs.glob.withArgs('glob1').yieldsAsync(null, [ 'path11', 'path12' ]);
+        stubs.fs.readFile.withArgs('path11').yieldsAsync(null, 'data11');
+        stubs.fs.readFile.withArgs('path12').yieldsAsync(null, 'data12');
+
+        return nsgProxy(options).then(function () {
+            expect(options.compositor.readImage).to.have.been.calledThrice;
+            expect(options.compositor.readImage).to.have.been.calledWith({ path: 'path11', data: 'data11' });
+            expect(options.compositor.readImage).to.have.been.calledWith({ path: 'path12', data: 'data12' });
+            expect(options.compositor.readImage).to.have.been.calledWith({ path: 'foobar.jpg', data: 'fob' });
+        });
+    });
+
+    it('should go through the pipeline correctly', function () {
+        var sources = [
+                { path: 'test', data: '1' },
+                { path: 'test2', data: '2' }
+            ],
+            readResults = [
+                { path: 'test', data: '1', width: 10, height: 30 },
+                { path: 'test2', data: '2', width: 10, height: 30 }
+            ],
+            layoutResult = {
+                width: 20,
+                height: 30,
+                images: [
+                    { path: 'test', data: '1', width: 10, height: 30 },
+                    { path: 'test2', data: '2', width: 10, height: 30 }
+                ]
+            },
+            stylesheetResult = 'my stylesheet',
+            renderResult = new Buffer('render result'),
+            options = mergeDefaultOptions({
+                src: sources
+            });
+
+        options.compositor.readImage.withArgs(sources[0]).resolves(readResults[0]);
+        options.compositor.readImage.withArgs(sources[1]).resolves(readResults[1]);
+        options.layout.withArgs(readResults).resolves(layoutResult);
+        options.stylesheet.withArgs(layoutResult).resolves(stylesheetResult);
+        options.compositor.render.withArgs(layoutResult).resolves(renderResult);
+
+        return nsg(options).spread(function (stylesheet, sprite) {
+            expect(stylesheet).to.equal(stylesheetResult);
+            expect(sprite).to.equal(renderResult);
+        });
+    });
 });
 
 describe('NSG functional tests', function () {
