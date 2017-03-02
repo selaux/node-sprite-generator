@@ -46,29 +46,23 @@ describe('Compositor/jimp', function () {
     });
 
     it('should read the files correctly', function () {
-        var stubs = _.map(imageData, function (image) {
-            var imgStub = {
-                data: image.data,
-                bitmap: {
-                    width: image.width,
-                    height: image.height
-                }
-            };
+        var imgStub = {
+            data: 'data',
+            bitmap: {
+                width: 1,
+                height: 2
+            }
+        };
 
-            jimpStub.withArgs(image.path).yieldsOnAsync(imgStub);
+        jimpStub.withArgs('test path').yieldsOnAsync(imgStub);
 
-            return imgStub;
-        });
-
-        return jimpCompositor.readImages(_.pluck(imageData, 'path')).then(function (images) {
-            expect(images).to.deep.equal(_.map(imageData, function (image, index) {
-                return {
-                    path: image.path,
-                    width: image.width,
-                    height: image.height,
-                    data: stubs[index]
-                };
-            }));
+        return jimpCompositor.readImage('test path').then(function (image) {
+            expect(image).to.deep.equal({
+                path: 'test path',
+                width: 1,
+                height: 2,
+                data: imgStub
+            });
         });
     });
 
@@ -77,7 +71,7 @@ describe('Compositor/jimp', function () {
 
         jimpStub.yieldsAsync(error);
 
-        return expect(jimpCompositor.readImages(_.pluck(imageData, 'path'))).to.be.rejectedWith('Test Error');
+        return expect(jimpCompositor.readImage('test')).to.be.rejectedWith('Test Error');
     });
 
     function testRender(options) {
