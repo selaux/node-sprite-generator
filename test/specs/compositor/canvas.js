@@ -29,54 +29,32 @@ describe('Compositor/canvas', function () {
             }
         };
 
-    it('should read the files correctly', function () {
-        var fs = {
-                readFile: sinon.stub(),
-                writeFile: sinon.stub()
-            },
+    it('should read a file correctly', function () {
+        var fs = { readFile: sinon.stub() },
             ImageStub = function () {
-                /*jshint -W105 */
                 var self = this;
                 self['__defineSetter__']('src', function (src) {
-                    var image = _.find(imageData, function (img) { return img.data === src; });
-                    self.width = image.width;
-                    self.height = image.height;
+                    expect(src).to.equal('my data');
+                    self.width = 20;
+                    self.height = 30;
                 });
             },
-            nodeCanvas = {
-                Image: ImageStub
-            },
+            nodeCanvas = { Image: ImageStub },
             canvasCompositor = proxyquire('../../../lib/compositor/canvas', {
                 fs: fs,
                 canvas: nodeCanvas
             });
 
-        _.each(imageData, function (data, path) {
-            fs.readFile.withArgs(path).yieldsAsync(null, data.data);
-        });
+        fs.readFile.withArgs('test/path').yieldsAsync(null, 'my data');
 
+        return canvasCompositor.readImage('test/path').then(function (image) {
+            expect(fs.readFile).to.have.been.calledOnce;
+            expect(fs.readFile).to.have.been.calledWith('test/path');
 
-        return canvasCompositor.readImages(_.keys(imageData)).then(function (images) {
-            var houseImage = images[0],
-                lenaImage = images[1],
-                lockImage = images[2];
-
-            expect(fs.readFile).to.have.been.calledThrice;
-
-            expect(lenaImage.path).to.equal('test/fixtures/images/src/lena.jpg');
-            expect(lenaImage.width).to.equal(300);
-            expect(lenaImage.height).to.equal(168);
-            expect(lenaImage.data).to.be.an.instanceof(ImageStub);
-
-            expect(lockImage.path).to.equal('test/fixtures/images/src/lock.png');
-            expect(lockImage.width).to.equal(26);
-            expect(lockImage.height).to.equal(31);
-            expect(lockImage.data).to.be.an.instanceof(ImageStub);
-
-            expect(houseImage.path).to.equal('test/fixtures/images/src/house.png');
-            expect(houseImage.width).to.equal(15);
-            expect(houseImage.height).to.equal(15);
-            expect(houseImage.data).to.be.an.instanceof(ImageStub);
+            expect(image).to.have.property('path', 'test/path');
+            expect(image).to.have.property('width', 20);
+            expect(image).to.have.property('height', 30);
+            expect(image).to.have.property('data').that.is.an.instanceOf(ImageStub);
         });
     });
 
@@ -95,7 +73,7 @@ describe('Compositor/canvas', function () {
 
         fs.readFile.yieldsAsync(error);
 
-        return expect(canvasCompositor.readImages(_.keys(imageData)))
+        return expect(canvasCompositor.readImage('path'))
             .to.be.rejectedWith('Test Error');
     });
 

@@ -18,25 +18,26 @@ var fs = require('fs'),
 require('sinon-as-promised');
 
 describe('NSG', function () {
-    function mergeStubModules(options) {
+    function mergeDefaultOptions(options) {
         return R.merge({
-            compositor: { readImages: sinon.stub().resolves().resolves([]), render: sinon.stub().resolves() },
+            src: [ __filename ],
+            compositor: { readImage: sinon.stub().resolves({}), render: sinon.stub().resolves() },
             layout: sinon.stub().resolves([]),
             stylesheet: sinon.stub().resolves()
         }, options);
     }
 
     it('should pass on default options to compositor, layout and stylesheet', function () {
-        var options = mergeStubModules({});
+        var options = mergeDefaultOptions({});
 
         return nsg(options).then(function () {
-            expect(options.compositor.readImages).to.have.been.calledOnce;
-            expect(options.compositor.readImages).to.have.been.calledWith([]);
+            expect(options.compositor.readImage).to.have.been.calledOnce;
+            expect(options.compositor.readImage).to.have.been.calledWith(__filename);
             expect(options.compositor.render).to.have.been.calledOnce;
             expect(options.compositor.render).to.have.been.calledWith([], null, { filter: 'all', compressionLevel: 6 });
 
             expect(options.layout).to.have.been.calledOnce;
-            expect(options.layout).to.have.been.calledWith([], { padding: 0, scaling: 1 });
+            expect(options.layout).to.have.been.calledWith([ {} ], { padding: 0, scaling: 1 });
 
             expect(options.stylesheet).to.have.been.calledOnce;
             expect(options.stylesheet).to.have.been.calledWith(
@@ -47,20 +48,20 @@ describe('NSG', function () {
     });
 
     it('should pass on custom options to compositor, layout and stylesheet', function () {
-        var options = mergeStubModules({
+        var options = mergeDefaultOptions({
             compositorOptions: { filter: 'none' },
             layoutOptions: { padding: 50 },
             stylesheetOptions: { spritePath: 'abc', prefix: 'test' }
         });
 
         return nsg(options).then(function () {
-            expect(options.compositor.readImages).to.have.been.calledOnce;
-            expect(options.compositor.readImages).to.have.been.calledWith([]);
+            expect(options.compositor.readImage).to.have.been.calledOnce;
+            expect(options.compositor.readImage).to.have.been.calledWith(__filename);
             expect(options.compositor.render).to.have.been.calledOnce;
             expect(options.compositor.render).to.have.been.calledWith([], null, { filter: 'none', compressionLevel: 6 });
 
             expect(options.layout).to.have.been.calledOnce;
-            expect(options.layout).to.have.been.calledWith([], { padding: 50, scaling: 1 });
+            expect(options.layout).to.have.been.calledWith([ {} ], { padding: 50, scaling: 1 });
 
             expect(options.stylesheet).to.have.been.calledOnce;
             expect(options.stylesheet).to.have.been.calledWith(
@@ -71,13 +72,13 @@ describe('NSG', function () {
     });
 
     it('should use default compositors, layout and stylesheet functions', sinon.test(function (done) {
-        this.stub(providedCompositors.canvas, 'readImages').resolves([]);
+        this.stub(providedCompositors.canvas, 'readImage').resolves([]);
         this.stub(providedCompositors.canvas, 'render').resolves();
         this.stub(providedLayouts, 'vertical').resolves({ width: 0, height: 0, images: [] });
         this.stub(providedStylesheets, 'stylus').resolves();
 
-        nsg({}).then(function () {
-            expect(providedCompositors.canvas.readImages).to.have.been.calledOnce;
+        nsg({ src: [ __filename ] }).then(function () {
+            expect(providedCompositors.canvas.readImage).to.have.been.calledOnce;
             expect(providedCompositors.canvas.render).to.have.been.calledOnce;
             expect(providedLayouts.vertical).to.have.been.calledOnce;
             expect(providedStylesheets.stylus).to.have.been.calledOnce;
@@ -93,7 +94,7 @@ describe('NSG', function () {
                 mkdirp: stubs.mkdirp,
                 fs: { writeFile: stubs.writeFile }
             }),
-            options = mergeStubModules({
+            options = mergeDefaultOptions({
                 spritePath: 'test/sprite/path/sprite.png',
                 stylesheetPath: 'test/styl/sprite.styl'
             });
@@ -114,7 +115,7 @@ describe('NSG', function () {
                 mkdirp: stubs.mkdirp,
                 fs: { writeFile: stubs.writeFile }
             }),
-            options = mergeStubModules({
+            options = mergeDefaultOptions({
                 stylesheetPath: 'test/styl/sprite.styl'
             });
 
@@ -138,7 +139,7 @@ describe('NSG', function () {
                 mkdirp: stubs.mkdirp,
                 fs: { writeFile: stubs.writeFile }
             }),
-            options = mergeStubModules({
+            options = mergeDefaultOptions({
                 spritePath: 'test/sprite/path/sprite.png'
             });
 
@@ -154,17 +155,18 @@ describe('NSG', function () {
     });
 
     it('should use a builtin compositor, stylesheet and layout when specified', sinon.test(function (done) {
-        this.stub(providedCompositors.gm, 'readImages').resolves([]);
+        this.stub(providedCompositors.gm, 'readImage').resolves([]);
         this.stub(providedCompositors.gm, 'render').resolves();
         this.stub(providedLayouts, 'horizontal').resolves({ width: 0, height: 0, images: [] });
         this.stub(providedStylesheets, 'css').resolves();
 
         nsg({
+            src: [ __filename ],
             compositor: 'gm',
             layout: 'horizontal',
             stylesheet: 'css'
         }).then(function () {
-            expect(providedCompositors.gm.readImages).to.have.been.calledOnce;
+            expect(providedCompositors.gm.readImage).to.have.been.calledOnce;
             expect(providedCompositors.gm.render).to.have.been.calledOnce;
             expect(providedLayouts.horizontal).to.have.been.calledOnce;
             expect(providedStylesheets.css).to.have.been.calledOnce;
@@ -172,7 +174,7 @@ describe('NSG', function () {
     }));
 
     it('should use a provided string for stylesheet as a template', sinon.test(function (done) {
-        var options = mergeStubModules({ stylesheet: 'test template' });
+        var options = mergeDefaultOptions({ stylesheet: 'test template' });
 
         options.layout.resolves({ images: [] });
 

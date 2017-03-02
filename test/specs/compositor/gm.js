@@ -44,23 +44,25 @@ describe('Compositor/gm', function () {
         });
     });
 
-    it('should read the files correctly', function () {
-        _.each(imageData, function (image) {
-            var imgStub = {
-                size: sinon.stub().yieldsAsync(null, {
-                    width: image.width,
-                    height: image.height
-                })
-            };
+    it('should read a file correctly', function () {
+        var imgStub = {
+            size: sinon.stub().yieldsAsync(null, {
+                width: 10,
+                height: 50
+            })
+        };
+        imgStub.size.returns(imgStub);
 
-            imgStub.size.returns(imgStub);
+        fsStub.readFile.withArgs('test path').yieldsAsync(null, 'test data');
+        gmStub.withArgs('test data').returns(imgStub);
 
-            fsStub.readFile.withArgs(image.path).yieldsAsync(null, image.data);
-            gmStub.withArgs(image.data).returns(imgStub);
-        });
-
-        return expect(gmCompositor.readImages(_.pluck(imageData, 'path')))
-            .to.eventually.deep.equal(imageData);
+        return expect(gmCompositor.readImage('test path'))
+            .to.eventually.deep.equal({
+                path: 'test path',
+                width: 10,
+                height: 50,
+                data: 'test data'
+            });
     });
 
     it('should callback with errors from reading files', function () {
@@ -68,25 +70,20 @@ describe('Compositor/gm', function () {
 
         fsStub.readFile.yieldsAsync(error);
 
-        return expect(gmCompositor.readImages(_.pluck(imageData, 'path')))
+        return expect(gmCompositor.readImage('path'))
             .to.be.rejectedWith('Test Error');
     });
 
     it('should callback with errors from gm', function () {
-        var error = new Error('Test Error');
-
-        _.each(imageData, function (image) {
-            var imgStub = {
+        var error = new Error('Test Error'),
+            imgStub = {
                 size: sinon.stub().yieldsAsync(error)
             };
 
-            imgStub.size.returns(imgStub);
+        fsStub.readFile.withArgs('path').yieldsAsync(null, 'data');
+        gmStub.withArgs('data').returns(imgStub);
 
-            fsStub.readFile.withArgs(image.path).yieldsAsync(null, image.data);
-            gmStub.withArgs(image.data).returns(imgStub);
-        });
-
-        return expect(gmCompositor.readImages(_.pluck(imageData, 'path')))
+        return expect(gmCompositor.readImage('path'))
             .to.be.rejectedWith('Test Error');
     });
 
