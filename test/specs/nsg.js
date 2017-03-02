@@ -18,9 +18,14 @@ var fs = require('fs'),
 require('sinon-as-promised');
 
 describe('NSG', function () {
+    var defaultFilename = __filename,
+        defaultFileContent = {
+            path: defaultFilename,
+            data: fs.readFileSync(defaultFilename)
+        };
     function mergeDefaultOptions(options) {
         return R.merge({
-            src: [ __filename ],
+            src: [ defaultFilename ],
             compositor: { readImage: sinon.stub().resolves({}), render: sinon.stub().resolves() },
             layout: sinon.stub().resolves([]),
             stylesheet: sinon.stub().resolves()
@@ -32,7 +37,7 @@ describe('NSG', function () {
 
         return nsg(options).then(function () {
             expect(options.compositor.readImage).to.have.been.calledOnce;
-            expect(options.compositor.readImage).to.have.been.calledWith(__filename);
+            expect(options.compositor.readImage).to.have.been.calledWith(defaultFileContent);
             expect(options.compositor.render).to.have.been.calledOnce;
             expect(options.compositor.render).to.have.been.calledWith([], null, { filter: 'all', compressionLevel: 6 });
 
@@ -56,7 +61,7 @@ describe('NSG', function () {
 
         return nsg(options).then(function () {
             expect(options.compositor.readImage).to.have.been.calledOnce;
-            expect(options.compositor.readImage).to.have.been.calledWith(__filename);
+            expect(options.compositor.readImage).to.have.been.calledWith(defaultFileContent);
             expect(options.compositor.render).to.have.been.calledOnce;
             expect(options.compositor.render).to.have.been.calledWith([], null, { filter: 'none', compressionLevel: 6 });
 
@@ -77,7 +82,7 @@ describe('NSG', function () {
         this.stub(providedLayouts, 'vertical').resolves({ width: 0, height: 0, images: [] });
         this.stub(providedStylesheets, 'stylus').resolves();
 
-        nsg({ src: [ __filename ] }).then(function () {
+        nsg({ src: [ defaultFilename ] }).then(function () {
             expect(providedCompositors.canvas.readImage).to.have.been.calledOnce;
             expect(providedCompositors.canvas.render).to.have.been.calledOnce;
             expect(providedLayouts.vertical).to.have.been.calledOnce;
@@ -161,7 +166,7 @@ describe('NSG', function () {
         this.stub(providedStylesheets, 'css').resolves();
 
         nsg({
-            src: [ __filename ],
+            src: [ defaultFilename ],
             compositor: 'gm',
             layout: 'horizontal',
             stylesheet: 'css'
@@ -208,7 +213,10 @@ describe('NSG functional tests', function () {
         expectedOptions = _.clone(options);
 
         nsg(options, function (err) {
-            expect(err).not.to.be.ok;
+            if (err) {
+                return done(err);
+            }
+
             expect(options).to.deep.equal(expectedOptions);
 
             expect(fs.readFileSync(expectedStylesheetPath).toString()).to.equal(fs.readFileSync(stylesheetPath).toString());
@@ -276,7 +284,9 @@ describe('NSG functional tests', function () {
         });
 
         middleware(undefined, undefined, function (err) {
-            expect(err).not.to.be.ok;
+            if (err) {
+                return done(err);
+            }
 
             expect(fs.readFileSync(expectedStylesheetPath).toString()).to.equal(fs.readFileSync(stylesheetPath).toString());
             expect(fs.readFileSync(expectedSpritePath).toString()).to.equal(fs.readFileSync(spritePath).toString());
@@ -301,10 +311,18 @@ describe('NSG functional tests', function () {
             };
 
         // it should always be rendered the first time
-        middleware(null, null, function () {
+        middleware(null, null, function (err) {
+            if (err) {
+                return done(err);
+            }
+
             var firstTime = fs.statSync(spritePath).ctime;
 
-            middlewareWithTimeout(function () {
+            middlewareWithTimeout(function (err) {
+                if (err) {
+                    return done(err);
+                }
+
                 var secondTime = fs.statSync(spritePath).ctime;
 
                 // it should not have been changed because no files have been changed
@@ -313,7 +331,11 @@ describe('NSG functional tests', function () {
                 // induce new sprite creation
                 fs.unlinkSync(spritePath);
 
-                middlewareWithTimeout(function () {
+                middlewareWithTimeout(function (err) {
+                    if (err) {
+                        return done(err);
+                    }
+
                     var thirdTime = fs.statSync(spritePath).ctime;
 
                     expect(thirdTime.getTime()).to.be.above(firstTime.getTime());

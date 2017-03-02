@@ -29,9 +29,8 @@ describe('Compositor/canvas', function () {
             }
         };
 
-    it('should read a file correctly', function () {
-        var fs = { readFile: sinon.stub() },
-            ImageStub = function () {
+    it('should read a buffer correctly', function () {
+        var ImageStub = function () {
                 var self = this;
                 self['__defineSetter__']('src', function (src) {
                     expect(src).to.equal('my data');
@@ -41,40 +40,15 @@ describe('Compositor/canvas', function () {
             },
             nodeCanvas = { Image: ImageStub },
             canvasCompositor = proxyquire('../../../lib/compositor/canvas', {
-                fs: fs,
                 canvas: nodeCanvas
             });
 
-        fs.readFile.withArgs('test/path').yieldsAsync(null, 'my data');
-
-        return canvasCompositor.readImage('test/path').then(function (image) {
-            expect(fs.readFile).to.have.been.calledOnce;
-            expect(fs.readFile).to.have.been.calledWith('test/path');
-
+        return canvasCompositor.readImage({ path: 'test/path', data: 'my data' }).then(function (image) {
             expect(image).to.have.property('path', 'test/path');
             expect(image).to.have.property('width', 20);
             expect(image).to.have.property('height', 30);
             expect(image).to.have.property('data').that.is.an.instanceOf(ImageStub);
         });
-    });
-
-    it('should correctly callback with errors when reading', function () {
-        var fs = {
-                readFile: sinon.stub(),
-                writeFile: sinon.stub()
-            },
-            canvasCompositor = proxyquire('../../../lib/compositor/canvas', {
-                fs: fs,
-                canvas: {
-                    Image: sinon.stub()
-                }
-            }),
-            error = new Error('Test Error');
-
-        fs.readFile.yieldsAsync(error);
-
-        return expect(canvasCompositor.readImage('path'))
-            .to.be.rejectedWith('Test Error');
     });
 
     function testRender (options) {

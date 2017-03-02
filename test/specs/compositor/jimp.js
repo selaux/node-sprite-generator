@@ -43,6 +43,7 @@ describe('Compositor/jimp', function () {
         jimpCompositor = proxyquire('../../../lib/compositor/jimp', {
             jimp: jimpStub
         });
+        jimpStub.read = sinon.stub();
     });
 
     it('should read the files correctly', function () {
@@ -54,9 +55,9 @@ describe('Compositor/jimp', function () {
             }
         };
 
-        jimpStub.withArgs('test path').yieldsOnAsync(imgStub);
+        jimpStub.read.withArgs('test data').resolves(imgStub);
 
-        return jimpCompositor.readImage('test path').then(function (image) {
+        return jimpCompositor.readImage({ path: 'test path', data: 'test data' }).then(function (image) {
             expect(image).to.deep.equal({
                 path: 'test path',
                 width: 1,
@@ -69,9 +70,9 @@ describe('Compositor/jimp', function () {
     it('should callback with errors from reading files', function () {
         var error = new Error('Test Error');
 
-        jimpStub.yieldsAsync(error);
+        jimpStub.read.rejects(error);
 
-        return expect(jimpCompositor.readImage('test')).to.be.rejectedWith('Test Error');
+        return expect(jimpCompositor.readImage({ path: 'test path', data: 'test data' })).to.be.rejectedWith('Test Error');
     });
 
     function testRender(options) {
