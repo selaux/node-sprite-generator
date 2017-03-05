@@ -31,10 +31,12 @@
     },
     "scripts": {
         "lint": "eslint .",
-        "unit-test": "istanbul test _mocha test -- --recursive --reporter spec",
-        "coverage": "npm run unit-test --coverage && npm run report-coverage-html",
-        "report-coverage-html": "istanbul report --dir  build/coverage html",
-        "test": "npm run lint && npm run coverage",
+        "test:unit": "istanbul test _mocha test/unit -- --recursive --reporter spec",
+        "test:unit:coverage": "npm run test:unit --coverage && npm run coverage:report:html",
+        "test:functional:node": "istanbul test _mocha test/functional/node.js -- --recursive --reporter spec",
+        "test:functional:browser": "istanbul test _mocha test/functional/browser.js -- --recursive --reporter spec",
+        "coverage:report:html": "istanbul report --dir  build/coverage html",
+        "test": "npm run lint && npm run test:unit:coverage && npm run test:functional:node",
         "coveralls": "cat ./build/coverage/lcov.info | coveralls"
     },
     "keywords": [
