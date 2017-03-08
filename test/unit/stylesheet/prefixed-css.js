@@ -1,12 +1,18 @@
 'use strict';
 
-var name = 'prefixed-css',
+var fs = require('fs'),
+    path = require('path'),
     testTemplatedStylesheet = require('./testTemplatedStylesheet'),
-    testUtils = require('../../utils/test.js'),
     nameToClass = require('../../../lib/utils/stylesheet').nameToClass,
-    stylesheetGenerator = require('../../../lib/stylesheet/' + name + '.js');
+    stylesheetGenerator = require('../../../lib/stylesheet/prefixed-css'),
+    expectedWithCommonWidth = fs.readFileSync(path.join(__dirname, '../../fixtures/stylesheets/prefixed-css/with-common-wh.css')),
+    expected = {
+        prefix: fs.readFileSync(path.join(__dirname, '../../fixtures/stylesheets/prefixed-css/with-prefix.css')),
+        nameMapping: fs.readFileSync(path.join(__dirname, '../../fixtures/stylesheets/prefixed-css/with-nameMapping.css')),
+        pixelRatio: fs.readFileSync(path.join(__dirname, '../../fixtures/stylesheets/prefixed-css/with-pixelRatio.css'))
+    };
 
-testTemplatedStylesheet(name, 'css', function () {
+testTemplatedStylesheet('prefixed-css', expected, function () {
     var layoutCommon = {
         width: 150,
         height: 156,
@@ -17,9 +23,8 @@ testTemplatedStylesheet(name, 'css', function () {
         ]
     };
 
-    it('should generate the correct ' + name + ' with common width/height', function () {
-        var expectedStylesheetPath = 'test/fixtures/stylesheets/' + name + '/with-common-wh.css';
-        return testUtils.testStylesheetGeneration(stylesheetGenerator, layoutCommon, expectedStylesheetPath, {
+    it('should generate the correct prefixed-css with common width/height', function () {
+        return testTemplatedStylesheet.testStylesheetGeneration(stylesheetGenerator, layoutCommon, expectedWithCommonWidth, {
             prefix: 'sprite-',
             nameMapping: nameToClass,
             spritePath: './images/png/sprite.png',
