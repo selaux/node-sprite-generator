@@ -1,8 +1,8 @@
 'use strict';
 
-var fs = require('fs'),
-    expect = require('chai').expect,
-    changeDetector = require('../../../lib/utils/changeDetector');
+var proxyquire = require('proxyquire'),
+    sinon = require('sinon'),
+    expect = require('chai').expect;
 
 describe('Utils/ChangeDetector', function () {
     var options = {
@@ -13,58 +13,62 @@ describe('Utils/ChangeDetector', function () {
         spritePath: 'test/fixtures/sprite.png'
     };
 
-    beforeEach(function () {
-        fs.writeFileSync(options.stylesheetPath, 'Foo');
-        fs.writeFileSync(options.spritePath, 'Bar');
-    });
-
-    afterEach(function () {
-        try {
-            fs.unlinkSync(options.spritePath);
-            fs.unlinkSync(options.stylesheetPath);
-        } catch (err) {
-            if (err.code !== 'ENOENT') {
-                throw err;
-            }
-        }
-    });
-
     it('should always return true the first time detect is called', function () {
-        var changes = changeDetector(options);
+        var stubs = { glob: sinon.stub.yieldsAsync(null, []) },
+            createChangeDetector = proxyquire('../../../lib/utils/changeDetector', stubs),
+            detector = createChangeDetector(options);
 
-        return expect(changes.detect())
-            .to.eventually.be.true;
+        return expect(detector.detect()).to.eventually.be.true;
     });
 
-    it('should return false if detect is called after register', function () {
-        var changes = changeDetector(options);
+    it('should return false if nothing changed', function () {
+        var stubs = {
+                glob: sinon.stub().yieldsAsync(null, [ 'myfile', 'myfile2' ]),
+                fs: { stat: sinon.stub() }
+            },
+            createChangeDetector = proxyquire('../../../lib/utils/changeDetector', stubs),
+            detector = createChangeDetector(options);
 
-        return changes.register().then(function () {
-            return expect(changes.detect())
-                .to.eventually.be.false;
-        });
+        stubs.fs.stat.withArgs('myfile').yieldsAsync(null, { mtime: new Date(0) });
+        stubs.fs.stat.withArgs('myfile2').yieldsAsync(null, { mtime: new Date(10) });
+
+        return expect(detector.register().then(function() {
+            return detector.detect();
+        })).to.eventually.be.false;
     });
 
     it('should return true if any of the files have changed', function () {
-        var changes = changeDetector(options),
-            oldDate = new Date((new Date()).getTime() - 10000);
+        var stubs = {
+                glob: sinon.stub().yieldsAsync(null, [ 'myfile', 'myfile2' ]),
+                fs: { stat: sinon.stub() }
+            },
+            createChangeDetector = proxyquire('../../../lib/utils/changeDetector', stubs),
+            detector = createChangeDetector(options);
 
-        return changes.register().then(function () {
-            fs.utimesSync('test/fixtures/images/src/house.png', oldDate, oldDate);
+        stubs.fs.stat.withArgs('myfile').onFirstCall().yieldsAsync(null, { mtime: new Date(0) });
+        stubs.fs.stat.withArgs('myfile').onSecondCall().yieldsAsync(null, { mtime: new Date(10) });
+        stubs.fs.stat.withArgs('myfile2').yieldsAsync(null, { mtime: new Date(10) });
 
-            return expect(changes.detect())
-                .to.eventually.be.true;
-        });
+        return expect(detector.register().then(function() {
+            return detector.detect();
+        })).to.eventually.be.true;
     });
 
     it('should return true if any of the files are deleted', function () {
-        var changes = changeDetector(options);
+        var stubs = {
+                glob: sinon.stub().yieldsAsync(null, [ 'myfile', 'myfile2' ]),
+                fs: { stat: sinon.stub() }
+            },
+            createChangeDetector = proxyquire('../../../lib/utils/changeDetector', stubs),
+            detector = createChangeDetector(options),
+            error = { code: 'ENOENT' };
 
-        return changes.register().then(function () {
-            fs.unlinkSync(options.stylesheetPath);
+        stubs.fs.stat.withArgs('myfile').yieldsAsync(null, { mtime: new Date(10) });
+        stubs.fs.stat.withArgs('myfile2').onFirstCall().yieldsAsync(null, { mtime: new Date(0) });
+        stubs.fs.stat.withArgs('myfile2').onSecondCall().yieldsAsync(error);
 
-            return expect(changes.detect())
-                .to.eventually.be.true;
-        });
+        return expect(detector.register().then(function() {
+            return detector.detect();
+        })).to.eventually.be.true;
     });
 });
