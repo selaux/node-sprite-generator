@@ -1,9 +1,21 @@
 'use strict';
 
-module.exports = function (name, suffix, additionalTests) {
+var expect = require('chai').expect,
+    R = require('ramda');
+
+function testStylesheetGeneration(generator, layout, expected, options) {
+    var expectedOptions = R.clone(options);
+
+    return generator(layout, options).then(function (stylesheet) {
+        expect(options).to.deep.equal(expectedOptions);
+        expect(stylesheet).to.equal(expected.toString());
+    });
+
+}
+
+module.exports = function (name, expected, additionalTests) {
     var R = require('ramda'),
         path = require('path'),
-        testUtils = require('../../utils/test'),
         nameToClass = require('../../../lib/utils/stylesheet').nameToClass,
         stylesheetGenerator = require('../../../lib/stylesheet')[name],
         defaultOptions = R.merge({
@@ -14,10 +26,6 @@ module.exports = function (name, suffix, additionalTests) {
         });
 
     describe('Stylesheet/' + name, function () {
-        if (!suffix) {
-            suffix = name;
-        }
-
         var layout = {
                 width: 150,
                 height: 156,
@@ -29,26 +37,18 @@ module.exports = function (name, suffix, additionalTests) {
             };
 
         it('should generate the correct ' + name + ' with a prefix specified', function () {
-            var expectedStylesheetPath = 'test/fixtures/stylesheets/' + name + '/with-prefix.' + suffix;
-            return testUtils.testStylesheetGeneration(stylesheetGenerator, layout, expectedStylesheetPath, defaultOptions({ prefix: 'prefix-' }));
-        });
-
-        it('should generate the correct ' + name + ' with a spritePath specified', function () {
-            var expectedStylesheetPath = 'test/fixtures/stylesheets/' + name + '/with-spritePath.' + suffix;
-            return testUtils.testStylesheetGeneration(stylesheetGenerator, layout, expectedStylesheetPath, defaultOptions({ spritePath: '/this/is/my/spritepath.png' }));
+            return testStylesheetGeneration(stylesheetGenerator, layout, expected.prefix, defaultOptions({ prefix: 'prefix-' }));
         });
 
         it('should generate the correct ' + name + ' with a custom nameMapping specified', function () {
-            var expectedStylesheetPath = 'test/fixtures/stylesheets/' + name + '/with-nameMapping.' + suffix,
-                nameMapping = function (imagePath) {
+            var nameMapping = function (imagePath) {
                     return path.basename(imagePath, path.extname(imagePath)).split('').reverse().join('');
                 };
-            return testUtils.testStylesheetGeneration(stylesheetGenerator, layout, expectedStylesheetPath, defaultOptions({ nameMapping: nameMapping }));
+            return testStylesheetGeneration(stylesheetGenerator, layout, expected.nameMapping, defaultOptions({ nameMapping: nameMapping }));
         });
 
         it('should generate the correct ' + name + ' with a pixelRatio specified', function () {
-            var expectedStylesheetPath = 'test/fixtures/stylesheets/' + name + '/with-pixelRatio.' + suffix;
-            return testUtils.testStylesheetGeneration(stylesheetGenerator, layout, expectedStylesheetPath, defaultOptions({ pixelRatio: 2 }));
+            return testStylesheetGeneration(stylesheetGenerator, layout, expected.pixelRatio, defaultOptions({ pixelRatio: 2 }));
         });
 
         if (additionalTests) {
@@ -56,3 +56,4 @@ module.exports = function (name, suffix, additionalTests) {
         }
     });
 };
+module.exports.testStylesheetGeneration = testStylesheetGeneration;
