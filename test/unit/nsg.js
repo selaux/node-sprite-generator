@@ -10,7 +10,8 @@ var sinon = require('sinon'),
     providedLayouts = require('../../lib/layout'),
     providedStylesheets = require('../../lib/stylesheet'),
     stylesheetUtils = require('../../lib/utils/stylesheet'),
-    sinonTest = require('sinon-test').configureTest(sinon);
+    sinonTest = require('sinon-test').configureTest(sinon),
+    inNode = require('../utils/platform').inNode;
 
 chai.use(require('sinon-chai'));
 
@@ -20,6 +21,7 @@ describe('NSG', function () {
             path: defaultFilename,
             data: 'test'
         };
+
     function mergeDefaultOptions(options) {
         return R.merge({
             src: [ defaultFileContent ],
@@ -87,7 +89,7 @@ describe('NSG', function () {
         }).nodeify(done);
     }));
 
-    it('should pass the relative sprite to the stylesheet if it is not set manually', sinonTest(function () {
+    inNode(it, 'should pass the relative sprite to the stylesheet if it is not set manually', sinonTest(function () {
         var stubs = {
                 writeFile: sinon.stub().yieldsAsync(),
                 mkdirp: sinon.stub().yieldsAsync()
@@ -108,7 +110,7 @@ describe('NSG', function () {
         });
     }));
 
-    it('should create stylesheet path and write stylesheet if specified', function () {
+    inNode(it, 'should create stylesheet path and write stylesheet if specified', function () {
         var stubs = {
                 writeFile: sinon.stub().yieldsAsync(),
                 mkdirp: sinon.stub().yieldsAsync()
@@ -132,7 +134,7 @@ describe('NSG', function () {
         });
     });
 
-    it('should create sprite path and write sprite if specified', function () {
+    inNode(it, 'should create sprite path and write sprite if specified', function () {
         var stubs = {
                 writeFile: sinon.stub().yieldsAsync(),
                 mkdirp: sinon.stub().yieldsAsync()
@@ -209,7 +211,7 @@ describe('NSG', function () {
         });
     });
 
-    it('should glob for passed in source strings', function () {
+    inNode(it, 'should glob for passed in source strings', function () {
         var options = mergeDefaultOptions({
                 src: [ 'glob1', 'glob2' ]
             }),
@@ -230,7 +232,7 @@ describe('NSG', function () {
         });
     });
 
-    it('should support mixed string and buffer sources', function () {
+    inNode(it, 'should support mixed string and buffer sources', function () {
         var options = mergeDefaultOptions({
                 src: [ 'glob1', { path: 'foobar.jpg', data: 'fob' } ]
             }),

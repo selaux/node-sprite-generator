@@ -6,11 +6,12 @@ var path = require('path'),
     sinon = require('sinon'),
     chai = require('chai'),
     expect = chai.expect,
-    sinonChai = require('sinon-chai');
+    sinonChai = require('sinon-chai'),
+    inNode = require('../../utils/platform').inNode;
 
 chai.use(sinonChai);
 
-describe('Compositor/gm', function () {
+inNode(describe, 'Compositor/gm', function () {
     var imageData = [
             {
                 path: 'test/fixtures/images/src/house.png',

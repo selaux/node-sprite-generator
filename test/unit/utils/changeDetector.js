@@ -2,9 +2,10 @@
 
 var proxyquire = require('proxyquire'),
     sinon = require('sinon'),
-    expect = require('chai').expect;
+    expect = require('chai').expect,
+    inNode = require('../../utils/platform').inNode;
 
-describe('Utils/ChangeDetector', function () {
+inNode(describe, 'Utils/ChangeDetector', function () {
     var options = {
         src: [
             'test/fixtures/images/src/*.png'
