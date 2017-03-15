@@ -4,9 +4,10 @@ var expect = require('chai').expect,
     _ = require('underscore'),
     proxyquire = require('proxyquire'),
 
-    utils = require('../../../lib/utils/stylesheet'),
     pathWin32 = require('../../utils/winPathMock'),
-    utilsOnWin = proxyquire('../../../lib/utils/stylesheet', { path: pathWin32 } );
+    utilsOnWin = proxyquire('../../../lib/utils/stylesheet', { path: pathWin32 } ),
+    inNode = require('../../utils/platform').inNode,
+    utils = require('../../../lib/utils/stylesheet');
 
 describe('Utils/Stylesheet', function () {
     it('prefixString should return the prefixed string', function () {
@@ -80,7 +81,7 @@ describe('Utils/Stylesheet', function () {
         });
     });
 
-    describe('getRelativeSpriteDir on Windows', function () {
+    inNode(describe, 'getRelativeSpriteDir on Windows', function () {
         var cases = [
             [ 'test/img/sprite.png', 'test/css/app.css', '../img/sprite.png' ],
             [ 'test/img/sprite.png', 'test/stylesheets/stylus/app.css', '../../img/sprite.png' ],
