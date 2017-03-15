@@ -24,9 +24,9 @@
         "mocha": "3.2.0",
         "node-resemble-v2": "1.0.0",
         "proxyquire": "1.7.11",
-        "sinon": "1.17.7",
-        "sinon-as-promised": "4.0.2",
+        "sinon": "2.0.0",
         "sinon-chai": "2.8.0",
+        "sinon-test": "1.0.1",
         "coveralls": "2.11.16"
     },
     "scripts": {

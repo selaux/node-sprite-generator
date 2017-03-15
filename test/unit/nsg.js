@@ -3,14 +3,16 @@
 var sinon = require('sinon'),
     proxyquire = require('proxyquire'),
     R = require('ramda'),
-    expect = require('chai').expect,
+    chai = require('chai'),
+    expect = chai.expect,
     nsg = require('../../lib/nsg'),
     providedCompositors = require('../../lib/compositor'),
     providedLayouts = require('../../lib/layout'),
     providedStylesheets = require('../../lib/stylesheet'),
-    stylesheetUtils = require('../../lib/utils/stylesheet');
+    stylesheetUtils = require('../../lib/utils/stylesheet'),
+    sinonTest = require('sinon-test').configureTest(sinon);
 
-require('sinon-as-promised');
+chai.use(require('sinon-chai'));
 
 describe('NSG', function () {
     var defaultFilename = 'test',
@@ -71,7 +73,7 @@ describe('NSG', function () {
         });
     });
 
-    it('should use default compositors, layout and stylesheet functions', sinon.test(function (done) {
+    it('should use default compositors, layout and stylesheet functions', sinonTest(function (done) {
         this.stub(providedCompositors.canvas, 'readImage').resolves([]);
         this.stub(providedCompositors.canvas, 'render').resolves();
         this.stub(providedLayouts, 'vertical').resolves({ width: 0, height: 0, images: [] });
@@ -85,7 +87,7 @@ describe('NSG', function () {
         }).nodeify(done);
     }));
 
-    it('should pass the relative sprite to the stylesheet if it is not set manually', sinon.test(function () {
+    it('should pass the relative sprite to the stylesheet if it is not set manually', sinonTest(function () {
         var stubs = {
                 writeFile: sinon.stub().yieldsAsync(),
                 mkdirp: sinon.stub().yieldsAsync()
@@ -154,7 +156,7 @@ describe('NSG', function () {
         });
     });
 
-    it('should use a builtin compositor, stylesheet and layout when specified', sinon.test(function (done) {
+    it('should use a builtin compositor, stylesheet and layout when specified', sinonTest(function (done) {
         this.stub(providedCompositors.gm, 'readImage').resolves([]);
         this.stub(providedCompositors.gm, 'render').resolves();
         this.stub(providedLayouts, 'horizontal').resolves({ width: 0, height: 0, images: [] });
@@ -173,7 +175,7 @@ describe('NSG', function () {
         }).nodeify(done);
     }));
 
-    it('should use a provided string for stylesheet as a template', sinon.test(function (done) {
+    it('should use a provided string for stylesheet as a template', sinonTest(function (done) {
         var options = mergeDefaultOptions({ stylesheet: 'test template' });
 
         options.layout.resolves({ images: [] });
