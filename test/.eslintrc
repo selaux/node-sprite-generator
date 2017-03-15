@@ -5,5 +5,8 @@
   },
   "rules": {
     "no-unused-expressions": 0
+  },
+  "globals": {
+    "Uint8Array": false
   }
 }
