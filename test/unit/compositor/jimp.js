@@ -6,9 +6,11 @@ var Jimp = require('jimp'),
     chai = require('chai'),
     expect = chai.expect,
     sinonChai = require('sinon-chai'),
+    chaiAsPromised = require('chai-as-promised'),
     createJimpCompositor = require('../../../lib/compositor/jimp');
 
 chai.use(sinonChai);
+chai.use(chaiAsPromised);
 
 describe('Compositor/jimp', function () {
     var imageData = [

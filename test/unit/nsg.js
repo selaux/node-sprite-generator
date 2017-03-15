@@ -159,19 +159,19 @@ describe('NSG', function () {
     });
 
     it('should use a builtin compositor, stylesheet and layout when specified', sinonTest(function (done) {
-        this.stub(providedCompositors.gm, 'readImage').resolves([]);
-        this.stub(providedCompositors.gm, 'render').resolves();
+        this.stub(providedCompositors.jimp, 'readImage').resolves([]);
+        this.stub(providedCompositors.jimp, 'render').resolves();
         this.stub(providedLayouts, 'horizontal').resolves({ width: 0, height: 0, images: [] });
         this.stub(providedStylesheets, 'css').resolves();
 
         nsg({
             src: [ defaultFileContent ],
-            compositor: 'gm',
+            compositor: 'jimp',
             layout: 'horizontal',
             stylesheet: 'css'
         }).then(function () {
-            expect(providedCompositors.gm.readImage).to.have.been.calledOnce;
-            expect(providedCompositors.gm.render).to.have.been.calledOnce;
+            expect(providedCompositors.jimp.readImage).to.have.been.calledOnce;
+            expect(providedCompositors.jimp.render).to.have.been.calledOnce;
             expect(providedLayouts.horizontal).to.have.been.calledOnce;
             expect(providedStylesheets.css).to.have.been.calledOnce;
         }).nodeify(done);
