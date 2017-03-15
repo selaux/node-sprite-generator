@@ -2,11 +2,11 @@
 
 var Jimp = require('jimp'),
     _ = require('underscore'),
-    proxyquire = require('proxyquire').noCallThru(),
     sinon = require('sinon'),
     chai = require('chai'),
     expect = chai.expect,
-    sinonChai = require('sinon-chai');
+    sinonChai = require('sinon-chai'),
+    createJimpCompositor = require('../../../lib/compositor/jimp');
 
 chai.use(sinonChai);
 
@@ -36,14 +36,11 @@ describe('Compositor/jimp', function () {
 
     beforeEach(function () {
         jimpStub = sinon.stub();
-
+        jimpStub.read = sinon.stub();
         jimpStub.PNG_FILTER_NONE = Jimp.PNG_FILTER_NONE;
         jimpStub.PNG_FILTER_AUTO = Jimp.PNG_FILTER_AUTO;
 
-        jimpCompositor = proxyquire('../../../lib/compositor/jimp', {
-            jimp: jimpStub
-        });
-        jimpStub.read = sinon.stub();
+        jimpCompositor = createJimpCompositor(jimpStub);
     });
 
     it('should read the files correctly', function () {
@@ -155,7 +152,7 @@ describe('Compositor/jimp', function () {
 
     describe('filterToQualtiy', function () {
         beforeEach(function () {
-            jimpCompositor = require('../../../lib/compositor/jimp');
+            jimpCompositor = require('../../../lib/compositor/jimp')(Jimp);
         });
 
         [

@@ -2,12 +2,13 @@
 
 var path = require('path'),
     _ = require('underscore'),
-    proxyquire = require('proxyquire').noCallThru(),
     sinon = require('sinon'),
     chai = require('chai'),
     expect = chai.expect,
     sinonChai = require('sinon-chai'),
-    inNode = require('../../utils/platform').inNode;
+    inNode = require('../../utils/platform').inNode,
+
+    createGmCompositor = require('../../../lib/compositor/gm');
 
 chai.use(sinonChai);
 
@@ -37,9 +38,7 @@ inNode(describe, 'Compositor/gm', function () {
 
     beforeEach(function () {
         gmStub = sinon.stub();
-        gmCompositor = proxyquire('../../../lib/compositor/gm', {
-            gm: gmStub
-        });
+        gmCompositor = createGmCompositor(gmStub);
     });
 
     it('should read a file correctly', function () {
