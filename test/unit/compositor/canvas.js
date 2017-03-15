@@ -2,10 +2,10 @@
 
 var _ = require('underscore'),
     Canvas = require('canvas'),
-    proxyquire = require('proxyquire').noCallThru(),
     sinon = require('sinon'),
     chai = require('chai'),
-    expect = chai.expect;
+    expect = chai.expect,
+    createCanvasCompositor = require('../../../lib/compositor/canvas');
 
 chai.use(require('chai-as-promised'));
 chai.use(require('sinon-chai'));
@@ -39,9 +39,7 @@ describe('Compositor/canvas', function () {
                 });
             },
             nodeCanvas = { Image: ImageStub },
-            canvasCompositor = proxyquire('../../../lib/compositor/canvas', {
-                canvas: nodeCanvas
-            });
+            canvasCompositor = createCanvasCompositor(nodeCanvas);
 
         return canvasCompositor.readImage({ path: 'test/path', data: 'my data' }).then(function (image) {
             expect(image).to.have.property('path', 'test/path');
@@ -77,10 +75,7 @@ describe('Compositor/canvas', function () {
                 PNG_ALL_FILTERS: 256
             },
             canvasStub = sinon.stub().returns(canvasInstance),
-            canvasCompositor = proxyquire('../../../lib/compositor/canvas', {
-                fs: fs,
-                canvas: canvasStub
-            });
+            canvasCompositor = createCanvasCompositor(canvasStub);
 
         return canvasCompositor.render(layout, 'some/path', options).then(function (result) {
             expect(options).to.deep.equal(optionsClone);
@@ -127,7 +122,7 @@ describe('Compositor/canvas', function () {
     });
 
     describe('filterToParam', function () {
-        var canvasCompositor = require('../../../lib/compositor/canvas'),
+        var canvasCompositor = createCanvasCompositor(),
             canvasInstance = new Canvas(0, 0);
 
         [
