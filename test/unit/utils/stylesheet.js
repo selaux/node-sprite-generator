@@ -4,8 +4,6 @@ var expect = require('chai').expect,
     _ = require('underscore'),
     proxyquire = require('proxyquire'),
 
-    pathWin32 = require('../../utils/winPathMock'),
-    utilsOnWin = proxyquire('../../../lib/utils/stylesheet', { path: pathWin32 } ),
     inNode = require('../../utils/platform').inNode,
     utils = require('../../../lib/utils/stylesheet');
 
@@ -83,21 +81,24 @@ describe('Utils/Stylesheet', function () {
 
     inNode(describe, 'getRelativeSpriteDir on Windows', function () {
         var cases = [
-            [ 'test/img/sprite.png', 'test/css/app.css', '../img/sprite.png' ],
-            [ 'test/img/sprite.png', 'test/stylesheets/stylus/app.css', '../../img/sprite.png' ],
-            [ 'test/sprite.png', 'test/app.css', './sprite.png' ],
-            [ '/home/user/test/sprite.png', '/home/user/test/app.css', './sprite.png' ],
-            [ '/home/user/test/sprite.png', '/home/user/test/css/app.css', '../sprite.png' ],
-            [ 'test\\img\\sprite.png', 'test\\css\\app.css', '../img/sprite.png' ],
-            [ 'test\\img\\sprite.png', 'test\\stylesheets\\stylus\\app.css', '../../img/sprite.png' ],
-            [ 'test\\sprite.png', 'test\\app.css', './sprite.png' ],
-            [ 'C:\\home\\user\\test\\sprite.png', 'C:\\home\\user\\test\\app.css', './sprite.png' ],
-            [ 'C:\\home\\user\\test\\sprite.png', 'C:\\home\\user\\test\\css\\app.css', '../sprite.png' ]
-        ];
+                [ 'test/img/sprite.png', 'test/css/app.css', '../img/sprite.png' ],
+                [ 'test/img/sprite.png', 'test/stylesheets/stylus/app.css', '../../img/sprite.png' ],
+                [ 'test/sprite.png', 'test/app.css', './sprite.png' ],
+                [ '/home/user/test/sprite.png', '/home/user/test/app.css', './sprite.png' ],
+                [ '/home/user/test/sprite.png', '/home/user/test/css/app.css', '../sprite.png' ],
+                [ 'test\\img\\sprite.png', 'test\\css\\app.css', '../img/sprite.png' ],
+                [ 'test\\img\\sprite.png', 'test\\stylesheets\\stylus\\app.css', '../../img/sprite.png' ],
+                [ 'test\\sprite.png', 'test\\app.css', './sprite.png' ],
+                [ 'C:\\home\\user\\test\\sprite.png', 'C:\\home\\user\\test\\app.css', './sprite.png' ],
+                [ 'C:\\home\\user\\test\\sprite.png', 'C:\\home\\user\\test\\css\\app.css', '../sprite.png' ]
+            ];
 
         _.each(cases, function (c) {
             it('should return ' + c[2] + ' for ' + c[0] + ' and ' + c[1], function () {
-                expect(utilsOnWin.getRelativeSpriteDir({ spritePath: c[0], stylesheetPath: c[1], stylesheetOptions: {} }))
+                var pathWin32 = require('../../utils/winPathMock'),
+                    utilsOnWin = proxyquire('../../../lib/utils/stylesheet', { path: pathWin32 } );
+
+                    expect(utilsOnWin.getRelativeSpriteDir({ spritePath: c[0], stylesheetPath: c[1], stylesheetOptions: {} }))
                     .to.have.deep.property('stylesheetOptions.spritePath', c[2]);
             });
         });
