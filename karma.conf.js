@@ -39,10 +39,8 @@ module.exports = function(config) {
                 resolve: {
                     alias: {
                         proxyquire: path.resolve(__dirname, './lib/browser/function.js'),
-                        fs: path.resolve(__dirname, './lib/browser/fsFacade.js'),
                         canvas: path.resolve(__dirname, './lib/browser/canvasFacade.js'),
                         mkdirp: path.resolve(__dirname, './lib/browser/function.js'),
-                        glob: path.resolve(__dirname, './lib/browser/function.js'),
                         gm: path.resolve(__dirname, './lib/browser/function.js'),
                         jimp: path.resolve(__dirname, './node_modules/jimp/browser/lib/jimp.js')
                     }

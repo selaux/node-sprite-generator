@@ -5,9 +5,12 @@ var Promise = require('bluebird'),
     path = require('path'),
     R = require('ramda'),
     resemble = require('node-resemble-v2'),
-    expect = require('chai').expect,
+    chai = require('chai'),
+    expect = chai.expect,
     base64 = require('base64-arraybuffer'),
-    nsg = require('../../lib/nsg');
+    nsg = require('../../lib/indexBrowser');
+
+chai.use(require('chai-as-promised'));
 
 function toArrayBuffer(array) {
     var uintArray = new Uint8Array(array);
@@ -27,6 +30,7 @@ describe('browser functional tests', function () {
         expectedStylesheet = fs.readFileSync(path.join(__dirname, '../fixtures/stylesheets/stylus/nsg-test.styl')).toString(),
         expectedSprite = toArrayBuffer(fs.readFileSync(path.join(__dirname, '../fixtures/images/expected/nsg.png'))),
         defaults = {
+            compositor: 'jimp',
             src: images,
             stylesheetOptions: {
                 spritePath: './sprite.png'
@@ -51,9 +55,24 @@ describe('browser functional tests', function () {
     });
 
     it('should render correctly when passing a template string', function () {
-        return nsg(R.merge(defaults, { compositor: 'jimp', stylesheet: 'width: <%= layout.width %>' })).then(function (results) {
+        return nsg(R.merge(defaults, { stylesheet: 'width: <%= layout.width %>' })).then(function (results) {
             var stylesheet = results[0];
             expect(stylesheet).to.deep.equal('width: 300');
         });
+    });
+
+    it('should throw on passing strings as source', function () {
+        return expect(nsg(R.merge(defaults, { src: [ 'somewhere' ] })))
+            .to.be.rejectedWith('Referencing files by path is not supported in the browser');
+    });
+
+    it('should throw on passing spritePath', function () {
+        return expect(nsg(R.merge(defaults, { spritePath: 'somewhere' })))
+            .to.be.rejectedWith('Creating directories is not supported in the browser');
+    });
+
+    it('should throw on passing stylesheetPath', function () {
+        return expect(nsg(R.merge(defaults, { stylesheetPath: 'somewhere' })))
+            .to.be.rejectedWith('Creating directories is not supported in the browser');
     });
 });
