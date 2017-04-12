@@ -6,7 +6,7 @@ var fs = require('fs'),
     R = require('ramda'),
     resemble = require('node-resemble-v2'),
     expect = require('chai').expect,
-    nsg = require('../../lib/nsg');
+    nsg = require('../../lib');
 
 describe('node functional tests', function () {
     var imagePaths = [

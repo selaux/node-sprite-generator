@@ -1,21 +1,19 @@
 'use strict';
 
 var sinon = require('sinon'),
-    proxyquire = require('proxyquire'),
     R = require('ramda'),
     chai = require('chai'),
     expect = chai.expect,
-    nsg = require('../../lib/nsg'),
+    spriteGenerator = require('../../lib/spriteGenerator'),
     providedCompositors = require('../../lib/compositor'),
     providedLayouts = require('../../lib/layout'),
     providedStylesheets = require('../../lib/stylesheet'),
     stylesheetUtils = require('../../lib/utils/stylesheet'),
-    sinonTest = require('sinon-test').configureTest(sinon),
-    inNode = require('../utils/platform').inNode;
+    sinonTest = require('sinon-test').configureTest(sinon);
 
 chai.use(require('sinon-chai'));
 
-describe('NSG', function () {
+describe('spriteGenerator', function () {
     var defaultFilename = 'test',
         defaultFileContent = {
             path: defaultFilename,
@@ -31,10 +29,19 @@ describe('NSG', function () {
         }, options);
     }
 
+    function buildDefaultDependencies() {
+        return {
+            readFile: sinon.stub().rejects(),
+            writeFile: sinon.stub().rejects(),
+            glob: sinon.stub().rejects(),
+            mkdirp: sinon.stub().rejects()
+        };
+    }
+
     it('should pass on default options to compositor, layout and stylesheet', function () {
         var options = mergeDefaultOptions({});
 
-        return nsg(options).then(function () {
+        return spriteGenerator(buildDefaultDependencies(), options).then(function () {
             expect(options.compositor.readImage).to.have.been.calledOnce;
             expect(options.compositor.readImage).to.have.been.calledWith(defaultFileContent);
             expect(options.compositor.render).to.have.been.calledOnce;
@@ -58,7 +65,7 @@ describe('NSG', function () {
             stylesheetOptions: { spritePath: 'abc', prefix: 'test' }
         });
 
-        return nsg(options).then(function () {
+        return spriteGenerator(buildDefaultDependencies(), options).then(function () {
             expect(options.compositor.readImage).to.have.been.calledOnce;
             expect(options.compositor.readImage).to.have.been.calledWith(defaultFileContent);
             expect(options.compositor.render).to.have.been.calledOnce;
@@ -81,7 +88,7 @@ describe('NSG', function () {
         this.stub(providedLayouts, 'vertical').resolves({ width: 0, height: 0, images: [] });
         this.stub(providedStylesheets, 'stylus').resolves();
 
-        nsg({ src: [ defaultFileContent ] }).then(function () {
+        spriteGenerator(buildDefaultDependencies(), { src: [ defaultFileContent ] }).then(function () {
             expect(providedCompositors.canvas.readImage).to.have.been.calledOnce;
             expect(providedCompositors.canvas.render).to.have.been.calledOnce;
             expect(providedLayouts.vertical).to.have.been.calledOnce;
@@ -89,72 +96,56 @@ describe('NSG', function () {
         }).nodeify(done);
     }));
 
-    inNode(it, 'should pass the relative sprite to the stylesheet if it is not set manually', sinonTest(function () {
-        var stubs = {
-                writeFile: sinon.stub().yieldsAsync(),
-                mkdirp: sinon.stub().yieldsAsync()
-            },
-            nsgProxy = proxyquire('../../lib/nsg', {
-                mkdirp: stubs.mkdirp,
-                fs: { writeFile: stubs.writeFile }
-            }),
+    it('should pass the relative sprite to the stylesheet if it is not set manually', function () {
+        var dependencies = buildDefaultDependencies(),
             options = mergeDefaultOptions({
                 spritePath: 'test/sprite/path/sprite.png',
                 stylesheetPath: 'test/styl/sprite.styl'
             });
 
-        return nsgProxy(options).then(function () {
+        options.stylesheet.resolves('my data');
+        options.compositor.render.resolves('my sprite data');
+        dependencies.mkdirp.withArgs('test/styl').resolves();
+        dependencies.writeFile.withArgs('test/styl/sprite.styl', 'my data').resolves();
+        dependencies.mkdirp.withArgs('test/sprite/path').resolves();
+        dependencies.writeFile.withArgs('test/sprite/path/sprite.png', 'my sprite data').resolves();
+
+        return spriteGenerator(dependencies, options).then(function () {
             expect(options.stylesheet).to.have.been.calledWithMatch([], {
                 spritePath: '../sprite/path/sprite.png'
             });
         });
-    }));
+    });
 
-    inNode(it, 'should create stylesheet path and write stylesheet if specified', function () {
-        var stubs = {
-                writeFile: sinon.stub().yieldsAsync(),
-                mkdirp: sinon.stub().yieldsAsync()
-            },
-            nsgProxy = proxyquire('../../lib/nsg', {
-                mkdirp: stubs.mkdirp,
-                fs: { writeFile: stubs.writeFile }
-            }),
+    it('should create stylesheet path and write stylesheet if specified', function () {
+        var dependencies = buildDefaultDependencies(),
             options = mergeDefaultOptions({
                 stylesheetPath: 'test/styl/sprite.styl'
             });
 
         options.stylesheet.resolves('my data');
+        dependencies.mkdirp.withArgs('test/styl').resolves();
+        dependencies.writeFile.withArgs('test/styl/sprite.styl', 'my data').resolves();
 
-        return nsgProxy(options).then(function () {
-            expect(stubs.mkdirp).to.have.been.calledOnce;
-            expect(stubs.mkdirp).to.have.been.calledWith('test/styl');
-
-            expect(stubs.writeFile).to.have.been.calledOnce;
-            expect(stubs.writeFile).to.have.been.calledWith('test/styl/sprite.styl', 'my data');
+        return spriteGenerator(dependencies, options).then(function () {
+            expect(dependencies.mkdirp).to.have.been.calledOnce;
+            expect(dependencies.writeFile).to.have.been.calledOnce;
         });
     });
 
-    inNode(it, 'should create sprite path and write sprite if specified', function () {
-        var stubs = {
-                writeFile: sinon.stub().yieldsAsync(),
-                mkdirp: sinon.stub().yieldsAsync()
-            },
-            nsgProxy = proxyquire('../../lib/nsg', {
-                mkdirp: stubs.mkdirp,
-                fs: { writeFile: stubs.writeFile }
-            }),
+    it('should create sprite path and write sprite if specified', function () {
+        var dependencies = buildDefaultDependencies(),
             options = mergeDefaultOptions({
                 spritePath: 'test/sprite/path/sprite.png'
             });
 
         options.compositor.render.resolves('my sprite data');
+        dependencies.mkdirp.withArgs('test/sprite/path').resolves();
+        dependencies.writeFile.withArgs('test/sprite/path/sprite.png', 'my sprite data').resolves();
 
-        return nsgProxy(options).then(function () {
-            expect(stubs.mkdirp).to.have.been.calledOnce;
-            expect(stubs.mkdirp).to.have.been.calledWith('test/sprite/path');
-
-            expect(stubs.writeFile).to.have.been.calledOnce;
-            expect(stubs.writeFile).to.have.been.calledWith('test/sprite/path/sprite.png', 'my sprite data');
+        return spriteGenerator(dependencies, options).then(function () {
+            expect(dependencies.mkdirp).to.have.been.calledOnce;
+            expect(dependencies.writeFile).to.have.been.calledOnce;
         });
     });
 
@@ -164,7 +155,7 @@ describe('NSG', function () {
         this.stub(providedLayouts, 'horizontal').resolves({ width: 0, height: 0, images: [] });
         this.stub(providedStylesheets, 'css').resolves();
 
-        nsg({
+        spriteGenerator(buildDefaultDependencies(), {
             src: [ defaultFileContent ],
             compositor: 'jimp',
             layout: 'horizontal',
@@ -182,7 +173,7 @@ describe('NSG', function () {
 
         options.layout.resolves({ images: [] });
 
-        nsg(options).spread(function (stylesheet) {
+        spriteGenerator(buildDefaultDependencies(), options).spread(function (stylesheet) {
             expect(stylesheet).to.equal('test template');
         }).nodeify(done);
     }));
@@ -192,7 +183,7 @@ describe('NSG', function () {
             src: [{path: 'somefile.png', data: 'somdata'}, {path: 'otherfile.png', data: 'otherdata'}]
         });
 
-        return nsg(options).then(function () {
+        return spriteGenerator(buildDefaultDependencies(), options).then(function () {
             expect(options.compositor.readImage).to.have.been.calledTwice;
             expect(options.compositor.readImage).to.have.been.calledWith(options.src[0]);
             expect(options.compositor.readImage).to.have.been.calledWith(options.src[1]);
@@ -204,27 +195,26 @@ describe('NSG', function () {
             src: [ { path: 'somefile.png', data: 'somdata' }, { path: 'otherfile.png', data: 'otherdata' } ]
         });
 
-        return nsg(options).then(function () {
+        return spriteGenerator(buildDefaultDependencies(), options).then(function () {
             expect(options.compositor.readImage).to.have.been.calledTwice;
             expect(options.compositor.readImage).to.have.been.calledWith(options.src[0]);
             expect(options.compositor.readImage).to.have.been.calledWith(options.src[1]);
         });
     });
 
-    inNode(it, 'should glob for passed in source strings', function () {
-        var options = mergeDefaultOptions({
+    it('should glob for passed in source strings', function () {
+        var dependencies = buildDefaultDependencies(),
+            options = mergeDefaultOptions({
                 src: [ 'glob1', 'glob2' ]
-            }),
-            stubs = { glob: sinon.stub(), fs: { readFile: sinon.stub() } },
-            nsgProxy = proxyquire('../../lib/nsg', stubs);
+            });
 
-        stubs.glob.withArgs('glob1').yieldsAsync(null, [ 'path11', 'path12' ]);
-        stubs.glob.withArgs('glob2').yieldsAsync(null, [ 'path2' ]);
-        stubs.fs.readFile.withArgs('path11').yieldsAsync(null, 'data11');
-        stubs.fs.readFile.withArgs('path12').yieldsAsync(null, 'data12');
-        stubs.fs.readFile.withArgs('path2').yieldsAsync(null, 'data2');
+        dependencies.glob.withArgs('glob1').resolves([ 'path11', 'path12' ]);
+        dependencies.glob.withArgs('glob2').resolves([ 'path2' ]);
+        dependencies.readFile.withArgs('path11').resolves('data11');
+        dependencies.readFile.withArgs('path12').resolves('data12');
+        dependencies.readFile.withArgs('path2').resolves('data2');
 
-        return nsgProxy(options).then(function () {
+        return spriteGenerator(dependencies, options).then(function () {
             expect(options.compositor.readImage).to.have.been.calledThrice;
             expect(options.compositor.readImage).to.have.been.calledWith({ path: 'path11', data: 'data11' });
             expect(options.compositor.readImage).to.have.been.calledWith({ path: 'path12', data: 'data12' });
@@ -232,18 +222,17 @@ describe('NSG', function () {
         });
     });
 
-    inNode(it, 'should support mixed string and buffer sources', function () {
-        var options = mergeDefaultOptions({
+    it('should support mixed string and buffer sources', function () {
+        var dependencies = buildDefaultDependencies(),
+            options = mergeDefaultOptions({
                 src: [ 'glob1', { path: 'foobar.jpg', data: 'fob' } ]
-            }),
-            stubs = { glob: sinon.stub(), fs: { readFile: sinon.stub() } },
-            nsgProxy = proxyquire('../../lib/nsg', stubs);
+            });
 
-        stubs.glob.withArgs('glob1').yieldsAsync(null, [ 'path11', 'path12' ]);
-        stubs.fs.readFile.withArgs('path11').yieldsAsync(null, 'data11');
-        stubs.fs.readFile.withArgs('path12').yieldsAsync(null, 'data12');
+        dependencies.glob.withArgs('glob1').resolves([ 'path11', 'path12' ]);
+        dependencies.readFile.withArgs('path11').resolves('data11');
+        dependencies.readFile.withArgs('path12').resolves('data12');
 
-        return nsgProxy(options).then(function () {
+        return spriteGenerator(dependencies, options).then(function () {
             expect(options.compositor.readImage).to.have.been.calledThrice;
             expect(options.compositor.readImage).to.have.been.calledWith({ path: 'path11', data: 'data11' });
             expect(options.compositor.readImage).to.have.been.calledWith({ path: 'path12', data: 'data12' });
@@ -280,7 +269,7 @@ describe('NSG', function () {
         options.stylesheet.withArgs(layoutResult).resolves(stylesheetResult);
         options.compositor.render.withArgs(layoutResult).resolves(renderResult);
 
-        return nsg(options).spread(function (stylesheet, sprite) {
+        return spriteGenerator(buildDefaultDependencies(), options).spread(function (stylesheet, sprite) {
             expect(stylesheet).to.equal(stylesheetResult);
             expect(sprite).to.equal(renderResult);
         });
