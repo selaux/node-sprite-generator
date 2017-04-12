@@ -1,8 +1,8 @@
 'use strict';
 
-var expect = require('chai').expect,
+var path = require('path'),
+    expect = require('chai').expect,
     _ = require('underscore'),
-    proxyquire = require('proxyquire'),
 
     inNode = require('../../utils/platform').inNode,
     utils = require('../../../lib/utils/stylesheet');
@@ -73,7 +73,7 @@ describe('Utils/Stylesheet', function () {
 
         _.each(cases, function (c) {
             it('should return ' + c[2] + ' for ' + c[0] + ' and ' + c[1], function () {
-                expect(utils.getRelativeSpriteDir({ spritePath: c[0], stylesheetPath: c[1], stylesheetOptions: {} }))
+                expect(utils.getRelativeSpriteDir(path, { spritePath: c[0], stylesheetPath: c[1], stylesheetOptions: {} }))
                     .to.have.deep.property('stylesheetOptions.spritePath', c[2]);
             });
         });
@@ -95,10 +95,9 @@ describe('Utils/Stylesheet', function () {
 
         _.each(cases, function (c) {
             it('should return ' + c[2] + ' for ' + c[0] + ' and ' + c[1], function () {
-                var pathWin32 = require('../../utils/winPathMock'),
-                    utilsOnWin = proxyquire('../../../lib/utils/stylesheet', { path: pathWin32 } );
+                var pathWin32 = require('../../utils/winPathMock');
 
-                    expect(utilsOnWin.getRelativeSpriteDir({ spritePath: c[0], stylesheetPath: c[1], stylesheetOptions: {} }))
+                expect(utils.getRelativeSpriteDir(pathWin32, { spritePath: c[0], stylesheetPath: c[1], stylesheetOptions: {} }))
                     .to.have.deep.property('stylesheetOptions.spritePath', c[2]);
             });
         });
