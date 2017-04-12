@@ -4,13 +4,10 @@ node_js:
   - "node"
   - "6"
   - "6.0"
-  - "iojs"
   - "5"
   - "5.0"
   - "4"
   - "4.0"
-  - "0.12"
-  - "0.10"
 addons:
   firefox: "latest-esr"
   apt:
