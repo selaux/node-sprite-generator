@@ -17,6 +17,7 @@
         "gm": "1.23.0"
     },
     "devDependencies": {
+        "base64-arraybuffer": "0.1.5",
         "chai": "3.5.0",
         "chai-as-promised": "6.0.0",
         "eslint": "2.13.1",
@@ -24,8 +25,8 @@
         "mocha": "3.2.0",
         "node-resemble-v2": "1.0.0",
         "proxyquire": "1.7.11",
-        "sinon": "2.0.0",
-        "sinon-chai": "2.8.0",
+        "sinon": "2.1.0",
+        "sinon-chai": "2.9.0",
         "sinon-test": "1.0.1",
         "coveralls": "2.11.16",
         "karma": "1.5.0",
