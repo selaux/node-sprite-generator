@@ -10,7 +10,7 @@
         "no-process-exit": 2,
         "eqeqeq": 2,
         "no-delete-var": 2,
-        "one-var": 2,
+        "one-var": [ 2, { "var": "always", "let": "never", "const": "never" } ],
         "no-plusplus": 2,
         "semi": [2, "always"],
         "no-mixed-requires": 0,
