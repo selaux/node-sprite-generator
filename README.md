@@ -89,7 +89,7 @@ module.exports = function (grunt)  {
 node-sprite-generator tries to be very modular, so you can use the options we provide or write your own functions/modules to further customize your sprites.
 
 #### options.src
-Type: `String`
+Type: `Array|String`
 Default value: `[]`  
 Specifies the images that will be combined to the sprite. node-sprite-generator uses glob pattern matching, so paths with wildcards are valid as well.
 
