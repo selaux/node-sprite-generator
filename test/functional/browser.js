@@ -4,7 +4,7 @@ var Promise = require('bluebird'),
     fs = require('fs'),
     path = require('path'),
     R = require('ramda'),
-    resemble = require('node-resemble-v2'),
+    resemble = require('resemblejs'),
     chai = require('chai'),
     expect = chai.expect,
     base64 = require('base64-arraybuffer'),
@@ -45,7 +45,7 @@ describe('browser functional tests', function () {
 
             expect(stylesheet).to.deep.equal(expectedStylesheet);
             return Promise.fromCallback(function (callback) {
-                resemble(spritePngUrl).compareTo(expectedSpritePngUrl).ignoreColors().onComplete(function(result) {
+                resemble(spritePngUrl).compareTo(expectedSpritePngUrl).onComplete(function(result) {
                     expect(result).to.have.property('isSameDimensions', true);
                     expect(result).to.have.property('rawMisMatchPercentage').that.is.lessThan(0.5);
                     callback();
@@ -62,7 +62,7 @@ describe('browser functional tests', function () {
 
             expect(stylesheet).to.deep.equal(expectedStylesheet);
             return Promise.fromCallback(function (callback) {
-                resemble(spritePngUrl).compareTo(expectedSpritePngUrl).ignoreColors().onComplete(function(result) {
+                resemble(spritePngUrl).compareTo(expectedSpritePngUrl).onComplete(function(result) {
                     expect(result).to.have.property('isSameDimensions', true);
                     expect(result).to.have.property('rawMisMatchPercentage').that.is.lessThan(0.5);
                     callback();

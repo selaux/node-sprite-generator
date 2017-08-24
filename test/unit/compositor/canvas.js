@@ -5,6 +5,7 @@ var _ = require('underscore'),
     chai = require('chai'),
     expect = chai.expect,
     inNode = require('../../utils/platform').inNode,
+    requireInNode = (m) => require(m),
     createCanvasCompositor = require('../../../lib/compositor/canvas');
 
 chai.use(require('chai-as-promised'));
@@ -122,7 +123,7 @@ describe('Compositor/canvas', function () {
     });
 
     inNode(describe, 'filterToParam', function () {
-        var Canvas = require('canvas'),
+        var Canvas = requireInNode('canvas'),
             canvasCompositor = createCanvasCompositor(),
             canvasInstance = new Canvas(0, 0);
 
