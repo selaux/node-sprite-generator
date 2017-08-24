@@ -5,7 +5,6 @@ var sinon = require('sinon'),
     chai = require('chai'),
     expect = chai.expect,
     spriteGenerator = require('../../lib/spriteGenerator'),
-    providedCompositors = require('../../lib/compositor'),
     providedLayouts = require('../../lib/layout'),
     providedStylesheets = require('../../lib/stylesheet'),
     stylesheetUtils = require('../../lib/utils/stylesheet'),
@@ -34,7 +33,8 @@ describe('spriteGenerator', function () {
             readFile: sinon.stub().rejects(),
             writeFile: sinon.stub().rejects(),
             glob: sinon.stub().rejects(),
-            mkdirp: sinon.stub().rejects()
+            mkdirp: sinon.stub().rejects(),
+            providedCompositors: {}
         };
     }
 
@@ -83,14 +83,18 @@ describe('spriteGenerator', function () {
     });
 
     it('should use default compositors, layout and stylesheet functions', sinonTest(function (done) {
-        this.stub(providedCompositors.canvas, 'readImage').resolves([]);
-        this.stub(providedCompositors.canvas, 'render').resolves();
+        const dependencies = buildDefaultDependencies();
+
+        dependencies.providedCompositors.canvas = {
+            readImage: sinon.stub().resolves([]),
+            render: sinon.stub().resolves()
+        };
         this.stub(providedLayouts, 'vertical').resolves({ width: 0, height: 0, images: [] });
         this.stub(providedStylesheets, 'stylus').resolves();
 
-        spriteGenerator(buildDefaultDependencies(), { src: [ defaultFileContent ] }).then(function () {
-            expect(providedCompositors.canvas.readImage).to.have.been.calledOnce;
-            expect(providedCompositors.canvas.render).to.have.been.calledOnce;
+        spriteGenerator(dependencies, { src: [ defaultFileContent ] }).then(function () {
+            expect(dependencies.providedCompositors.canvas.readImage).to.have.been.calledOnce;
+            expect(dependencies.providedCompositors.canvas.render).to.have.been.calledOnce;
             expect(providedLayouts.vertical).to.have.been.calledOnce;
             expect(providedStylesheets.stylus).to.have.been.calledOnce;
         }).nodeify(done);
@@ -150,19 +154,23 @@ describe('spriteGenerator', function () {
     });
 
     it('should use a builtin compositor, stylesheet and layout when specified', sinonTest(function (done) {
-        this.stub(providedCompositors.jimp, 'readImage').resolves([]);
-        this.stub(providedCompositors.jimp, 'render').resolves();
+        const dependencies = buildDefaultDependencies();
+
+        dependencies.providedCompositors.jimp = {
+            readImage: sinon.stub().resolves([]),
+            render: sinon.stub().resolves()
+        };
         this.stub(providedLayouts, 'horizontal').resolves({ width: 0, height: 0, images: [] });
         this.stub(providedStylesheets, 'css').resolves();
 
-        spriteGenerator(buildDefaultDependencies(), {
+        spriteGenerator(dependencies, {
             src: [ defaultFileContent ],
             compositor: 'jimp',
             layout: 'horizontal',
             stylesheet: 'css'
         }).then(function () {
-            expect(providedCompositors.jimp.readImage).to.have.been.calledOnce;
-            expect(providedCompositors.jimp.render).to.have.been.calledOnce;
+            expect(dependencies.providedCompositors.jimp.readImage).to.have.been.calledOnce;
+            expect(dependencies.providedCompositors.jimp.render).to.have.been.calledOnce;
             expect(providedLayouts.horizontal).to.have.been.calledOnce;
             expect(providedStylesheets.css).to.have.been.calledOnce;
         }).nodeify(done);
