@@ -1,10 +1,10 @@
 'use strict';
 
 var _ = require('underscore'),
-    Canvas = require('canvas'),
     sinon = require('sinon'),
     chai = require('chai'),
     expect = chai.expect,
+    inNode = require('../../utils/platform').inNode,
     createCanvasCompositor = require('../../../lib/compositor/canvas');
 
 chai.use(require('chai-as-promised'));
@@ -121,8 +121,9 @@ describe('Compositor/canvas', function () {
         });
     });
 
-    describe('filterToParam', function () {
-        var canvasCompositor = createCanvasCompositor(),
+    inNode(describe, 'filterToParam', function () {
+        var Canvas = require('canvas'),
+            canvasCompositor = createCanvasCompositor(),
             canvasInstance = new Canvas(0, 0);
 
         [
