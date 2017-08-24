@@ -39,7 +39,7 @@ describe('node functional tests', function () {
             expect(options).to.deep.equal(expectedOptions);
 
             expect(fs.readFileSync(expectedStylesheetPath).toString()).to.equal(fs.readFileSync(stylesheetPath).toString());
-            resemble(expectedSpritePath).compareTo(spritePath).ignoreColors().onComplete(function(result) {
+            resemble(expectedSpritePath).compareTo(spritePath).onComplete(function(result) {
                 expect(result).to.have.property('isSameDimensions', true);
                 expect(result).to.have.property('rawMisMatchPercentage').that.is.lessThan(0.5);
                 done();
