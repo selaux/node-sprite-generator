@@ -54,6 +54,23 @@ describe('browser functional tests', function () {
         });
     });
 
+    it('should render correctly using the canvas compositor', function () {
+        return nsg(R.merge(defaults, { compositor: 'canvas' })).then(function (results) {
+            var stylesheet = results[0],
+                expectedSpritePngUrl = toDataUrl(expectedSprite),
+                spritePngUrl = toDataUrl(results[1].buffer);
+
+            expect(stylesheet).to.deep.equal(expectedStylesheet);
+            return Promise.fromCallback(function (callback) {
+                resemble(spritePngUrl).compareTo(expectedSpritePngUrl).ignoreColors().onComplete(function(result) {
+                    expect(result).to.have.property('isSameDimensions', true);
+                    expect(result).to.have.property('rawMisMatchPercentage').that.is.lessThan(0.5);
+                    callback();
+                });
+            });
+        });
+    });
+
     it('should render correctly when passing a template string', function () {
         return nsg(R.merge(defaults, { stylesheet: 'width: <%= layout.width %>' })).then(function (results) {
             var stylesheet = results[0];
