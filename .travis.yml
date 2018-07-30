@@ -2,12 +2,12 @@ sudo: false
 language: node_js
 node_js:
   - "node"
+  - "10"
+  - "10.0"
+  - "8"
+  - "8.0"
   - "6"
   - "6.0"
-  - "5"
-  - "5.0"
-  - "4"
-  - "4.0"
 addons:
   firefox: "latest-esr"
   apt:
