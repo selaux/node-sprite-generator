@@ -4,7 +4,7 @@ var fs = require('fs'),
     path = require('path'),
     mkdirp = require('mkdirp'),
     R = require('ramda'),
-    resemble = require('node-resemble-v2'),
+    resemble = require('resemblejs'),
     expect = require('chai').expect,
     nsg = require('../../lib');
 

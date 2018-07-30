@@ -24,7 +24,6 @@
         "istanbul": "0.4.5",
         "mocha": "5.2.0",
         "resemblejs": "2.10.3",
-        "node-resemble-v2": "1.0.0",
         "sinon": "6.1.4",
         "sinon-chai": "3.2.0",
         "sinon-test": "2.2.1",
