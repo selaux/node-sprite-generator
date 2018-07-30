@@ -9,8 +9,9 @@ module.exports = function(config) {
             preprocessors: {},
             webpack: {
                 devtool: 'inline-source-map',
+                mode: 'development',
                 module: {
-                    loaders: [
+                    rules: [
                         {
                             test: /\/stylesheet\/.*\.js$/,
                             exclude: /(node_modules|bower_components)/,
@@ -38,7 +39,8 @@ module.exports = function(config) {
                 },
                 resolve: {
                     alias: {
-                        jimp: path.resolve(__dirname, './node_modules/jimp/browser/lib/jimp.js')
+                        jimp: path.resolve(__dirname, './node_modules/jimp/browser/lib/jimp.js'),
+                        'canvas-prebuilt': path.resolve(__dirname, './lib/browser/nothing.js')
                     }
                 }
             },

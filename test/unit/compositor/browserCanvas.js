@@ -108,7 +108,7 @@ describe('Compositor/browserCanvas', function () {
             expect(canvas2dContext.drawImage.getCall(1).args).to.deep.equal([ 'lock data', 1, 15, 26, 31 ]);
             expect(canvas2dContext.drawImage.getCall(2).args).to.deep.equal([ 'lena data', 2, 183, 300, 168 ]);
 
-            expect(result).to.deep.equal({ '0': 1, '1': 2, '2': 3 });
+            expect(result).to.deep.equal(new Uint8Array([ 1, 2, 3 ]));
         });
     });
 });

@@ -74,7 +74,7 @@ describe('Utils/Stylesheet', function () {
         _.each(cases, function (c) {
             it('should return ' + c[2] + ' for ' + c[0] + ' and ' + c[1], function () {
                 expect(utils.getRelativeSpriteDir(path, { spritePath: c[0], stylesheetPath: c[1], stylesheetOptions: {} }))
-                    .to.have.deep.property('stylesheetOptions.spritePath', c[2]);
+                    .to.have.nested.property('stylesheetOptions.spritePath', c[2]);
             });
         });
     });
@@ -98,7 +98,7 @@ describe('Utils/Stylesheet', function () {
                 var pathWin32 = require('../../utils/winPathMock');
 
                 expect(utils.getRelativeSpriteDir(pathWin32, { spritePath: c[0], stylesheetPath: c[1], stylesheetOptions: {} }))
-                    .to.have.deep.property('stylesheetOptions.spritePath', c[2]);
+                    .to.have.nested.property('stylesheetOptions.spritePath', c[2]);
             });
         });
     });
