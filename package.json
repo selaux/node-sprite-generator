@@ -2,7 +2,7 @@
     "name": "node-sprite-generator",
     "version": "0.10.2",
     "description": "Generates image sprites and their spritesheets (css, stylus, sass, scss or less) from sets of images. Supports retina sprites. Provides express middleware and grunt task.",
-    "main": "lib/nsg.js",
+    "main": "lib/index.js",
     "dependencies": {
         "bin-pack": "1.0.2",
         "bluebird": "3.5.1",
