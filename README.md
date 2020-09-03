@@ -1,5 +1,7 @@
 # node-sprite-generator
 
+__This project is no longer actively maintained__
+
 [![NPM Version](https://img.shields.io/npm/v/node-sprite-generator.svg?style=flat-square)](https://www.npmjs.org/package/node-sprite-generator)
 [![Build Status](https://img.shields.io/travis/selaux/node-sprite-generator/master.svg?style=flat-square)](https://travis-ci.org/selaux/node-sprite-generator)
 [![Coverage Status](https://img.shields.io/coveralls/selaux/node-sprite-generator/master.svg?style=flat-square)](https://coveralls.io/r/selaux/node-sprite-generator?branch=master)
