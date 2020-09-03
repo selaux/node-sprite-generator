@@ -116,7 +116,7 @@ Built-in formats:
 - `'sass'`, `'scss'`: http://sass-lang.com/
 - `'css'`: http://www.w3.org/Style/CSS/
 - `'prefixed-css'`: A version of `'css'` that generates a smaller stylesheet but requires the use of the `'prefix'` stylesheet option
-- `'javascript'`: Creates a file that exports javascrip object with sprites data.
+- `'javascript'`: Creates a file that exports JavaScript object with sprites data.
 
 #### options.stylesheetOptions
 Type: `Object`
